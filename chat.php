@@ -96,8 +96,8 @@ $myInitials    = strtoupper(substr($parts[0], 0, 1) . (count($parts) > 1 ? subst
                 <!-- Input Bar -->
                 <div id="chatInputBar" class="flex-shrink-0 bg-white border-t border-gray-100 px-3 sm:px-6 py-2 sm:py-3"
                      style="padding-bottom:max(0.5rem, env(safe-area-inset-bottom));">
-                    <form id="chatForm" class="flex items-end gap-2 sm:gap-3">
-                        <div class="w-7 h-7 sm:w-9 sm:h-9 rounded-xl flex items-center justify-center font-bold text-xs sm:text-sm flex-shrink-0 text-white"
+                    <form id="chatForm" class="flex items-center gap-2 sm:gap-3">
+                        <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center font-bold text-sm flex-shrink-0 text-white"
                              style="background:<?php echo $isAdmin ? 'linear-gradient(135deg,#8B5CF6,#6D28D9)' : 'linear-gradient(135deg,#F59E0B,#F97316)'; ?>">
                             <?php echo htmlspecialchars($myInitials); ?>
                         </div>
@@ -112,9 +112,9 @@ $myInitials    = strtoupper(substr($parts[0], 0, 1) . (count($parts) > 1 ? subst
                             <span id="charCount" class="hidden absolute right-3 bottom-2 text-xs text-gray-300"></span>
                         </div>
                         <button type="submit"
-                                class="flex-shrink-0 w-9 h-9 sm:px-5 sm:py-2.5 sm:w-auto rounded-xl text-white text-sm font-semibold transition hover:opacity-90 active:scale-95 flex items-center justify-center"
+                                class="flex-shrink-0 w-11 h-11 sm:px-5 sm:py-2.5 sm:w-auto sm:h-auto rounded-xl text-white font-semibold transition hover:opacity-90 active:scale-95 flex items-center justify-center"
                                 style="background:linear-gradient(135deg,#F59E0B,#F97316);">
-                            <i class="fas fa-paper-plane text-sm"></i>
+                            <i class="fas fa-paper-plane text-base"></i>
                         </button>
                     </form>
                 </div>
