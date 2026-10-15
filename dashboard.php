@@ -76,9 +76,7 @@ $avgCO2         = getAvgCO2($conn);
                     <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse inline-block"></span>
                     Live monitoring active
                 </div>
-                <span class="text-xs text-gray-400 bg-gray-100 px-2 py-1 rounded-lg">
-                    Updated <span id="lastUpdatedAgo">just now</span>
-                </span>
+                <span id="lastUpdatedAgo" class="hidden"></span>
             </div>
         </div>
 
