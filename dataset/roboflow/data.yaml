@@ -1,0 +1,12 @@
+train: train/images
+val: valid/images
+
+nc: 3
+names: ['nonpollenbee', 'pollen', 'pollenbee']
+
+roboflow:
+  workspace: hornet-detection-1wa7m
+  project: bee-detection-kx8gg
+  version: 1
+  license: CC BY 4.0
+  url: https://universe.roboflow.com/hornet-detection-1wa7m/bee-detection-kx8gg/dataset/1

@@ -1,0 +1,13 @@
+train: ../train/images
+val: ../valid/images
+test: ../test/images
+
+nc: 1
+names: ['Insects']
+
+roboflow:
+  workspace: msa-grad
+  project: insect-detection-aytbi
+  version: 6
+  license: CC BY 4.0
+  url: https://universe.roboflow.com/msa-grad/insect-detection-aytbi/dataset/6

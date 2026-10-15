@@ -1,0 +1,698 @@
+/* ═══════════════════════════════════════════════════
+   BeeGuard IoT — Minimal UI Design System
+   ═══════════════════════════════════════════════════ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+/* ── Design Tokens ──────────────────────────────── */
+:root {
+  --bg:             #F6F7F9;
+  --surface:        #FFFFFF;
+  --primary:        #F59E0B;
+  --primary-dark:   #D97706;
+  --primary-glow:   rgba(245,158,11,0.15);
+  --secondary:      #F97316;
+  --sidebar-bg:     #111009;
+  --sidebar-hover:  rgba(245,158,11,0.08);
+  --sidebar-active: rgba(245,158,11,0.14);
+  --text-1:         #111827;
+  --text-2:         #4B5563;
+  --text-3:         #9CA3AF;
+  --border:         #E5E7EB;
+  --border-hover:   rgba(245,158,11,0.25);
+  --shadow-xs:      0 1px 2px rgba(0,0,0,0.05);
+  --shadow-sm:      0 1px 4px rgba(0,0,0,0.06);
+  --shadow-md:      0 4px 16px rgba(0,0,0,0.08);
+  --shadow-lg:      0 8px 32px rgba(0,0,0,0.10);
+  --shadow-xl:      0 16px 48px rgba(0,0,0,0.12);
+  --radius-sm:      6px;
+  --radius:         10px;
+  --radius-lg:      12px;
+  --radius-xl:      14px;
+  --radius-2xl:     18px;
+  --transition:     all 0.18s ease;
+}
+
+/* ── Base ───────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--text-1);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  letter-spacing: -0.01em;
+}
+
+/* ── Keyframes ──────────────────────────────────── */
+@keyframes fadeIn {
+  from { opacity:0; } to { opacity:1; }
+}
+@keyframes fadeInDown {
+  from { opacity:0; transform:translateY(-8px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+@keyframes fadeInUp {
+  from { opacity:0; transform:translateY(12px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+@keyframes scaleIn {
+  from { opacity:0; transform:scale(0.97); }
+  to   { opacity:1; transform:scale(1); }
+}
+@keyframes shimmer {
+  0%   { background-position:-200% 0; }
+  100% { background-position:200% 0; }
+}
+@keyframes bounce-in {
+  0%   { transform:scale(0.5); opacity:0; }
+  70%  { transform:scale(1.1); }
+  100% { transform:scale(1); opacity:1; }
+}
+@keyframes pulse-ring {
+  0%   { transform:scale(1); opacity:1; }
+  100% { transform:scale(1.5); opacity:0; }
+}
+@keyframes progress-fill {
+  from { width:0; }
+}
+@keyframes count-up {
+  from { opacity:0; transform:translateY(8px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+@keyframes ripple-effect {
+  to { transform:scale(3); opacity:0; }
+}
+
+/* ── Page Animation ─────────────────────────────── */
+main > div:first-child:not(.modal) { animation: fadeInDown 0.25s ease both; }
+main > .p-8 > * { animation: fadeInUp 0.3s ease both; }
+main > .p-8 > *:nth-child(1) { animation-delay:0.04s; }
+main > .p-8 > *:nth-child(2) { animation-delay:0.08s; }
+main > .p-8 > *:nth-child(3) { animation-delay:0.12s; }
+main > .p-8 > *:nth-child(4) { animation-delay:0.16s; }
+main > .p-8 > *:nth-child(5) { animation-delay:0.20s; }
+
+/* ── Cards ──────────────────────────────────────── */
+.bg-white:not(.modal-content):not(#notificationDropdown):not(#esp32ToastContainer *):not(.modal *) {
+  border-radius: var(--radius-lg) !important;
+  box-shadow: var(--shadow-xs);
+  border: 1px solid var(--border);
+  transition: var(--transition);
+}
+.bg-white:not(.modal-content):not(#notificationDropdown):not(.modal *):hover {
+  box-shadow: var(--shadow-sm);
+  border-color: #D1D5DB;
+}
+
+/* Gradient stat cards */
+.stat-card {
+  animation: scaleIn 0.3s ease both;
+  position: relative;
+  overflow: hidden;
+}
+.stat-card:nth-child(1) { animation-delay:0.04s; }
+.stat-card:nth-child(2) { animation-delay:0.08s; }
+.stat-card:nth-child(3) { animation-delay:0.12s; }
+.stat-card:nth-child(4) { animation-delay:0.16s; }
+
+/* ── Stat cards: always 2×2 grid, equal height ── */
+#statCardsGrid {
+  grid-template-columns: repeat(2, 1fr) !important;
+}
+#statCardsGrid .stat-card {
+  min-height: 110px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Sidebar ────────────────────────────────────── */
+#mainSidebar {
+  background: #111009 !important;
+  border-right: 1px solid rgba(245,158,11,0.08);
+  box-shadow: 2px 0 16px rgba(0,0,0,0.25);
+}
+
+.sidebar-logo-wrap {
+  background: linear-gradient(135deg, #F59E0B, #F97316);
+  border-radius: var(--radius);
+  box-shadow: 0 2px 10px rgba(245,158,11,0.35);
+}
+
+.sidebar-nav-link {
+  position: relative;
+  border-radius: var(--radius-sm) !important;
+  transition: var(--transition) !important;
+}
+.sidebar-nav-link::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 20%; bottom: 20%;
+  width: 2px;
+  background: #F59E0B;
+  border-radius: 0 2px 2px 0;
+  transform: scaleY(0);
+  transition: transform 0.15s ease;
+}
+.sidebar-nav-link:hover::before,
+.sidebar-nav-link.active::before {
+  transform: scaleY(1);
+}
+.sidebar-nav-link:hover {
+  background: var(--sidebar-hover) !important;
+}
+.sidebar-nav-link.active {
+  background: rgba(245,158,11,0.13) !important;
+}
+.sidebar-nav-link.active span { color: #FDE68A !important; }
+.sidebar-nav-link.active i {
+  color: #FBBF24 !important;
+}
+
+/* Sidebar badge */
+.sidebar-badge {
+  animation: bounce-in 0.3s ease both;
+}
+
+/* System status card */
+.sidebar-status {
+  background: rgba(245,158,11,0.05);
+  border: 1px solid rgba(245,158,11,0.10);
+  border-radius: var(--radius);
+}
+
+/* Online pulse dot */
+.online-dot {
+  position: relative;
+}
+.online-dot::before {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  background: #22C55E;
+  animation: pulse-ring 2s ease-out infinite;
+}
+
+/* Sidebar scrollbar */
+#mainSidebar::-webkit-scrollbar { width:3px; }
+#mainSidebar::-webkit-scrollbar-track { background:transparent; }
+#mainSidebar::-webkit-scrollbar-thumb { background:rgba(245,158,11,0.2); border-radius:3px; }
+
+/* ── Header ─────────────────────────────────────── */
+#mainHeader {
+  background: linear-gradient(90deg, #F59E0B 0%, #F97316 100%) !important;
+  box-shadow: 0 1px 8px rgba(245,158,11,0.2) !important;
+}
+
+/* Notification dropdown */
+#notificationDropdown {
+  border-radius: var(--radius-lg) !important;
+  box-shadow: var(--shadow-lg) !important;
+  border: 1px solid rgba(0,0,0,0.06) !important;
+  animation: scaleIn 0.15s ease both;
+  transform-origin: top right;
+}
+
+/* Header action buttons */
+.header-action-btn {
+  transition: var(--transition);
+}
+.header-action-btn:hover {
+  background: rgba(0,0,0,0.2) !important;
+}
+
+/* ── Page Header Banner ──────────────────────────── */
+.page-header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  position: relative;
+}
+.page-header::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: var(--primary);
+}
+
+/* ── Buttons ─────────────────────────────────────── */
+button, .btn { transition: var(--transition) !important; }
+button:active:not(:disabled), .btn:active { transform: scale(0.98) !important; }
+
+.btn-primary {
+  background: linear-gradient(135deg, #F59E0B, #F97316);
+  color: white;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(245,158,11,0.25);
+  transition: var(--transition);
+}
+.btn-primary:hover {
+  filter: brightness(1.05);
+  box-shadow: 0 4px 12px rgba(245,158,11,0.35);
+}
+
+/* Ripple */
+.ripple { position:relative; overflow:hidden; }
+.ripple::after {
+  content:'';
+  position:absolute; border-radius:50%;
+  background:rgba(255,255,255,0.25);
+  width:80px; height:80px;
+  margin-top:-40px; margin-left:-40px;
+  top:50%; left:50%; transform:scale(0);
+  animation:ripple-effect 0.5s ease-out; opacity:0;
+}
+
+/* ── Badges ──────────────────────────────────────── */
+.badge {
+  display:inline-flex; align-items:center; gap:4px;
+  padding:2px 8px; border-radius:999px;
+  font-size:11px; font-weight:600; letter-spacing:0.01em;
+}
+.badge-critical { background:#FEE2E2; color:#991B1B; }
+.badge-warning  { background:#FEF3C7; color:#92400E; }
+.badge-info     { background:#DBEAFE; color:#1E40AF; }
+.badge-success  { background:#D1FAE5; color:#065F46; }
+.badge-purple   { background:#EDE9FE; color:#5B21B6; }
+
+/* ── Tables ──────────────────────────────────────── */
+table { border-collapse:separate; border-spacing:0; width:100%; }
+thead th {
+  background: #F9FAFB;
+  font-size:11px; font-weight:700;
+  letter-spacing:0.06em; text-transform:uppercase;
+  color: var(--text-3);
+  border-bottom:1.5px solid var(--border);
+  padding:10px 14px; white-space:nowrap;
+}
+thead th:first-child { border-radius: var(--radius-sm) 0 0 0; }
+thead th:last-child  { border-radius: 0 var(--radius-sm) 0 0; }
+tbody tr { transition: background 0.1s ease; }
+tbody tr:hover { background:rgba(245,158,11,0.025); }
+tbody td { border-bottom:1px solid #F3F4F6; }
+
+/* ── Form Controls ───────────────────────────────── */
+select, input[type="text"], input[type="email"],
+input[type="password"], input[type="number"], textarea {
+  transition: var(--transition) !important;
+  border:1.5px solid var(--border) !important;
+  border-radius: var(--radius-sm) !important;
+}
+select:focus, input:focus, textarea:focus {
+  border-color: var(--primary) !important;
+  box-shadow:0 0 0 3px var(--primary-glow) !important;
+  outline:none !important;
+}
+
+/* ── Skeleton Loader ─────────────────────────────── */
+.skeleton {
+  background:linear-gradient(90deg,#F1F5F9 25%,#E2E8F0 50%,#F1F5F9 75%);
+  background-size:200% 100%;
+  animation:shimmer 1.5s infinite;
+  border-radius:var(--radius-sm);
+}
+
+/* ── Alert Cards ─────────────────────────────────── */
+.alert-card {
+  border-radius:var(--radius-lg) !important;
+  border-left-width:3px !important;
+  transition:var(--transition);
+}
+.alert-card:hover { box-shadow:var(--shadow-sm); }
+
+/* ── Progress Bars ───────────────────────────────── */
+.progress-bar { border-radius:999px; overflow:hidden; background:#E2E8F0; }
+.progress-fill {
+  border-radius:999px;
+  animation:progress-fill 0.8s ease both;
+  transition:width 0.4s ease;
+}
+
+/* ── Hive Cards ──────────────────────────────────── */
+.hive-card {
+  border-radius:var(--radius-xl) !important;
+  border:1px solid var(--border);
+  position:relative; overflow:visible;
+  animation:scaleIn 0.3s ease both;
+  box-shadow:var(--shadow-xs);
+}
+.hive-card:hover { box-shadow:var(--shadow-sm); }
+
+/* ── Sensor Metric Box ───────────────────────────── */
+.metric-box {
+  border-radius:var(--radius) !important;
+  transition:var(--transition);
+}
+
+/* ── Status Dot ──────────────────────────────────── */
+.status-online  { color:#22C55E; }
+.status-offline { color:#EF4444; }
+.status-warning { color:#F59E0B; }
+
+/* ── Modal Reset ─────────────────────────────────── */
+.modal { animation:none !important; }
+.modal-content {
+  border-radius:16px !important;
+  border:none !important;
+  box-shadow:0 16px 60px rgba(0,0,0,0.25) !important;
+  transform:none !important;
+}
+.modal-content:hover { transform:none !important; border-color:transparent !important; }
+.modal-content * { animation:none !important; }
+@keyframes modal-slide-in {
+  from { opacity:0; transform:translateY(-16px) scale(0.98); }
+  to   { opacity:1; transform:translateY(0) scale(1); }
+}
+.modal.active .modal-content {
+  animation:modal-slide-in 0.25s ease both !important;
+}
+
+/* ── Toast ───────────────────────────────────────── */
+#esp32ToastContainer > div {
+  border-radius:var(--radius-lg) !important;
+  box-shadow:var(--shadow-md) !important;
+}
+
+/* ── Chart Containers ────────────────────────────── */
+.chart-wrapper { position:relative; border-radius:var(--radius); overflow:hidden; }
+
+/* ── Scrollbar Global ────────────────────────────── */
+::-webkit-scrollbar { width:5px; height:5px; }
+::-webkit-scrollbar-track { background:transparent; }
+::-webkit-scrollbar-thumb { background:#D1D5DB; border-radius:3px; }
+::-webkit-scrollbar-thumb:hover { background:#9CA3AF; }
+
+/* ── Sidebar toggle transitions ─────────────────── */
+#mainSidebar {
+  transform:translateX(0);
+  transition:transform 0.35s cubic-bezier(0.4,0,0.2,1);
+}
+#mainHeader {
+  left:256px;
+  transition:left 0.35s cubic-bezier(0.4,0,0.2,1);
+}
+main {
+  margin-left:256px;
+  transition:margin-left 0.35s cubic-bezier(0.4,0,0.2,1) !important;
+}
+
+/* ── Glow Effects ────────────────────────────────── */
+.glow-yellow { box-shadow:0 0 12px rgba(245,158,11,0.3); }
+.glow-green  { box-shadow:0 0 12px rgba(34,197,94,0.3); }
+.glow-red    { box-shadow:0 0 12px rgba(239,68,68,0.3); }
+
+/* ── Number Counter Animation ────────────────────── */
+.counter-num { animation:count-up 0.4s ease both; }
+
+/* ── Section Divider ─────────────────────────────── */
+.section-title {
+  font-size:17px; font-weight:700;
+  color:var(--text-1);
+  display:flex; align-items:center; gap:8px;
+  margin-bottom:14px;
+}
+.section-title i { color:var(--primary); }
+
+/* ── Login Page ──────────────────────────────────── */
+.login-card {
+  animation:scaleIn 0.35s ease both;
+  border-radius:var(--radius-2xl) !important;
+  box-shadow:var(--shadow-lg) !important;
+  border:1px solid rgba(245,158,11,0.15) !important;
+  overflow:hidden;
+}
+.login-input {
+  border-radius:var(--radius-sm) !important;
+  border:1.5px solid #E5E7EB !important;
+  transition:var(--transition) !important;
+  font-size:14px;
+}
+.login-input:focus {
+  border-color:var(--primary) !important;
+  box-shadow:0 0 0 3px var(--primary-glow) !important;
+}
+.login-submit {
+  background:linear-gradient(135deg,#F59E0B 0%,#F97316 100%);
+  border-radius:var(--radius-sm);
+  font-weight:600; font-size:15px;
+  box-shadow:0 4px 16px rgba(245,158,11,0.3);
+  transition:var(--transition);
+}
+.login-submit:hover {
+  box-shadow:0 6px 20px rgba(245,158,11,0.4);
+  filter:brightness(1.04);
+}
+
+/* ── Mobile Overlay ──────────────────────────────── */
+#sidebarOverlay {
+  display:none; position:fixed; inset:0;
+  background:rgba(0,0,0,0.5); z-index:55;
+  animation:fadeIn 0.15s ease;
+}
+
+/* ── Mobile Layout (< 1024px) ────────────────────── */
+@media (max-width:1023px) {
+  #mainSidebar {
+    transform:translateX(-100%) !important;
+    width:260px; z-index:60;
+    box-shadow:6px 0 32px rgba(0,0,0,0.4);
+  }
+  body.sidebar-open #mainSidebar { transform:translateX(0) !important; }
+  body.sidebar-open #sidebarOverlay { display:block; }
+  #mainHeader { left:0 !important; transition:none !important; }
+  main { margin-left:0 !important; transition:none !important; }
+  #notificationDropdown { width:min(340px,calc(100vw - 1rem)) !important; }
+}
+
+/* ── Notification dropdown: fixed to viewport on mobile ── */
+@media (max-width:767px) {
+  #notificationDropdown {
+    position: fixed !important;
+    top: 52px !important;
+    left: 0.5rem !important;
+    right: 0.5rem !important;
+    width: auto !important;
+    max-width: none !important;
+    transform: none !important;
+    z-index: 9999 !important;
+    max-height: calc(100dvh - 60px) !important;
+    overflow-y: auto !important;
+  }
+}
+
+/* ── Compact header on phones ─────────────────────── */
+@media (max-width:767px) {
+  #mainHeader > div { height:52px !important; padding-left:0.75rem !important; padding-right:0.75rem !important; }
+  /* Spacer: use ~ (general sibling) because #sidebarOverlay sits between header and spacer */
+  #mainHeader ~ .h-16 { height:52px !important; }
+  #sidebarToggle { width:2.25rem !important; height:2.25rem !important; }
+  #notificationBtn, #mainHeader a[href="logout.php"] {
+    width:2.25rem !important; height:2.25rem !important;
+  }
+  /* ── Chat page: matches fixed header + spacer (52px) ── */
+  #chatPage {
+    margin-left:0 !important;
+    height:calc(100dvh - 52px) !important;
+  }
+  /* Hide member panel on mobile — too narrow */
+  #memberPanel { display:none !important; }
+  /* Chat messages padding */
+  #chatBox { padding:0.75rem !important; }
+}
+
+/* ═══════════════════════════════════════════════════
+   MOBILE — compact app-like layout (< 768px)
+   Inspired by Instagram/Facebook density:
+   • 12px card padding  • 28px icon boxes
+   • 12px inter-card gaps  • 20px stat numbers
+   ═══════════════════════════════════════════════════ */
+@media (max-width:767px) {
+
+  /* ── Layout spacing ── */
+  .p-8, .p-6 { padding:0.75rem !important; }
+  .p-5       { padding:0.75rem !important; }
+  .p-4       { padding:0.625rem !important; }
+  .px-8, .px-6 { padding-left:0.75rem !important; padding-right:0.75rem !important; }
+  .px-5      { padding-left:0.75rem !important; padding-right:0.75rem !important; }
+  .py-5, .py-4 { padding-top:0.625rem !important; padding-bottom:0.625rem !important; }
+  .gap-6, .gap-5, .gap-4 { gap:0.625rem !important; }
+  .gap-3     { gap:0.5rem !important; }
+  .space-y-6 > * + *, .space-y-5 > * + * { margin-top:0.625rem !important; }
+  .space-y-4 > * + * { margin-top:0.5rem !important; }
+  .mb-6 { margin-bottom:0.75rem !important; }
+  .mb-5 { margin-bottom:0.625rem !important; }
+  .mb-4 { margin-bottom:0.5rem !important; }
+  .mt-5, .mt-4 { margin-top:0.625rem !important; }
+
+  /* ── Page header ── */
+  .page-header {
+    padding:0.625rem 0.75rem !important;
+    flex-wrap:wrap; align-items:flex-start !important;
+  }
+  .page-header h1 { font-size:0.95rem !important; gap:0.5rem !important; }
+  .page-header p  { font-size:0.7rem !important; margin-top:1px !important; }
+
+  /* ── Icon boxes: 36px → 26px ── */
+  .w-9.h-9, .w-8.h-8 {
+    width:1.625rem !important; height:1.625rem !important;
+    border-radius:6px !important;
+  }
+  .w-9.h-9 i, .w-8.h-8 i { font-size:0.625rem !important; }
+  .w-11.h-11 { width:2rem !important; height:2rem !important; }
+  .w-14.h-14 { width:2.25rem !important; height:2.25rem !important; }
+  .w-14.h-14 i { font-size:1rem !important; }
+
+  /* ── Stat cards: compact 2×2 boxes ── */
+  #statCardsGrid { gap:0.5rem !important; }
+  .stat-card  { border-radius:14px !important; min-height:100px !important; }
+  .stat-card h2 { font-size:1.6rem !important; line-height:1.1 !important; }
+  .stat-card .text-xs { font-size:0.65rem !important; }
+  .stat-card .w-8.h-8 { width:1.75rem !important; height:1.75rem !important; border-radius:8px !important; }
+  .stat-card .flex-col { padding:0.75rem !important; }
+
+  /* ── Section titles ── */
+  .section-title { font-size:0.8rem !important; margin-bottom:0.5rem !important; }
+
+  /* ── Card text ── */
+  .text-xl { font-size:0.95rem !important; }
+  .text-2xl { font-size:1rem !important; }
+  .text-3xl { font-size:1.25rem !important; }
+
+  /* ── Grids ── */
+  .grid-cols-4 { grid-template-columns:repeat(2,1fr) !important; }
+  .grid-cols-3 { grid-template-columns:repeat(2,1fr) !important; }
+  .hive-card .grid-cols-3 { gap:0.375rem !important; }
+
+  /* ── Mini stats row: 3-col compact ── */
+  #miniStatsRow { grid-template-columns:repeat(3,1fr) !important; gap:0.5rem !important; }
+  #miniStatsRow .px-5 { padding-left:0.5rem !important; padding-right:0.5rem !important; }
+  #miniStatsRow .py-3 { padding-top:0.5rem !important; padding-bottom:0.5rem !important; }
+  #miniStatsRow .gap-4 { gap:0.375rem !important; }
+  #miniStatsRow p.font-bold { font-size:0.8rem !important; }
+  #miniStatsRow .text-xs { font-size:0.6rem !important; }
+
+  /* ── Hive summary row: 3-col, compact ── */
+  #hiveSummaryRow { grid-template-columns:repeat(3,1fr) !important; gap:0.5rem !important; }
+  #hiveSummaryRow .text-xl { font-size:0.9rem !important; }
+  #hiveSummaryRow .text-xs { font-size:0.6rem !important; }
+
+  /* ── Tables ── */
+  .overflow-x-auto { overflow-x:auto !important; -webkit-overflow-scrolling:touch; }
+  table { min-width:480px; }
+  td, th { font-size:0.75rem !important; padding:7px 10px !important; }
+
+  /* ── Modals ── */
+  .modal-content {
+    max-height:calc(100dvh - 1.5rem) !important;
+    overflow-y:auto !important;
+    max-width:calc(100vw - 0.75rem) !important;
+    margin:0.375rem !important;
+    border-radius:14px !important;
+  }
+
+  /* ── Search / inputs ── */
+  #searchUsers, #searchInput { width:100% !important; }
+  select, input[type="text"], input[type="email"],
+  input[type="password"], input[type="number"] {
+    font-size:0.8rem !important;
+    padding:0.4rem 0.625rem !important;
+  }
+
+  /* notification dropdown handled by fixed-position rule above */
+
+  /* ── Hide non-essential header elements on phones ── */
+  #mainHeader .hidden.md\:block,
+  #mainHeader .hidden.md\:flex { display:none !important; }
+
+  /* ── Alert empty-state card ── */
+  .bg-white .w-14.h-14.bg-green-50 {
+    width:2rem !important; height:2rem !important; margin-bottom:0.5rem !important;
+  }
+
+  /* ── Page header right-side status (hidden on mobile) ── */
+  .page-header .hidden.sm\:flex { display:none !important; }
+}
+
+/* ═══════════════════════════════════════════════════
+   EXTRA-SMALL (< 480px) — push even tighter
+   ═══════════════════════════════════════════════════ */
+@media (max-width:479px) {
+
+  /* ── Layout ── */
+  .p-8, .p-6, .p-5 { padding:0.625rem !important; }
+  .p-4 { padding:0.5rem !important; }
+  .px-8, .px-6, .px-5 { padding-left:0.625rem !important; padding-right:0.625rem !important; }
+  .gap-6, .gap-5, .gap-4, .gap-3 { gap:0.5rem !important; }
+
+  /* ── Grids stack ── */
+  .grid-cols-4 { grid-template-columns:repeat(2,1fr) !important; }
+  .grid-cols-3 { grid-template-columns:1fr !important; }
+  /* hive card sensor grids and modal sensor grids always stay 3-col */
+  .hive-card .grid-cols-3,
+  .modal-content .grid-cols-3 { grid-template-columns:repeat(3,1fr) !important; }
+  /* grid-cols-2 stays 2-col on mobile (stat cards, hive cards, etc.) */
+  .lg\:grid-cols-2, .settings-grid { grid-template-columns:1fr !important; }
+
+  /* ── Keep summary rows as 3-col with tiny text ── */
+  #miniStatsRow  { grid-template-columns:repeat(3,1fr) !important; }
+  #hiveSummaryRow{ grid-template-columns:repeat(3,1fr) !important; }
+
+  /* ── Compact hive sensor mini-cards ── */
+  .hive-card .grid-cols-3 > div { padding:6px 5px !important; border-radius:10px !important; }
+  .hive-card .grid-cols-3 canvas,
+  .hive-card .grid-cols-3 div[style*="height:42px"] { display:none !important; }
+  .hive-card .grid-cols-3 .font-black { font-size:12px !important; }
+  .hive-card .grid-cols-3 .text-xs { font-size:10px !important; }
+
+  /* ── Typography ── */
+  body { font-size:13px; }
+  .page-header h1 { font-size:0.875rem !important; }
+  .stat-card h2   { font-size:1.1rem !important; }
+  .text-xl  { font-size:0.85rem !important; }
+  .text-2xl { font-size:0.9rem !important; }
+  .text-3xl { font-size:1.1rem !important; }
+  .text-sm  { font-size:0.75rem !important; }
+  .text-xs  { font-size:0.65rem !important; }
+
+  /* ── Icon boxes ── */
+  .w-9.h-9, .w-8.h-8 {
+    width:1.375rem !important; height:1.375rem !important;
+    border-radius:5px !important;
+  }
+  .w-11.h-11 { width:1.75rem !important; height:1.75rem !important; }
+
+  /* ── Touch targets (inputs & primary buttons only) ── */
+  input[type="text"], input[type="email"],
+  input[type="password"], input[type="number"],
+  select, textarea { min-height:40px !important; }
+  #mainSidebar a  { min-height:44px !important; }
+  #mainHeader button, #mainHeader a { min-height:44px !important; min-width:44px !important; }
+
+  /* ── Special containers ── */
+  #deviceGrid   { grid-template-columns:1fr !important; }
+  #chatPage     { height:100dvh !important; }
+  canvas        { max-width:100% !important; }
+  table         { min-width:360px !important; }
+
+  /* notification dropdown handled by fixed-position rule above */
+
+  /* ── Profile card email ── */
+  .profile-email { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+}
+
+/* ── Safe-area insets ────────────────────────────── */
+@supports (padding-bottom:env(safe-area-inset-bottom)) {
+  #mainSidebar { padding-bottom:calc(1rem + env(safe-area-inset-bottom)); }
+  main { padding-bottom:calc(1rem + env(safe-area-inset-bottom)); }
+}
+
+/* ── Touch UX ────────────────────────────────────── */
+@media (hover:none) and (pointer:coarse) {
+  a:hover, button:hover { opacity:1; }
+  * { -webkit-tap-highlight-color:transparent; }
+  .overflow-x-auto,.overflow-y-auto,#chatMessages { -webkit-overflow-scrolling:touch; }
+}

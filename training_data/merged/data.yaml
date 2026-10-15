@@ -1,0 +1,11 @@
+names:
+- bee
+- wasp
+- hornet
+- moth
+- fly
+- insect
+nc: 6
+path: c:\xampp\htdocs\beemonitoring\training_data\merged
+train: train/images
+val: valid/images

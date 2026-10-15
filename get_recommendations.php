@@ -1,0 +1,253 @@
+<?php
+// Smart recommendation system based on sensor data and colony status
+
+function getHiveRecommendations($sensor_data, $audio_analysis) {
+    $recommendations = [];
+    
+    if (!$sensor_data) {
+        return [
+            ['type' => 'warning', 'icon' => 'fa-plug', 'title' => 'No Sensor Data', 'message' => 'ESP32 not yet connected.', 'actions' => ['Check sensor connectivity', 'Verify ESP32 is powered on', 'Check network connection']],
+        ];
+    }
+    
+    // Temperature Recommendations
+    $temp = $sensor_data['temperature'];
+    if ($temp > 37) {
+        $recommendations[] = [
+            'type' => 'critical',
+            'icon' => 'fa-thermometer-full',
+            'title' => 'HIGH TEMPERATURE ALERT',
+            'message' => "Temperature is {$temp}°C (Critical: >37°C)",
+            'actions' => [
+                'Immediately check hive ventilation',
+                'Ensure adequate shade covering',
+                'Add ventilation holes if needed',
+                'Check for overcrowding',
+                'Monitor for 30 minutes after intervention'
+            ]
+        ];
+    } elseif ($temp > 36) {
+        $recommendations[] = [
+            'type' => 'warning',
+            'icon' => 'fa-thermometer-half',
+            'title' => 'Temperature Above Normal',
+            'message' => "Temperature is {$temp}°C (Optimal: 33-36°C)",
+            'actions' => [
+                'Improve ventilation gradually',
+                'Check hive orientation (facing east preferred)',
+                'Consider adding shade cloth',
+                'Monitor temperature trend over next 2 hours'
+            ]
+        ];
+    } elseif ($temp < 32) {
+        $recommendations[] = [
+            'type' => 'warning',
+            'icon' => 'fa-snowflake',
+            'title' => 'Temperature Below Normal',
+            'message' => "Temperature is {$temp}°C (Optimal: 33-36°C)",
+            'actions' => [
+                'Check for gaps in hive body',
+                'Reduce ventilation openings',
+                'Add insulation if weather is cold',
+                'Check colony strength (weak colonies can\'t maintain heat)',
+                'Consider combining with stronger colony if very weak'
+            ]
+        ];
+    }
+    
+    // Humidity Recommendations
+    $humidity = $sensor_data['humidity'];
+    if ($humidity > 70) {
+        $recommendations[] = [
+            'type' => 'warning',
+            'icon' => 'fa-tint',
+            'title' => 'High Humidity Detected',
+            'message' => "Humidity is {$humidity}% (Optimal: 50-70%)",
+            'actions' => [
+                'Increase ventilation to reduce moisture',
+                'Check for water leaks in hive roof',
+                'Ensure bottom board drainage is clear',
+                'Tilt hive slightly forward for water runoff',
+                'Risk of mold - inspect frames within 24 hours'
+            ]
+        ];
+    } elseif ($humidity < 40) {
+        $recommendations[] = [
+            'type' => 'info',
+            'icon' => 'fa-tint-slash',
+            'title' => 'Low Humidity',
+            'message' => "Humidity is {$humidity}% (Optimal: 50-70%)",
+            'actions' => [
+                'Reduce excessive ventilation',
+                'Bees will bring in water - monitor behavior',
+                'Not critical but monitor for bee stress'
+            ]
+        ];
+    }
+    
+    // CO2 Recommendations
+    $co2 = $sensor_data['co2'];
+    if ($co2 > 3000) {
+        $recommendations[] = [
+            'type' => 'critical',
+            'icon' => 'fa-wind',
+            'title' => 'CRITICAL: Poor Air Quality',
+            'message' => "CO₂ level is {$co2}ppm (Critical: >3000ppm)",
+            'actions' => [
+                'URGENT: Improve ventilation immediately',
+                'Open top ventilation holes',
+                'Ensure entrance is not blocked',
+                'Check for dead bees blocking airflow',
+                'Colony at risk of suffocation'
+            ]
+        ];
+    } elseif ($co2 > 2000) {
+        $recommendations[] = [
+            'type' => 'warning',
+            'icon' => 'fa-wind',
+            'title' => 'Elevated CO₂ Levels',
+            'message' => "CO₂ level is {$co2}ppm (Optimal: <2000ppm)",
+            'actions' => [
+                'Increase ventilation openings',
+                'Check entrance reducer - may be too small',
+                'Inspect for overcrowding',
+                'Add upper ventilation if needed'
+            ]
+        ];
+    }
+    
+    // Colony Status Recommendations (from Audio Analysis)
+    if ($audio_analysis) {
+        $status = $audio_analysis['colony_status'];
+        $confidence = $audio_analysis['confidence'];
+        
+        switch ($status) {
+            case 'queenless':
+                $recommendations[] = [
+                    'type' => 'critical',
+                    'icon' => 'fa-crown',
+                    'title' => 'QUEENLESS COLONY DETECTED',
+                    'message' => "Audio analysis shows queenless behavior ({$confidence}% confidence)",
+                    'actions' => [
+                        'URGENT: Verify by visual inspection within 24 hours',
+                        'Look for eggs and young larvae (confirms queen present)',
+                        'If queenless: Install new queen within 3 days',
+                        'Option 1: Introduce mated queen in cage',
+                        'Option 2: Add frame with eggs from strong colony',
+                        'Listen for high-pitched roaring sound (confirms queenless)',
+                        'Do NOT delay - colony will fail without queen'
+                    ]
+                ];
+                break;
+                
+            case 'swarming':
+                $recommendations[] = [
+                    'type' => 'warning',
+                    'icon' => 'fa-exclamation-triangle',
+                    'title' => 'Swarming Preparation Detected',
+                    'message' => "Colony showing pre-swarm behavior ({$confidence}% confidence)",
+                    'actions' => [
+                        'Inspect for queen cells within 48 hours',
+                        'Add honey super to give bees more space',
+                        'Consider split to prevent swarm loss',
+                        'Ensure adequate ventilation',
+                        'Remove queen cells if swarm not desired',
+                        'Check weekly until behavior normalizes',
+                        'Peak swarming season: April-June'
+                    ]
+                ];
+                break;
+                
+            case 'varroa_mite':
+                $recommendations[] = [
+                    'type' => 'critical',
+                    'icon' => 'fa-bug',
+                    'title' => 'PEST INFESTATION SUSPECTED',
+                    'message' => "Possible Varroa mite infestation ({$confidence}% confidence)",
+                    'actions' => [
+                        'URGENT: Perform alcohol wash or sugar shake test',
+                        'Count mites - over 3 per 100 bees requires treatment',
+                        'Treatment options:',
+                        '  • Formic acid strips (MAQS)',
+                        '  • Oxalic acid vaporization',
+                        '  • Apivar strips (amitraz)',
+                        'Remove honey supers before treatment',
+                        'Monitor mite levels every 2 weeks',
+                        'Unchecked mites will kill colony in months'
+                    ]
+                ];
+                break;
+                
+            case 'environmental_stress':
+                $recommendations[] = [
+                    'type' => 'warning',
+                    'icon' => 'fa-exclamation-circle',
+                    'title' => 'Colony Under Stress',
+                    'message' => "Environmental stress detected ({$confidence}% confidence)",
+                    'actions' => [
+                        'Check temperature and humidity levels',
+                        'Inspect for pests or diseases',
+                        'Verify water source is nearby (within 100m)',
+                        'Check for pesticide exposure in area',
+                        'Reduce inspections to minimize disturbance',
+                        'Monitor improvement over next 7 days'
+                    ]
+                ];
+                break;
+                
+            case 'robbing':
+                $recommendations[] = [
+                    'type' => 'warning',
+                    'icon' => 'fa-shield-alt',
+                    'title' => 'Robbing Behavior Detected',
+                    'message' => "Colony may be under attack ({$confidence}% confidence)",
+                    'actions' => [
+                        'IMMEDIATE: Reduce entrance to smallest opening',
+                        'Look for fighting bees at entrance',
+                        'Robber bees have shiny, hairless appearance',
+                        'Stop all feeding immediately',
+                        'Apply wet grass/leaves at entrance (temporary)',
+                        'Move hive only if severe (last resort)',
+                        'Weak colonies most vulnerable - combine if needed',
+                        'Monitor until robbing stops'
+                    ]
+                ];
+                break;
+                
+            case 'normal':
+                if ($confidence > 85) {
+                    $recommendations[] = [
+                        'type' => 'success',
+                        'icon' => 'fa-check-circle',
+                        'title' => 'Healthy Colony',
+                        'message' => "Colony showing normal behavior ({$confidence}% confidence)",
+                        'actions' => [
+                            'Colony is healthy - maintain current management',
+                            'Continue regular inspections every 7-10 days',
+                            'Monitor for seasonal changes',
+                            'Keep records of hive conditions'
+                        ]
+                    ];
+                }
+                break;
+        }
+    }
+    
+    // No issues found
+    if (empty($recommendations)) {
+        $recommendations[] = [
+            'type' => 'success',
+            'icon' => 'fa-check-circle',
+            'title' => 'All Parameters Normal',
+            'message' => 'Hive conditions are within optimal range',
+            'actions' => [
+                'Continue monitoring',
+                'Maintain regular inspection schedule',
+                'All systems operating normally'
+            ]
+        ];
+    }
+    
+    return $recommendations;
+}
+?>

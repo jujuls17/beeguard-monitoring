@@ -1,0 +1,242 @@
+Requirement already satisfied: numpy>=1.24 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from -r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 1)) (2.3.5)
+Collecting librosa>=0.10 (from -r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 2))
+  Downloading librosa-1.0.0-py3-none-any.whl.metadata (6.7 kB)
+Requirement already satisfied: scikit-learn>=1.3 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from -r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 3)) (1.9.0)
+Requirement already satisfied: matplotlib>=3.7 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from -r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 4)) (3.11.1)
+Requirement already satisfied: pandas>=2.0 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from -r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 5)) (3.0.5)
+Requirement already satisfied: mysql-connector-python>=8.1 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from -r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 6)) (9.5.0)
+Requirement already satisfied: joblib>=1.3 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from -r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 7)) (1.6.0)
+Collecting soundfile>=0.12 (from -r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 8))
+  Downloading soundfile-0.14.0-py2.py3-none-win_amd64.whl.metadata (18 kB)
+Collecting numba>=0.61.0 (from librosa>=0.10->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 2))
+  Downloading numba-0.68.0-cp313-cp313-win_amd64.whl.metadata (2.9 kB)
+Requirement already satisfied: scipy>=1.15.0 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from librosa>=0.10->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 2)) (1.18.1)
+Collecting decorator>=5.2.1 (from librosa>=0.10->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 2))
+  Downloading decorator-5.3.1-py3-none-any.whl.metadata (3.9 kB)
+Collecting pooch>=1.7 (from librosa>=0.10->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 2))
+  Downloading pooch-1.9.0-py3-none-any.whl.metadata (10 kB)
+Collecting soxr>=1.0.0 (from librosa>=0.10->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 2))
+  Downloading soxr-1.1.0-cp312-abi3-win_amd64.whl.metadata (5.8 kB)
+Requirement already satisfied: lazy_loader>=0.3 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from librosa>=0.10->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 2)) (0.5)
+Collecting msgpack>=1.0.5 (from librosa>=0.10->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 2))
+  Downloading msgpack-1.2.3-cp313-cp313-win_amd64.whl.metadata (8.5 kB)
+Requirement already satisfied: narwhals>=2.0.1 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from scikit-learn>=1.3->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 3)) (2.26.0)
+Requirement already satisfied: threadpoolctl>=3.5.0 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from scikit-learn>=1.3->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 3)) (3.6.0)
+Requirement already satisfied: contourpy>=1.0.1 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from matplotlib>=3.7->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 4)) (1.3.3)
+Requirement already satisfied: cycler>=0.10 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from matplotlib>=3.7->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 4)) (0.12.1)
+Requirement already satisfied: fonttools>=4.28.2 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from matplotlib>=3.7->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 4)) (4.64.0)
+Requirement already satisfied: kiwisolver>=1.3.1 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from matplotlib>=3.7->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 4)) (1.5.1)
+Requirement already satisfied: packaging>=20.0 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from matplotlib>=3.7->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 4)) (26.3)
+Requirement already satisfied: pillow>=9 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from matplotlib>=3.7->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 4)) (12.3.0)
+Requirement already satisfied: pyparsing>=3 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from matplotlib>=3.7->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 4)) (3.3.2)
+Requirement already satisfied: python-dateutil>=2.7 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from matplotlib>=3.7->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 4)) (2.9.0.post0)
+Requirement already satisfied: tzdata in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from pandas>=2.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 5)) (2026.3)
+Requirement already satisfied: cloudpickle>=3.0 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from joblib>=1.3->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 7)) (3.1.2)
+Requirement already satisfied: cffi>=1.0 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from soundfile>=0.12->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 8)) (2.1.1)
+Requirement already satisfied: typing-extensions in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from soundfile>=0.12->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 8)) (4.16.0)
+Requirement already satisfied: pycparser in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from cffi>=1.0->soundfile>=0.12->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 8)) (3.0)
+Collecting llvmlite<0.51,>=0.50.0dev0 (from numba>=0.61.0->librosa>=0.10->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 2))
+  Downloading llvmlite-0.50.0-cp313-cp313-win_amd64.whl.metadata (5.2 kB)
+Collecting platformdirs>=2.5.0 (from pooch>=1.7->librosa>=0.10->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 2))
+  Downloading platformdirs-4.12.4-py3-none-any.whl.metadata (5.5 kB)
+Requirement already satisfied: requests>=2.19.0 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from pooch>=1.7->librosa>=0.10->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 2)) (2.34.2)
+Requirement already satisfied: six>=1.5 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from python-dateutil>=2.7->matplotlib>=3.7->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 4)) (1.17.0)
+Requirement already satisfied: charset_normalizer<4,>=2 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from requests>=2.19.0->pooch>=1.7->librosa>=0.10->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 2)) (3.5.1)
+Requirement already satisfied: idna<4,>=2.5 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from requests>=2.19.0->pooch>=1.7->librosa>=0.10->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 2)) (3.19)
+Requirement already satisfied: urllib3<3,>=1.26 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from requests>=2.19.0->pooch>=1.7->librosa>=0.10->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 2)) (2.7.0)
+Requirement already satisfied: certifi>=2023.5.7 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from requests>=2.19.0->pooch>=1.7->librosa>=0.10->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 2)) (2026.7.22)
+Downloading librosa-1.0.0-py3-none-any.whl (294 kB)
+Downloading soundfile-0.14.0-py2.py3-none-win_amd64.whl (1.0 MB)
+   ---------------------------------------- 1.0/1.0 MB 403.8 kB/s  0:00:02
+Downloading decorator-5.3.1-py3-none-any.whl (10 kB)
+Downloading msgpack-1.2.3-cp313-cp313-win_amd64.whl (76 kB)
+Downloading numba-0.68.0-cp313-cp313-win_amd64.whl (2.8 MB)
+   ---------------------------------------- 2.8/2.8 MB 473.7 kB/s  0:00:05
+Downloading llvmlite-0.50.0-cp313-cp313-win_amd64.whl (41.9 MB)
+   -                                        1.3/41.9 MB 455.0 kB/s eta 0:01:30
+WARNING: Connection timed out while downloading.
+WARNING: Attempting to resume incomplete download (1.3 MB/41.9 MB, attempt 1)
+Resuming download llvmlite-0.50.0-cp313-cp313-win_amd64.whl (1.3 MB/41.9 MB)
+   ---------------------------------------- 41.9/41.9 MB 397.3 kB/s  0:01:56
+Downloading pooch-1.9.0-py3-none-any.whl (67 kB)
+Downloading platformdirs-4.12.4-py3-none-any.whl (32 kB)
+Downloading soxr-1.1.0-cp312-abi3-win_amd64.whl (174 kB)
+Installing collected packages: soxr, platformdirs, msgpack, llvmlite, decorator, soundfile, pooch, numba, librosa
+
+Successfully installed decorator-5.3.1 librosa-1.0.0 llvmlite-0.50.0 msgpack-1.2.3 numba-0.68.0 platformdirs-4.12.4 pooch-1.9.0 soundfile-0.14.0 soxr-1.1.0
+
+[notice] A new release of pip is available: 25.2 -> 26.2.1
+[notice] To update, run: python.exe -m pip install --upgrade pip
+
+=== BeeGuard MLP Training ===
+
+[Data] Found 84 records in DB
+  [OK]  sound_6a100c6e771592.30727214.mp3  ->  normal
+  [OK]  sound_6a100ca4962693.20647546.mp3  ->  normal
+  [OK]  sound_6a100cb0a4c404.72295538.mp3  ->  normal
+  [OK]  sound_6a100cc396ff97.98618949.mp3  ->  normal
+  [OK]  sound_6a100cca16d3d3.32785253.mp3  ->  normal
+  [OK]  sound_6a100ccdce09a5.88091193.mp3  ->  normal
+  [OK]  sound_6a100cd3b135d7.15567697.mp3  ->  normal
+  [OK]  sound_6a100cd825c005.19539986.mp3  ->  normal
+  [OK]  sound_6a100cdcd1f4a7.99119522.mp3  ->  normal
+  [OK]  sound_6a100ce0156834.12448650.mp3  ->  normal
+  [OK]  sound_6a13f89af210a2.20227595.mp3  ->  normal
+  [OK]  sound_6a13f92db8dab4.17791872.mp3  ->  normal
+  [OK]  sound_6a13f99a77f2f3.84451846.mp3  ->  normal
+  [OK]  sound_6a13f9c8f2af28.92999998.mp3  ->  queenless
+  [OK]  sound_6a13f9e250eeb2.23439851.mp3  ->  queenless
+  [OK]  sound_6a13f9f8847e70.38616795.mp3  ->  queenless
+  [OK]  sound_6a13fa0be115e0.15336339.mp3  ->  queenless
+  [OK]  sound_6a13fa207d5965.30629348.mp3  ->  queenless
+  [OK]  sound_6a13fe8176fcb5.30686591.wav  ->  varroa_mite
+  [OK]  sound_6a13fe95c4a991.54771996.wav  ->  varroa_mite
+  [OK]  sound_6a1400c168b367.84991399.wav  ->  swarming
+  [OK]  sound_6a1400eb704c16.54386989.wav  ->  swarming
+  [OK]  sound_6a14897c2e9154.97618736.mp3  ->  normal
+  [OK]  sound_6a156e4b016022.40034588.wav  ->  varroa_mite
+  [OK]  sound_6a156e8ba1d187.55745239.wav  ->  varroa_mite
+  [OK]  sound_6a156e9a266121.43977635.wav  ->  varroa_mite
+  [OK]  sound_6a156eac0311c1.30852875.wav  ->  varroa_mite
+  [OK]  sound_6a156ebd980ec1.04640115.wav  ->  varroa_mite
+  [OK]  sound_6a156ed29ac944.34540854.wav  ->  varroa_mite
+  [OK]  sound_6a156ee7e0c585.04537367.wav  ->  varroa_mite
+  [OK]  sound_6a156ef646ed93.04159661.wav  ->  varroa_mite
+  [OK]  sound_6a156f0778bac1.86808487.wav  ->  varroa_mite
+  [OK]  sound_6a156f19069a08.66676443.wav  ->  varroa_mite
+  [OK]  sound_6a156f2dd53243.26872584.wav  ->  varroa_mite
+  [OK]  sound_6a156f426f36d6.49931723.wav  ->  varroa_mite
+  [OK]  sound_6a156f5239cd51.35364715.wav  ->  varroa_mite
+  [OK]  sound_6a156f63476495.12509592.wav  ->  varroa_mite
+  [OK]  sound_6a156f800e9ee7.05081149.wav  ->  varroa_mite
+  [OK]  sound_6a156f93238139.11774576.wav  ->  varroa_mite
+  [OK]  sound_6a157020171963.93680063.wav  ->  queenless
+  [OK]  sound_6a1570315dbdb3.89077908.wav  ->  queenless
+  [OK]  sound_6a15706121ef40.43703198.wav  ->  queenless
+  [OK]  sound_6a157075b7c2d5.83736703.wav  ->  queenless
+  [OK]  sound_6a157089634833.93414597.wav  ->  queenless
+  [OK]  sound_6a15709c428d89.99115730.wav  ->  queenless
+  [OK]  sound_6a1570af21e346.10540729.wav  ->  queenless
+  [OK]  sound_6a1570c0bef3a6.72065932.wav  ->  queenless
+  [OK]  sound_6a1570d2754c92.06061163.wav  ->  queenless
+  [OK]  sound_6a1570e3e00767.67155491.wav  ->  queenless
+  [OK]  sound_6a1570f64bcb94.80228969.wav  ->  queenless
+  [OK]  sound_6a157108331dc3.17855490.wav  ->  queenless
+  [OK]  sound_6a157116f1e957.45548557.wav  ->  queenless
+  [OK]  sound_6a15712a134ac3.72707498.wav  ->  queenless
+  [OK]  sound_6a15713f7cbba4.00583119.wav  ->  queenless
+  [OK]  sound_6a15714ff207c4.44629187.wav  ->  queenless
+  [OK]  sound_6a15715eaf7258.58591299.wav  ->  queenless
+  [OK]  sound_6a1571d3c91365.74634664.wav  ->  normal
+  [OK]  sound_6a1571e414f278.76289900.wav  ->  normal
+  [OK]  sound_6a1571f42880e0.88675062.wav  ->  normal
+  [OK]  sound_6a157214897955.76008578.wav  ->  normal
+  [OK]  sound_6a15722471bb37.62304273.wav  ->  normal
+  [OK]  sound_6a15723b17a114.69884509.wav  ->  normal
+  [OK]  sound_6a1572713352b2.48658972.wav  ->  normal
+  [OK]  sound_6a1572829fc114.52668950.wav  ->  normal
+  [OK]  sound_6a170ccc1099d0.82026924.wav  ->  normal
+  [OK]  sound_6a170d8d6784d8.74454802.wav  ->  normal
+  [OK]  sound_6a170db42e7482.31189437.wav  ->  normal
+  [OK]  sound_6a170dde5ce527.56081088.wav  ->  normal
+  [OK]  sound_6a170e1510cf86.08701477.wav  ->  normal
+  [OK]  sound_6a170e5c4b2d79.27163982.wav  ->  normal
+  [OK]  sound_6a170e9c662887.71939885.wav  ->  normal
+  [OK]  sound_6a170ec03e9d61.80840300.wav  ->  normal
+  [OK]  sound_6a170ee4e5ad34.26066793.wav  ->  normal
+  [OK]  sound_6a170f09ad7938.44773072.wav  ->  normal
+  [OK]  sound_6a170f30cdda42.31822414.wav  ->  normal
+  [OK]  sound_6a170f57b2bb20.73817827.wav  ->  normal
+  [OK]  sound_6a170f7b8d2621.26721014.wav  ->  normal
+  [OK]  sound_6a171005192250.36032096.wav  ->  normal
+  [OK]  sound_6a1710311b65b5.89554737.wav  ->  normal
+  [OK]  sound_6a171078708328.49736553.wav  ->  normal
+  [OK]  sound_6a17109da7e256.78424131.wav  ->  normal
+  [OK]  sound_6a1710c2b1ee67.39306352.wav  ->  normal
+  [OK]  sound_6a1710eb0936b9.30048442.wav  ->  normal
+  [OK]  sound_6a1711674bcff2.38407399.wav  ->  normal
+
+[Data] Loaded 84 samples across classes: ['normal' 'queenless' 'swarming' 'varroa_mite']
+[Data] Label encoder saved -> C:\xampp\htdocs\beemonitoring\ml\models\label_encoder.pkl
+[Data] Scaler saved -> C:\xampp\htdocs\beemonitoring\ml\models\scaler.pkl
+[Train] 67 train  |  17 val  |  stratify=True
+Iteration 1, loss = 1.48340385
+Validation score: 0.571429
+Iteration 2, loss = 1.19861294
+Validation score: 0.714286
+Iteration 3, loss = 1.01835204
+Validation score: 0.571429
+Iteration 4, loss = 0.90124716
+Validation score: 0.714286
+Iteration 5, loss = 0.81141379
+Validation score: 0.714286
+Iteration 6, loss = 0.72783683
+Validation score: 0.714286
+Iteration 7, loss = 0.64492188
+Validation score: 0.714286
+Iteration 8, loss = 0.56753292
+Validation score: 0.571429
+Iteration 9, loss = 0.49905310
+Validation score: 0.714286
+Iteration 10, loss = 0.44221144
+Validation score: 0.714286
+Iteration 11, loss = 0.39435469
+Validation score: 0.714286
+Iteration 12, loss = 0.35188593
+Validation score: 0.714286
+Iteration 13, loss = 0.31199878
+Validation score: 0.714286
+Iteration 14, loss = 0.27480955
+Validation score: 0.714286
+Iteration 15, loss = 0.24127452
+Validation score: 0.857143
+Iteration 16, loss = 0.21169601
+Validation score: 0.857143
+Iteration 17, loss = 0.18598421
+Validation score: 0.857143
+Iteration 18, loss = 0.16387166
+Validation score: 0.857143
+Iteration 19, loss = 0.14474105
+Validation score: 0.857143
+Iteration 20, loss = 0.12811323
+Validation score: 0.857143
+Iteration 21, loss = 0.11358456
+Validation score: 0.857143
+Iteration 22, loss = 0.10089698
+Validation score: 0.857143
+Iteration 23, loss = 0.08993808
+Validation score: 0.857143
+Iteration 24, loss = 0.08056469
+Validation score: 0.857143
+Iteration 25, loss = 0.07240264
+Validation score: 0.857143
+Iteration 26, loss = 0.06510667
+Validation score: 0.857143
+Iteration 27, loss = 0.05904250
+Validation score: 0.857143
+Iteration 28, loss = 0.05400454
+Validation score: 0.857143
+Iteration 29, loss = 0.04971188
+Validation score: 0.857143
+Iteration 30, loss = 0.04588580
+Validation score: 0.857143
+Iteration 31, loss = 0.04267203
+Validation score: 0.857143
+Validation score did not improve more than tol=0.000100 for 15 consecutive epochs. Stopping.
+
+[Results]
+              precision    recall  f1-score   support
+
+      normal       0.50      0.44      0.47         9
+   queenless       0.33      0.75      0.46         4
+    swarming       0.00      0.00      0.00         0
+ varroa_mite       0.00      0.00      0.00         4
+
+    accuracy                           0.41        17
+   macro avg       0.21      0.30      0.23        17
+weighted avg       0.34      0.41      0.36        17
+
+[Model] Saved -> C:\xampp\htdocs\beemonitoring\ml\models\beeguard_mlp.pkl
+[Metrics] val_accuracy=41.2%
+[Done] Training complete!
+

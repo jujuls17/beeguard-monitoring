@@ -1,0 +1,1 @@
+{"val_accuracy": 41.2, "final_accuracy": 41.2, "sample_count": 84, "classes": ["normal", "queenless", "swarming", "varroa_mite"], "trained_at": "Oct 09, 2026 01:38", "per_class": {"normal": 47.1, "queenless": 46.2, "swarming": 0.0, "varroa_mite": 0.0}}

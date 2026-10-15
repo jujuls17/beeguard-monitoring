@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(php -l hives.php)",
+      "Bash(php -l alerts.php)",
+      "Bash(php -l dismiss_alert.php)",
+      "Bash(php -l export.php)",
+      "Bash(php -l api/export_data.php)"
+    ]
+  }
+}
