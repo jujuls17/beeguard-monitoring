@@ -10,7 +10,7 @@ imgsz: 640
 save: true
 save_period: -1
 cache: true
-device: '0'
+device: cpu
 workers: 8
 project: models/trained
 name: bee_3class

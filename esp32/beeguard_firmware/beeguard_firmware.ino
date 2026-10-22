@@ -184,9 +184,6 @@ void updateOLED() {
     snprintf(buf, sizeof(buf), "Hz:%.0f",    g_dominantFreq);
     u8g2.drawStr(0, 57, buf);
 
-    int secsLeft = max(0, (int)(((unsigned long)syncIntervalMs - (millis() - lastSendTime)) / 1000));
-    snprintf(buf, sizeof(buf), "Sync:%ds", secsLeft);
-    u8g2.drawStr(0, 63, buf);
 
     // --- Bee (right side) ---
     drawBee(101, 38);

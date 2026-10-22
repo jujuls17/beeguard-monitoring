@@ -157,13 +157,13 @@ $hiveRow  = $conn->query("SELECT name FROM hives WHERE id = {$hiveId} LIMIT 1")-
 $hiveName = $hiveRow ? htmlspecialchars($hiveRow['name']) : "Hive #{$hiveId}";
 
 // ── Temperature alerts ────────────────────────────────────────────────────
-// Optimal: 33–36°C. Safe auto-resolve range: 32–37°C.
-if ($temp >= 32 && $temp <= 37) {
+// Paper spec: Optimal 33–36°C. Warning <33 or >36. Critical <18 or >38.
+if ($temp >= 33 && $temp <= 36) {
     dismissAlertType($conn, $hiveId, 'temperature');
 } else {
-    if ($temp > 37) {
+    if ($temp > 38) {
         insertAlertIfNew($conn, $hiveId, 'temperature', 'critical',
-            "Temperature critically high at {$temp}°C on {$hiveName}.",
+            "Temperature critically high at {$temp}°C on {$hiveName}. Colony at heat stress risk.",
             "Immediately open entrance and add top ventilation. Provide shade if the hive is in direct sun. Heat stress can halt brood production — check queen activity within 24 hours."
         );
     } elseif ($temp > 36) {
@@ -176,7 +176,7 @@ if ($temp >= 32 && $temp <= 37) {
             "Temperature critically low at {$temp}°C on {$hiveName}. Colony at hypothermia risk.",
             "Insulate the hive immediately with foam or wrapping material. Reduce entrance to a 1-bee gap to retain heat. Verify cluster size is sufficient — a small colony may need combining with another to survive."
         );
-    } elseif ($temp < 32) {
+    } elseif ($temp < 33) {
         insertAlertIfNew($conn, $hiveId, 'temperature', 'warning',
             "Temperature too low at {$temp}°C on {$hiveName}. Below optimal brood range (33–36°C).",
             "Reduce entrance size to help bees retain heat. Add insulation above the inner cover. If late-season, verify honey stores are adequate for cluster survival through cold nights."
@@ -185,18 +185,18 @@ if ($temp >= 32 && $temp <= 37) {
 }
 
 // ── Humidity alerts ───────────────────────────────────────────────────────
-// Optimal: 50–70%. Safe auto-resolve range: 40–75%.
-if ($humidity >= 40 && $humidity <= 75) {
+// Paper spec: Optimal 40–95%. Warning <40 or >95. Critical <30 or >98.
+if ($humidity >= 40 && $humidity <= 95) {
     dismissAlertType($conn, $hiveId, 'humidity');
 } else {
-    if ($humidity > 85) {
+    if ($humidity > 98) {
         insertAlertIfNew($conn, $hiveId, 'humidity', 'critical',
             "Humidity critically high at {$humidity}% on {$hiveName}. Risk of fungal disease and brood death.",
             "Open all ventilation immediately. Check for water ingress or roof leaks. Inspect brood frames for chalkbrood (white mummified larvae) or nosema. Remove entrance reducer if it is blocking airflow."
         );
-    } elseif ($humidity > 75) {
+    } elseif ($humidity > 95) {
         insertAlertIfNew($conn, $hiveId, 'humidity', 'warning',
-            "High humidity at {$humidity}% on {$hiveName}. Above optimal range (50–70%).",
+            "High humidity at {$humidity}% on {$hiveName}. Above optimal range (40–95%).",
             "Improve ventilation by propping the lid slightly or opening the screened bottom board. Monitor for condensation on the inner cover. Watch brood frames for early signs of chalkbrood."
         );
     } elseif ($humidity < 30) {
@@ -206,7 +206,7 @@ if ($humidity >= 40 && $humidity <= 75) {
         );
     } elseif ($humidity < 40) {
         insertAlertIfNew($conn, $hiveId, 'humidity', 'warning',
-            "Low humidity at {$humidity}% on {$hiveName}. Below optimal range (50–70%).",
+            "Low humidity at {$humidity}% on {$hiveName}. Below optimal range (40–95%).",
             "Ensure a clean water source is accessible within 50m. Monitor nectar curing — bees need adequate humidity to properly ripen and seal honey. Check if colony is consuming water stores rapidly."
         );
     }

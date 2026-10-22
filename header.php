@@ -118,8 +118,6 @@ if ($ra) while ($row = $ra->fetch_assoc()) $recent_alerts[] = $row;
 <!-- Header spacer -->
 <div class="h-16"></div>
 
-<!-- ESP32 Connection Toast Container -->
-<div id="esp32ToastContainer" class="fixed top-20 right-5 z-50 flex flex-col gap-3 pointer-events-none" style="min-width:300px;max-width:340px;"></div>
 
 <script>
 /* Live clock */
@@ -201,77 +199,18 @@ window.addEventListener('resize', function () {
 /* On mobile page load: clear inline styles so CSS media query takes over */
 if (_isMobile()) _clearInlineLayout();
 
-/* ── ESP32 Connection Toast ── */
-(function(){
-    const POLL_MS = 20000;
-    const LS_KEY  = 'bg_device_ts';
-    function load()  { try { return JSON.parse(localStorage.getItem(LS_KEY)||'{}'); } catch{return {};} }
-    function save(o) { localStorage.setItem(LS_KEY, JSON.stringify(o)); }
 
-    function showToast(dev) {
-        const container = document.getElementById('esp32ToastContainer');
-        if (!container) return;
-        const id = 'toast_' + Date.now();
-        container.insertAdjacentHTML('beforeend', `
-            <div id="${id}" class="pointer-events-auto bg-white rounded-2xl overflow-hidden"
-                 style="box-shadow:0 12px 40px rgba(0,0,0,0.15);transform:translateX(120%);transition:transform 0.4s cubic-bezier(.22,1,.36,1),opacity 0.4s;opacity:0;border:1px solid #D1FAE5;">
-                <div class="flex items-center gap-3 p-4">
-                    <div class="w-10 h-10 bg-green-50 rounded-xl flex items-center justify-center flex-shrink-0">
-                        <i class="fas fa-wifi text-green-500 text-lg"></i>
-                    </div>
-                    <div class="flex-1">
-                        <p class="font-bold text-gray-900 text-sm flex items-center gap-2">
-                            <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse inline-block"></span>
-                            ESP32 Connected
-                        </p>
-                        <p class="text-xs text-gray-500 mt-0.5"><strong>${dev.device_name||dev.device_id}</strong> → ${dev.hive_name}</p>
-                        <p class="text-xs text-gray-400 mt-0.5"><i class="far fa-clock mr-1"></i>${dev.last_sync_fmt}</p>
-                    </div>
-                    <button onclick="document.getElementById('${id}').remove()"
-                            class="text-gray-300 hover:text-gray-500 text-xl leading-none transition-colors">&times;</button>
-                </div>
-                <div id="${id}_bar" class="h-0.5 bg-green-400" style="width:100%;transition:width 5s linear;"></div>
-            </div>`);
-        const el = document.getElementById(id);
-        requestAnimationFrame(() => requestAnimationFrame(() => {
-            el.style.transform = 'translateX(0)';
-            el.style.opacity   = '1';
-            const bar = document.getElementById(id+'_bar');
-            if (bar) bar.style.width = '0%';
-        }));
-        setTimeout(() => {
-            if (!el) return;
-            el.style.transform = 'translateX(120%)';
-            el.style.opacity   = '0';
-            setTimeout(() => el && el.remove(), 450);
-        }, 5200);
+// Synchronized page refresh — all devices reload at the same clock boundary
+// (every 15s aligned to wall clock: :00, :15, :30, :45)
+(function () {
+    const INTERVAL = 15000;
+    function doReload() {
+        const modalOpen = document.querySelector('.modal.active');
+        const typing    = document.activeElement && ['INPUT','TEXTAREA','SELECT'].includes(document.activeElement.tagName);
+        if (!modalOpen && !typing) location.reload();
     }
-
-    function poll() {
-        fetch('api/esp32_connect.php').then(r=>r.json()).then(data => {
-            if (!data.success) return;
-            const stored = load(), updated = {};
-            data.devices.forEach(dev => {
-                updated[dev.device_id] = dev.last_sync_ts;
-                if (dev.last_sync_ts > (stored[dev.device_id]||0) && dev.status === 'online') showToast(dev);
-            });
-            save(updated);
-        }).catch(()=>{});
-    }
-
-    fetch('api/esp32_connect.php').then(r=>r.json()).then(data => {
-        if (!data.success) return;
-        const seed = {};
-        data.devices.forEach(dev => { seed[dev.device_id] = dev.last_sync_ts; });
-        save(seed);
-    }).catch(()=>{}).finally(() => setInterval(poll, POLL_MS));
+    // Wait until the next 15s boundary, then tick every 15s
+    const msUntilNext = INTERVAL - (Date.now() % INTERVAL);
+    setTimeout(() => { doReload(); setInterval(doReload, INTERVAL); }, msUntilNext);
 })();
-
-// Auto-refresh the whole page every 30 seconds
-// Skip reload if a modal is open or user is typing in an input
-setInterval(() => {
-    const modalOpen = document.querySelector('.modal.active');
-    const typing    = document.activeElement && ['INPUT','TEXTAREA','SELECT'].includes(document.activeElement.tagName);
-    if (!modalOpen && !typing) location.reload();
-}, 30000);
 </script>

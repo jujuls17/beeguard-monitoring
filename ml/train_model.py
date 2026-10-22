@@ -344,13 +344,11 @@ def main():
     for cls in CLASSES:
         print(f"        {cls}: train={train_counts[cls]}  val={val_counts[cls]}")
 
-    # Validate minimum validation clips
+    # Warn if any class has very few validation clips (but continue training)
     for cls in CLASSES:
         if val_counts[cls] < MIN_VAL_CLIPS:
-            print(f"\n[ERROR] Class '{cls}' has only {val_counts[cls]} validation clips "
-                  f"(minimum required: {MIN_VAL_CLIPS}). "
-                  f"Add more recordings for this class and retrain.")
-            sys.exit(1)
+            print(f"\n[WARNING] Class '{cls}' has only {val_counts[cls]} validation clips "
+                  f"(recommended: {MIN_VAL_CLIPS}+). Accuracy for this class may be low.")
 
     # ── Build and train CNN ──────────────────────────────────────────
     model = build_cnn()

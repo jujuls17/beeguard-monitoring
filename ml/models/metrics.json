@@ -1,1 +1,50 @@
-{"val_accuracy": 41.2, "final_accuracy": 41.2, "sample_count": 84, "classes": ["normal", "queenless", "swarming", "varroa_mite"], "trained_at": "Oct 09, 2026 01:38", "per_class": {"normal": 47.1, "queenless": 46.2, "swarming": 0.0, "varroa_mite": 0.0}}
+{
+  "val_accuracy": 81.99,
+  "final_accuracy": 81.99,
+  "per_class": {
+    "normal": {
+      "precision": 0.9239,
+      "recall": 0.7944,
+      "f1": 0.8543,
+      "support": 107
+    },
+    "queenless": {
+      "precision": 0.6866,
+      "recall": 0.8846,
+      "f1": 0.7731,
+      "support": 52
+    },
+    "swarming": {
+      "precision": 0.5,
+      "recall": 0.5,
+      "f1": 0.5,
+      "support": 2
+    }
+  },
+  "macro_avg": {
+    "precision": 0.7035,
+    "recall": 0.7263,
+    "f1": 0.7091
+  },
+  "overall_accuracy": 81.99,
+  "train_clip_counts": {
+    "normal": 395,
+    "queenless": 214,
+    "swarming": 2
+  },
+  "val_clip_counts": {
+    "normal": 107,
+    "queenless": 52,
+    "swarming": 2
+  },
+  "epochs_run": 14,
+  "training_date": "2026-10-22 15:52:49",
+  "classes": [
+    "normal",
+    "queenless",
+    "swarming"
+  ],
+  "model": "BeeGuard CNN (Conv2D x3 + GAP)",
+  "sample_count": 772,
+  "trained_at": "Oct 22, 2026 15:52"
+}

@@ -7,8 +7,8 @@ checkAuth();
 
 function getTempRange(?float $t): string {
     if ($t === null) return 'no-data';
-    if ($t < 18 || $t > 37)          return 'critical';
-    if ($t < 32 || $t > 36)          return 'warning';
+    if ($t < 18 || $t > 38)          return 'critical';
+    if ($t < 33 || $t > 36)          return 'warning';
     return 'normal';
 }
 function getTempRangeBadge(?float $t): string {

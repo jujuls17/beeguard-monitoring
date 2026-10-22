@@ -872,8 +872,12 @@ if (!$s) {
                     const pct   = total > 0 ? Math.round((count / total) * 100) : 0;
                     const barW  = maxCount > 0 ? Math.round((count / maxCount) * 100) : 0;
                     const color = CLASS_COLORS[cls] || '#F59E0B';
-                    const perClassAcc = m.per_class && m.per_class[cls] !== undefined
-                        ? `<span class="text-xs text-gray-400 ml-1">${m.per_class[cls]}% F1</span>` : '';
+                    const clsData = m.per_class && m.per_class[cls];
+                    const f1Val = clsData !== undefined
+                        ? (typeof clsData === 'object' ? clsData.f1 : clsData / 100)
+                        : null;
+                    const perClassAcc = f1Val !== null
+                        ? `<span class="text-xs text-gray-400 ml-1">${(f1Val * 100).toFixed(1)}% F1</span>` : '';
                     return `<div class="flex items-center gap-3">
                         <span class="text-xs text-gray-600 w-36 truncate flex-shrink-0">${CLASS_LABELS[cls] || cls}</span>
                         <div class="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">

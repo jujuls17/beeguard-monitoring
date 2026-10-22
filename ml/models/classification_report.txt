@@ -1,0 +1,13 @@
+BeeGuard CNN Classification Report
+==================================================
+Generated: 2026-10-22 15:52:49
+
+              precision    recall  f1-score   support
+
+      normal       0.92      0.79      0.85       107
+   queenless       0.69      0.88      0.77        52
+    swarming       0.50      0.50      0.50         2
+
+    accuracy                           0.82       161
+   macro avg       0.70      0.73      0.71       161
+weighted avg       0.84      0.82      0.82       161

@@ -59,7 +59,7 @@ echo json_encode([
     'hive_code'              => $device['hive_code'],
     'sync_interval_seconds'  => $syncSeconds,   // new field — use this
     'sync_interval_minutes'  => $syncMinutes,   // legacy field — kept for old firmware
-    'api_endpoint'           => 'http://YOUR_SERVER_IP/beemonitoring/api/receive_data.php',
+    'api_endpoint'           => (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . '/beemonitoring/api/receive_data.php',
     'firmware'               => $device['firmware_version'],
     'server_time'            => date('Y-m-d H:i:s'),
 ]);

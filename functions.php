@@ -185,10 +185,11 @@ function countHealthyHives($conn) {
         if (!$sensor) continue;
 
         // Same scoring as getHiveHealthScore — healthy = score >= 80
+        // Paper spec: Temp optimal 33–36°C, Humidity optimal 40–95%, CO2 normal ≤4000ppm
         $s = 100;
-        if ($sensor['temperature'] > 37 || $sensor['temperature'] < 32) $s -= 5;
-        if ($sensor['co2'] > 3000)    $s -= 5;
-        if ($sensor['humidity'] > 75) $s -= 3;
+        if ($sensor['temperature'] > 36 || $sensor['temperature'] < 33) $s -= 5;
+        if ($sensor['co2'] > 4000)     $s -= 5;
+        if ($sensor['humidity'] > 95 || $sensor['humidity'] < 40)  $s -= 3;
         if ($audio && $audio['colony_status'] !== 'normal') $s -= 8;
         if (max(0, $s) >= 80) $healthy++;
     }
@@ -260,10 +261,11 @@ function getHiveHealthScore($conn) {
         $audio  = getLatestAudioAnalysis($conn, $hive['id']);
         if (!$sensor) continue; // skip hives with no data
 
+        // Paper spec: Temp optimal 33–36°C, Humidity optimal 40–95%, CO2 normal ≤4000ppm
         $s = 100;
-        if ($sensor['temperature'] > 37 || $sensor['temperature'] < 32) { $s -= 5; $issues++; }
-        if ($sensor['co2'] > 3000)    { $s -= 5; $issues++; }
-        if ($sensor['humidity'] > 75) { $s -= 3; $issues++; }
+        if ($sensor['temperature'] > 36 || $sensor['temperature'] < 33) { $s -= 5; $issues++; }
+        if ($sensor['co2'] > 4000)     { $s -= 5; $issues++; }
+        if ($sensor['humidity'] > 95 || $sensor['humidity'] < 40)  { $s -= 3; $issues++; }
         if ($audio && $audio['colony_status'] !== 'normal') { $s -= 8; $issues++; }
         $hiveScores[] = max(0, $s);
     }

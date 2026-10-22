@@ -10,14 +10,14 @@ function getHiveRecommendations($sensor_data, $audio_analysis) {
         ];
     }
     
-    // Temperature Recommendations
+    // Temperature Recommendations — Paper spec: Optimal 33–36°C
     $temp = $sensor_data['temperature'];
-    if ($temp > 37) {
+    if ($temp > 38) {
         $recommendations[] = [
             'type' => 'critical',
             'icon' => 'fa-thermometer-full',
             'title' => 'HIGH TEMPERATURE ALERT',
-            'message' => "Temperature is {$temp}°C (Critical: >37°C)",
+            'message' => "Temperature is {$temp}°C (Critical: >38°C, Optimal: 33–36°C)",
             'actions' => [
                 'Immediately check hive ventilation',
                 'Ensure adequate shade covering',
@@ -30,8 +30,8 @@ function getHiveRecommendations($sensor_data, $audio_analysis) {
         $recommendations[] = [
             'type' => 'warning',
             'icon' => 'fa-thermometer-half',
-            'title' => 'Temperature Above Normal',
-            'message' => "Temperature is {$temp}°C (Optimal: 33-36°C)",
+            'title' => 'Temperature Above Optimal',
+            'message' => "Temperature is {$temp}°C (Optimal: 33–36°C)",
             'actions' => [
                 'Improve ventilation gradually',
                 'Check hive orientation (facing east preferred)',
@@ -39,77 +39,113 @@ function getHiveRecommendations($sensor_data, $audio_analysis) {
                 'Monitor temperature trend over next 2 hours'
             ]
         ];
-    } elseif ($temp < 32) {
+    } elseif ($temp < 18) {
+        $recommendations[] = [
+            'type' => 'critical',
+            'icon' => 'fa-snowflake',
+            'title' => 'CRITICAL: Temperature Dangerously Low',
+            'message' => "Temperature is {$temp}°C (Critical: <18°C, Optimal: 33–36°C)",
+            'actions' => [
+                'Insulate the hive immediately',
+                'Reduce entrance to a 1-bee gap to retain heat',
+                'Verify cluster size — consider combining weak colonies',
+                'Check honey stores for winter survival'
+            ]
+        ];
+    } elseif ($temp < 33) {
         $recommendations[] = [
             'type' => 'warning',
             'icon' => 'fa-snowflake',
-            'title' => 'Temperature Below Normal',
-            'message' => "Temperature is {$temp}°C (Optimal: 33-36°C)",
+            'title' => 'Temperature Below Optimal',
+            'message' => "Temperature is {$temp}°C (Optimal: 33–36°C)",
             'actions' => [
                 'Check for gaps in hive body',
                 'Reduce ventilation openings',
                 'Add insulation if weather is cold',
-                'Check colony strength (weak colonies can\'t maintain heat)',
+                'Check colony strength (weak colonies cannot maintain heat)',
                 'Consider combining with stronger colony if very weak'
             ]
         ];
     }
-    
-    // Humidity Recommendations
+
+    // Humidity Recommendations — Paper spec: Optimal 40–95%
     $humidity = $sensor_data['humidity'];
-    if ($humidity > 70) {
+    if ($humidity > 98) {
+        $recommendations[] = [
+            'type' => 'critical',
+            'icon' => 'fa-tint',
+            'title' => 'CRITICAL: Humidity Dangerously High',
+            'message' => "Humidity is {$humidity}% (Critical: >98%, Optimal: 40–95%)",
+            'actions' => [
+                'Open all ventilation immediately',
+                'Check for water ingress or roof leaks',
+                'Inspect brood frames for chalkbrood or nosema',
+                'Remove entrance reducer to improve airflow'
+            ]
+        ];
+    } elseif ($humidity > 95) {
         $recommendations[] = [
             'type' => 'warning',
             'icon' => 'fa-tint',
             'title' => 'High Humidity Detected',
-            'message' => "Humidity is {$humidity}% (Optimal: 50-70%)",
+            'message' => "Humidity is {$humidity}% (Optimal: 40–95%)",
             'actions' => [
                 'Increase ventilation to reduce moisture',
                 'Check for water leaks in hive roof',
                 'Ensure bottom board drainage is clear',
-                'Tilt hive slightly forward for water runoff',
-                'Risk of mold - inspect frames within 24 hours'
+                'Tilt hive slightly forward for water runoff'
+            ]
+        ];
+    } elseif ($humidity < 30) {
+        $recommendations[] = [
+            'type' => 'critical',
+            'icon' => 'fa-tint-slash',
+            'title' => 'CRITICAL: Humidity Dangerously Low',
+            'message' => "Humidity is {$humidity}% (Critical: <30%, Optimal: 40–95%)",
+            'actions' => [
+                'Provide a water source immediately within 50m',
+                'Place a boardman feeder with clean water at entrance',
+                'Check for severe nectar dearth'
             ]
         ];
     } elseif ($humidity < 40) {
         $recommendations[] = [
-            'type' => 'info',
+            'type' => 'warning',
             'icon' => 'fa-tint-slash',
             'title' => 'Low Humidity',
-            'message' => "Humidity is {$humidity}% (Optimal: 50-70%)",
+            'message' => "Humidity is {$humidity}% (Optimal: 40–95%)",
             'actions' => [
-                'Reduce excessive ventilation',
-                'Bees will bring in water - monitor behavior',
-                'Not critical but monitor for bee stress'
+                'Ensure a water source is accessible within 50m',
+                'Monitor nectar curing — bees need humidity to ripen honey',
+                'Reduce excessive ventilation if present'
             ]
         ];
     }
-    
-    // CO2 Recommendations
+
+    // CO2 Recommendations — Inside-hive reference: Normal ≤4000ppm
     $co2 = $sensor_data['co2'];
-    if ($co2 > 3000) {
+    if ($co2 > 6000) {
         $recommendations[] = [
             'type' => 'critical',
             'icon' => 'fa-wind',
-            'title' => 'CRITICAL: Poor Air Quality',
-            'message' => "CO₂ level is {$co2}ppm (Critical: >3000ppm)",
+            'title' => 'CRITICAL: Severe Ventilation Failure',
+            'message' => "CO₂ level is {$co2}ppm (Critical: >6000ppm, Normal: ≤4000ppm)",
             'actions' => [
-                'URGENT: Improve ventilation immediately',
-                'Open top ventilation holes',
-                'Ensure entrance is not blocked',
-                'Check for dead bees blocking airflow',
-                'Colony at risk of suffocation'
+                'URGENT: Open all entrances and ventilation slots immediately',
+                'Remove entrance reducer completely',
+                'Inspect for overcrowding — consider adding a super or splitting',
+                'CO₂ this high can suffocate brood'
             ]
         ];
-    } elseif ($co2 > 2000) {
+    } elseif ($co2 > 4000) {
         $recommendations[] = [
             'type' => 'warning',
             'icon' => 'fa-wind',
             'title' => 'Elevated CO₂ Levels',
-            'message' => "CO₂ level is {$co2}ppm (Optimal: <2000ppm)",
+            'message' => "CO₂ level is {$co2}ppm (Elevated: >4000ppm, Normal: ≤4000ppm)",
             'actions' => [
                 'Increase ventilation openings',
-                'Check entrance reducer - may be too small',
+                'Check entrance reducer — may be too small for colony size',
                 'Inspect for overcrowding',
                 'Add upper ventilation if needed'
             ]

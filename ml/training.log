@@ -1,242 +1,542 @@
-Requirement already satisfied: numpy>=1.24 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from -r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 1)) (2.3.5)
-Collecting librosa>=0.10 (from -r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 2))
-  Downloading librosa-1.0.0-py3-none-any.whl.metadata (6.7 kB)
-Requirement already satisfied: scikit-learn>=1.3 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from -r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 3)) (1.9.0)
-Requirement already satisfied: matplotlib>=3.7 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from -r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 4)) (3.11.1)
-Requirement already satisfied: pandas>=2.0 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from -r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 5)) (3.0.5)
-Requirement already satisfied: mysql-connector-python>=8.1 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from -r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 6)) (9.5.0)
-Requirement already satisfied: joblib>=1.3 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from -r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 7)) (1.6.0)
-Collecting soundfile>=0.12 (from -r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 8))
-  Downloading soundfile-0.14.0-py2.py3-none-win_amd64.whl.metadata (18 kB)
-Collecting numba>=0.61.0 (from librosa>=0.10->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 2))
-  Downloading numba-0.68.0-cp313-cp313-win_amd64.whl.metadata (2.9 kB)
-Requirement already satisfied: scipy>=1.15.0 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from librosa>=0.10->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 2)) (1.18.1)
-Collecting decorator>=5.2.1 (from librosa>=0.10->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 2))
-  Downloading decorator-5.3.1-py3-none-any.whl.metadata (3.9 kB)
-Collecting pooch>=1.7 (from librosa>=0.10->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 2))
-  Downloading pooch-1.9.0-py3-none-any.whl.metadata (10 kB)
-Collecting soxr>=1.0.0 (from librosa>=0.10->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 2))
-  Downloading soxr-1.1.0-cp312-abi3-win_amd64.whl.metadata (5.8 kB)
-Requirement already satisfied: lazy_loader>=0.3 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from librosa>=0.10->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 2)) (0.5)
-Collecting msgpack>=1.0.5 (from librosa>=0.10->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 2))
-  Downloading msgpack-1.2.3-cp313-cp313-win_amd64.whl.metadata (8.5 kB)
-Requirement already satisfied: narwhals>=2.0.1 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from scikit-learn>=1.3->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 3)) (2.26.0)
-Requirement already satisfied: threadpoolctl>=3.5.0 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from scikit-learn>=1.3->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 3)) (3.6.0)
-Requirement already satisfied: contourpy>=1.0.1 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from matplotlib>=3.7->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 4)) (1.3.3)
-Requirement already satisfied: cycler>=0.10 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from matplotlib>=3.7->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 4)) (0.12.1)
-Requirement already satisfied: fonttools>=4.28.2 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from matplotlib>=3.7->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 4)) (4.64.0)
-Requirement already satisfied: kiwisolver>=1.3.1 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from matplotlib>=3.7->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 4)) (1.5.1)
-Requirement already satisfied: packaging>=20.0 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from matplotlib>=3.7->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 4)) (26.3)
-Requirement already satisfied: pillow>=9 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from matplotlib>=3.7->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 4)) (12.3.0)
-Requirement already satisfied: pyparsing>=3 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from matplotlib>=3.7->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 4)) (3.3.2)
-Requirement already satisfied: python-dateutil>=2.7 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from matplotlib>=3.7->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 4)) (2.9.0.post0)
-Requirement already satisfied: tzdata in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from pandas>=2.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 5)) (2026.3)
-Requirement already satisfied: cloudpickle>=3.0 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from joblib>=1.3->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 7)) (3.1.2)
-Requirement already satisfied: cffi>=1.0 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from soundfile>=0.12->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 8)) (2.1.1)
-Requirement already satisfied: typing-extensions in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from soundfile>=0.12->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 8)) (4.16.0)
-Requirement already satisfied: pycparser in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from cffi>=1.0->soundfile>=0.12->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 8)) (3.0)
-Collecting llvmlite<0.51,>=0.50.0dev0 (from numba>=0.61.0->librosa>=0.10->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 2))
-  Downloading llvmlite-0.50.0-cp313-cp313-win_amd64.whl.metadata (5.2 kB)
-Collecting platformdirs>=2.5.0 (from pooch>=1.7->librosa>=0.10->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 2))
-  Downloading platformdirs-4.12.4-py3-none-any.whl.metadata (5.5 kB)
-Requirement already satisfied: requests>=2.19.0 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from pooch>=1.7->librosa>=0.10->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 2)) (2.34.2)
-Requirement already satisfied: six>=1.5 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from python-dateutil>=2.7->matplotlib>=3.7->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 4)) (1.17.0)
-Requirement already satisfied: charset_normalizer<4,>=2 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from requests>=2.19.0->pooch>=1.7->librosa>=0.10->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 2)) (3.5.1)
-Requirement already satisfied: idna<4,>=2.5 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from requests>=2.19.0->pooch>=1.7->librosa>=0.10->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 2)) (3.19)
-Requirement already satisfied: urllib3<3,>=1.26 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from requests>=2.19.0->pooch>=1.7->librosa>=0.10->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 2)) (2.7.0)
-Requirement already satisfied: certifi>=2023.5.7 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from requests>=2.19.0->pooch>=1.7->librosa>=0.10->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 2)) (2026.7.22)
-Downloading librosa-1.0.0-py3-none-any.whl (294 kB)
-Downloading soundfile-0.14.0-py2.py3-none-win_amd64.whl (1.0 MB)
-   ---------------------------------------- 1.0/1.0 MB 403.8 kB/s  0:00:02
-Downloading decorator-5.3.1-py3-none-any.whl (10 kB)
-Downloading msgpack-1.2.3-cp313-cp313-win_amd64.whl (76 kB)
-Downloading numba-0.68.0-cp313-cp313-win_amd64.whl (2.8 MB)
-   ---------------------------------------- 2.8/2.8 MB 473.7 kB/s  0:00:05
-Downloading llvmlite-0.50.0-cp313-cp313-win_amd64.whl (41.9 MB)
-   -                                        1.3/41.9 MB 455.0 kB/s eta 0:01:30
-WARNING: Connection timed out while downloading.
-WARNING: Attempting to resume incomplete download (1.3 MB/41.9 MB, attempt 1)
-Resuming download llvmlite-0.50.0-cp313-cp313-win_amd64.whl (1.3 MB/41.9 MB)
-   ---------------------------------------- 41.9/41.9 MB 397.3 kB/s  0:01:56
-Downloading pooch-1.9.0-py3-none-any.whl (67 kB)
-Downloading platformdirs-4.12.4-py3-none-any.whl (32 kB)
-Downloading soxr-1.1.0-cp312-abi3-win_amd64.whl (174 kB)
-Installing collected packages: soxr, platformdirs, msgpack, llvmlite, decorator, soundfile, pooch, numba, librosa
+Requirement already satisfied: tensorflow==2.21.0 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from -r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 1)) (2.21.0)
+Requirement already satisfied: librosa==1.0.0 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from -r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 2)) (1.0.0)
+Requirement already satisfied: numpy==2.3.5 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from -r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 3)) (2.3.5)
+Requirement already satisfied: scikit-learn==1.9.0 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from -r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 4)) (1.9.0)
+Requirement already satisfied: matplotlib>=3.7 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from -r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 5)) (3.11.1)
+Requirement already satisfied: pandas>=2.0 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from -r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 6)) (3.0.5)
+Requirement already satisfied: mysql-connector-python>=8.1 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from -r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 7)) (9.5.0)
+Requirement already satisfied: joblib>=1.3 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from -r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 8)) (1.6.0)
+Requirement already satisfied: soundfile>=0.12 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from -r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 9)) (0.14.0)
+Requirement already satisfied: pyaudio>=0.2.13 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from -r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 10)) (0.2.14)
+Requirement already satisfied: requests>=2.31 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from -r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 11)) (2.34.2)
+Requirement already satisfied: absl-py>=1.0.0 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from tensorflow==2.21.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 1)) (2.5.1)
+Requirement already satisfied: astunparse>=1.6.0 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from tensorflow==2.21.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 1)) (1.6.3)
+Requirement already satisfied: flatbuffers>=25.9.23 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from tensorflow==2.21.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 1)) (25.12.19)
+Requirement already satisfied: gast!=0.5.0,!=0.5.1,!=0.5.2,>=0.2.1 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from tensorflow==2.21.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 1)) (0.7.0)
+Requirement already satisfied: google_pasta>=0.1.1 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from tensorflow==2.21.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 1)) (0.2.0)
+Requirement already satisfied: libclang>=13.0.0 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from tensorflow==2.21.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 1)) (18.1.1)
+Requirement already satisfied: opt_einsum>=2.3.2 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from tensorflow==2.21.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 1)) (3.4.0)
+Requirement already satisfied: packaging in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from tensorflow==2.21.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 1)) (26.3)
+Requirement already satisfied: protobuf<8.0.0,>=6.31.1 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from tensorflow==2.21.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 1)) (7.36.2)
+Requirement already satisfied: setuptools in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from tensorflow==2.21.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 1)) (84.0.0)
+Requirement already satisfied: six>=1.12.0 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from tensorflow==2.21.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 1)) (1.17.0)
+Requirement already satisfied: termcolor>=1.1.0 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from tensorflow==2.21.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 1)) (3.3.0)
+Requirement already satisfied: typing_extensions>=3.6.6 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from tensorflow==2.21.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 1)) (4.16.0)
+Requirement already satisfied: wrapt>=1.11.0 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from tensorflow==2.21.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 1)) (2.4.0)
+Requirement already satisfied: grpcio<2.0,>=1.24.3 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from tensorflow==2.21.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 1)) (1.84.0)
+Requirement already satisfied: keras>=3.12.0 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from tensorflow==2.21.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 1)) (3.15.1)
+Requirement already satisfied: h5py<3.15.0,>=3.11.0 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from tensorflow==2.21.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 1)) (3.14.0)
+Requirement already satisfied: ml_dtypes<1.0.0,>=0.5.1 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from tensorflow==2.21.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 1)) (0.6.0)
+Requirement already satisfied: numba>=0.61.0 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from librosa==1.0.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 2)) (0.68.0)
+Requirement already satisfied: scipy>=1.15.0 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from librosa==1.0.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 2)) (1.18.1)
+Requirement already satisfied: decorator>=5.2.1 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from librosa==1.0.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 2)) (5.3.1)
+Requirement already satisfied: pooch>=1.7 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from librosa==1.0.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 2)) (1.9.0)
+Requirement already satisfied: soxr>=1.0.0 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from librosa==1.0.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 2)) (1.1.0)
+Requirement already satisfied: lazy_loader>=0.3 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from librosa==1.0.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 2)) (0.5)
+Requirement already satisfied: msgpack>=1.0.5 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from librosa==1.0.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 2)) (1.2.3)
+Requirement already satisfied: narwhals>=2.0.1 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from scikit-learn==1.9.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 4)) (2.26.0)
+Requirement already satisfied: threadpoolctl>=3.5.0 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from scikit-learn==1.9.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 4)) (3.6.0)
+Requirement already satisfied: charset_normalizer<4,>=2 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from requests>=2.31->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 11)) (3.5.1)
+Requirement already satisfied: idna<4,>=2.5 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from requests>=2.31->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 11)) (3.19)
+Requirement already satisfied: urllib3<3,>=1.26 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from requests>=2.31->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 11)) (2.7.0)
+Requirement already satisfied: certifi>=2023.5.7 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from requests>=2.31->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 11)) (2026.7.22)
+Requirement already satisfied: contourpy>=1.0.1 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from matplotlib>=3.7->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 5)) (1.3.3)
+Requirement already satisfied: cycler>=0.10 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from matplotlib>=3.7->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 5)) (0.12.1)
+Requirement already satisfied: fonttools>=4.28.2 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from matplotlib>=3.7->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 5)) (4.64.0)
+Requirement already satisfied: kiwisolver>=1.3.1 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from matplotlib>=3.7->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 5)) (1.5.1)
+Requirement already satisfied: pillow>=9 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from matplotlib>=3.7->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 5)) (12.3.0)
+Requirement already satisfied: pyparsing>=3 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from matplotlib>=3.7->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 5)) (3.3.2)
+Requirement already satisfied: python-dateutil>=2.7 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from matplotlib>=3.7->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 5)) (2.9.0.post0)
+Requirement already satisfied: tzdata in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from pandas>=2.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 6)) (2026.3)
+Requirement already satisfied: cloudpickle>=3.0 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from joblib>=1.3->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 8)) (3.1.2)
+Requirement already satisfied: cffi>=1.0 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from soundfile>=0.12->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 9)) (2.1.1)
+Requirement already satisfied: wheel<1.0,>=0.23.0 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from astunparse>=1.6.0->tensorflow==2.21.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 1)) (0.48.0)
+Requirement already satisfied: pycparser in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from cffi>=1.0->soundfile>=0.12->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 9)) (3.0)
+Requirement already satisfied: rich in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from keras>=3.12.0->tensorflow==2.21.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 1)) (15.0.0)
+Requirement already satisfied: namex in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from keras>=3.12.0->tensorflow==2.21.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 1)) (0.1.0)
+Requirement already satisfied: optree in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from keras>=3.12.0->tensorflow==2.21.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 1)) (0.20.0)
+Requirement already satisfied: llvmlite<0.51,>=0.50.0dev0 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from numba>=0.61.0->librosa==1.0.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 2)) (0.50.0)
+Requirement already satisfied: platformdirs>=2.5.0 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from pooch>=1.7->librosa==1.0.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 2)) (4.12.4)
+Requirement already satisfied: markdown-it-py>=2.2.0 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from rich->keras>=3.12.0->tensorflow==2.21.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 1)) (4.2.0)
+Requirement already satisfied: pygments<3.0.0,>=2.13.0 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from rich->keras>=3.12.0->tensorflow==2.21.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 1)) (2.21.0)
+Requirement already satisfied: mdurl~=0.1 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from markdown-it-py>=2.2.0->rich->keras>=3.12.0->tensorflow==2.21.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 1)) (0.1.2)
 
-Successfully installed decorator-5.3.1 librosa-1.0.0 llvmlite-0.50.0 msgpack-1.2.3 numba-0.68.0 platformdirs-4.12.4 pooch-1.9.0 soundfile-0.14.0 soxr-1.1.0
-
-[notice] A new release of pip is available: 25.2 -> 26.2.1
+[notice] A new release of pip is available: 25.2 -> 26.2.2
 [notice] To update, run: python.exe -m pip install --upgrade pip
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1792655490.321729   21396 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1792655492.890727   21396 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+I0000 00:00:1792655505.877311   21396 cpu_feature_guard.cc:227] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: SSE3 SSE4.1 SSE4.2 AVX AVX2 AVX512F AVX512_VNNI FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+WARNING:tensorflow:TensorFlow GPU support is not available on native Windows for TensorFlow >= 2.11. Even if CUDA/cuDNN are installed, GPU will not be used. Please use WSL2 or the TensorFlow-DirectML plugin.
 
-=== BeeGuard MLP Training ===
+=== BeeGuard CNN Training (Chapter 3 Spec) ===
 
-[Data] Found 84 records in DB
-  [OK]  sound_6a100c6e771592.30727214.mp3  ->  normal
-  [OK]  sound_6a100ca4962693.20647546.mp3  ->  normal
-  [OK]  sound_6a100cb0a4c404.72295538.mp3  ->  normal
-  [OK]  sound_6a100cc396ff97.98618949.mp3  ->  normal
-  [OK]  sound_6a100cca16d3d3.32785253.mp3  ->  normal
-  [OK]  sound_6a100ccdce09a5.88091193.mp3  ->  normal
-  [OK]  sound_6a100cd3b135d7.15567697.mp3  ->  normal
-  [OK]  sound_6a100cd825c005.19539986.mp3  ->  normal
-  [OK]  sound_6a100cdcd1f4a7.99119522.mp3  ->  normal
-  [OK]  sound_6a100ce0156834.12448650.mp3  ->  normal
-  [OK]  sound_6a13f89af210a2.20227595.mp3  ->  normal
-  [OK]  sound_6a13f92db8dab4.17791872.mp3  ->  normal
-  [OK]  sound_6a13f99a77f2f3.84451846.mp3  ->  normal
-  [OK]  sound_6a13f9c8f2af28.92999998.mp3  ->  queenless
-  [OK]  sound_6a13f9e250eeb2.23439851.mp3  ->  queenless
-  [OK]  sound_6a13f9f8847e70.38616795.mp3  ->  queenless
-  [OK]  sound_6a13fa0be115e0.15336339.mp3  ->  queenless
-  [OK]  sound_6a13fa207d5965.30629348.mp3  ->  queenless
-  [OK]  sound_6a13fe8176fcb5.30686591.wav  ->  varroa_mite
-  [OK]  sound_6a13fe95c4a991.54771996.wav  ->  varroa_mite
-  [OK]  sound_6a1400c168b367.84991399.wav  ->  swarming
-  [OK]  sound_6a1400eb704c16.54386989.wav  ->  swarming
-  [OK]  sound_6a14897c2e9154.97618736.mp3  ->  normal
-  [OK]  sound_6a156e4b016022.40034588.wav  ->  varroa_mite
-  [OK]  sound_6a156e8ba1d187.55745239.wav  ->  varroa_mite
-  [OK]  sound_6a156e9a266121.43977635.wav  ->  varroa_mite
-  [OK]  sound_6a156eac0311c1.30852875.wav  ->  varroa_mite
-  [OK]  sound_6a156ebd980ec1.04640115.wav  ->  varroa_mite
-  [OK]  sound_6a156ed29ac944.34540854.wav  ->  varroa_mite
-  [OK]  sound_6a156ee7e0c585.04537367.wav  ->  varroa_mite
-  [OK]  sound_6a156ef646ed93.04159661.wav  ->  varroa_mite
-  [OK]  sound_6a156f0778bac1.86808487.wav  ->  varroa_mite
-  [OK]  sound_6a156f19069a08.66676443.wav  ->  varroa_mite
-  [OK]  sound_6a156f2dd53243.26872584.wav  ->  varroa_mite
-  [OK]  sound_6a156f426f36d6.49931723.wav  ->  varroa_mite
-  [OK]  sound_6a156f5239cd51.35364715.wav  ->  varroa_mite
-  [OK]  sound_6a156f63476495.12509592.wav  ->  varroa_mite
-  [OK]  sound_6a156f800e9ee7.05081149.wav  ->  varroa_mite
-  [OK]  sound_6a156f93238139.11774576.wav  ->  varroa_mite
-  [OK]  sound_6a157020171963.93680063.wav  ->  queenless
-  [OK]  sound_6a1570315dbdb3.89077908.wav  ->  queenless
-  [OK]  sound_6a15706121ef40.43703198.wav  ->  queenless
-  [OK]  sound_6a157075b7c2d5.83736703.wav  ->  queenless
-  [OK]  sound_6a157089634833.93414597.wav  ->  queenless
-  [OK]  sound_6a15709c428d89.99115730.wav  ->  queenless
-  [OK]  sound_6a1570af21e346.10540729.wav  ->  queenless
-  [OK]  sound_6a1570c0bef3a6.72065932.wav  ->  queenless
-  [OK]  sound_6a1570d2754c92.06061163.wav  ->  queenless
-  [OK]  sound_6a1570e3e00767.67155491.wav  ->  queenless
-  [OK]  sound_6a1570f64bcb94.80228969.wav  ->  queenless
-  [OK]  sound_6a157108331dc3.17855490.wav  ->  queenless
-  [OK]  sound_6a157116f1e957.45548557.wav  ->  queenless
-  [OK]  sound_6a15712a134ac3.72707498.wav  ->  queenless
-  [OK]  sound_6a15713f7cbba4.00583119.wav  ->  queenless
-  [OK]  sound_6a15714ff207c4.44629187.wav  ->  queenless
-  [OK]  sound_6a15715eaf7258.58591299.wav  ->  queenless
-  [OK]  sound_6a1571d3c91365.74634664.wav  ->  normal
-  [OK]  sound_6a1571e414f278.76289900.wav  ->  normal
-  [OK]  sound_6a1571f42880e0.88675062.wav  ->  normal
-  [OK]  sound_6a157214897955.76008578.wav  ->  normal
-  [OK]  sound_6a15722471bb37.62304273.wav  ->  normal
-  [OK]  sound_6a15723b17a114.69884509.wav  ->  normal
-  [OK]  sound_6a1572713352b2.48658972.wav  ->  normal
-  [OK]  sound_6a1572829fc114.52668950.wav  ->  normal
-  [OK]  sound_6a170ccc1099d0.82026924.wav  ->  normal
-  [OK]  sound_6a170d8d6784d8.74454802.wav  ->  normal
-  [OK]  sound_6a170db42e7482.31189437.wav  ->  normal
-  [OK]  sound_6a170dde5ce527.56081088.wav  ->  normal
-  [OK]  sound_6a170e1510cf86.08701477.wav  ->  normal
-  [OK]  sound_6a170e5c4b2d79.27163982.wav  ->  normal
-  [OK]  sound_6a170e9c662887.71939885.wav  ->  normal
-  [OK]  sound_6a170ec03e9d61.80840300.wav  ->  normal
-  [OK]  sound_6a170ee4e5ad34.26066793.wav  ->  normal
-  [OK]  sound_6a170f09ad7938.44773072.wav  ->  normal
-  [OK]  sound_6a170f30cdda42.31822414.wav  ->  normal
-  [OK]  sound_6a170f57b2bb20.73817827.wav  ->  normal
-  [OK]  sound_6a170f7b8d2621.26721014.wav  ->  normal
-  [OK]  sound_6a171005192250.36032096.wav  ->  normal
-  [OK]  sound_6a1710311b65b5.89554737.wav  ->  normal
-  [OK]  sound_6a171078708328.49736553.wav  ->  normal
-  [OK]  sound_6a17109da7e256.78424131.wav  ->  normal
-  [OK]  sound_6a1710c2b1ee67.39306352.wav  ->  normal
-  [OK]  sound_6a1710eb0936b9.30048442.wav  ->  normal
-  [OK]  sound_6a1711674bcff2.38407399.wav  ->  normal
+  [OK] normal/sound_6a100c6e771592.30727214.mp3 -> 13 clip(s)
+  [OK] normal/sound_6a100ca4962693.20647546.mp3 -> 12 clip(s)
+  [OK] normal/sound_6a100cb0a4c404.72295538.mp3 -> 12 clip(s)
+  [OK] normal/sound_6a100cc396ff97.98618949.mp3 -> 12 clip(s)
+  [OK] normal/sound_6a100cca16d3d3.32785253.mp3 -> 12 clip(s)
+  [OK] normal/sound_6a100ccdce09a5.88091193.mp3 -> 12 clip(s)
+  [OK] normal/sound_6a100cd3b135d7.15567697.mp3 -> 12 clip(s)
+  [OK] normal/sound_6a100cd825c005.19539986.mp3 -> 12 clip(s)
+  [OK] normal/sound_6a100cdcd1f4a7.99119522.mp3 -> 12 clip(s)
+  [OK] normal/sound_6a100ce0156834.12448650.mp3 -> 13 clip(s)
+  [OK] normal/sound_6a13f89af210a2.20227595.mp3 -> 10 clip(s)
+  [OK] normal/sound_6a13f92db8dab4.17791872.mp3 -> 15 clip(s)
+  [OK] normal/sound_6a13f99a77f2f3.84451846.mp3 -> 10 clip(s)
+  [OK] normal/sound_6a14897c2e9154.97618736.mp3 -> 13 clip(s)
+  [OK] normal/sound_6a1571d3c91365.74634664.wav -> 12 clip(s)
+  [OK] normal/sound_6a1571e414f278.76289900.wav -> 12 clip(s)
+  [OK] normal/sound_6a1571f42880e0.88675062.wav -> 11 clip(s)
+  [OK] normal/sound_6a157214897955.76008578.wav -> 12 clip(s)
+  [OK] normal/sound_6a15722471bb37.62304273.wav -> 12 clip(s)
+  [OK] normal/sound_6a15723b17a114.69884509.wav -> 12 clip(s)
+  [OK] normal/sound_6a1572713352b2.48658972.wav -> 12 clip(s)
+  [OK] normal/sound_6a1572829fc114.52668950.wav -> 12 clip(s)
+  [OK] normal/sound_6a170ccc1099d0.82026924.wav -> 12 clip(s)
+  [OK] normal/sound_6a170d8d6784d8.74454802.wav -> 12 clip(s)
+  [OK] normal/sound_6a170db42e7482.31189437.wav -> 12 clip(s)
+  [OK] normal/sound_6a170dde5ce527.56081088.wav -> 12 clip(s)
+  [OK] normal/sound_6a170e1510cf86.08701477.wav -> 12 clip(s)
+  [OK] normal/sound_6a170e5c4b2d79.27163982.wav -> 11 clip(s)
+  [OK] normal/sound_6a170e9c662887.71939885.wav -> 12 clip(s)
+  [OK] normal/sound_6a170ec03e9d61.80840300.wav -> 12 clip(s)
+  [OK] normal/sound_6a170ee4e5ad34.26066793.wav -> 12 clip(s)
+  [OK] normal/sound_6a170f09ad7938.44773072.wav -> 12 clip(s)
+  [OK] normal/sound_6a170f30cdda42.31822414.wav -> 12 clip(s)
+  [OK] normal/sound_6a170f57b2bb20.73817827.wav -> 11 clip(s)
+  [OK] normal/sound_6a170f7b8d2621.26721014.wav -> 12 clip(s)
+  [OK] normal/sound_6a171005192250.36032096.wav -> 11 clip(s)
+  [OK] normal/sound_6a1710311b65b5.89554737.wav -> 12 clip(s)
+  [OK] normal/sound_6a171078708328.49736553.wav -> 12 clip(s)
+  [OK] normal/sound_6a17109da7e256.78424131.wav -> 12 clip(s)
+  [OK] normal/sound_6a1710c2b1ee67.39306352.wav -> 12 clip(s)
+  [OK] normal/sound_6a1710eb0936b9.30048442.wav -> 12 clip(s)
+  [OK] normal/sound_6a1711674bcff2.38407399.wav -> 12 clip(s)
+  [OK] queenless/sound_6a13f9c8f2af28.92999998.mp3 -> 8 clip(s)
+  [OK] queenless/sound_6a13f9e250eeb2.23439851.mp3 -> 9 clip(s)
+  [OK] queenless/sound_6a13f9f8847e70.38616795.mp3 -> 18 clip(s)
+  [OK] queenless/sound_6a13fa0be115e0.15336339.mp3 -> 16 clip(s)
+  [OK] queenless/sound_6a13fa207d5965.30629348.mp3 -> 13 clip(s)
+  [OK] queenless/sound_6a157020171963.93680063.wav -> 12 clip(s)
+  [OK] queenless/sound_6a1570315dbdb3.89077908.wav -> 12 clip(s)
+  [OK] queenless/sound_6a15706121ef40.43703198.wav -> 12 clip(s)
+  [OK] queenless/sound_6a157075b7c2d5.83736703.wav -> 12 clip(s)
+  [OK] queenless/sound_6a157089634833.93414597.wav -> 11 clip(s)
+  [OK] queenless/sound_6a15709c428d89.99115730.wav -> 12 clip(s)
+  [OK] queenless/sound_6a1570af21e346.10540729.wav -> 12 clip(s)
+  [OK] queenless/sound_6a1570c0bef3a6.72065932.wav -> 12 clip(s)
+  [OK] queenless/sound_6a1570d2754c92.06061163.wav -> 12 clip(s)
+  [OK] queenless/sound_6a1570e3e00767.67155491.wav -> 12 clip(s)
+  [OK] queenless/sound_6a1570f64bcb94.80228969.wav -> 12 clip(s)
+  [OK] queenless/sound_6a157108331dc3.17855490.wav -> 12 clip(s)
+  [OK] queenless/sound_6a157116f1e957.45548557.wav -> 11 clip(s)
+  [OK] queenless/sound_6a15712a134ac3.72707498.wav -> 12 clip(s)
+  [OK] queenless/sound_6a15713f7cbba4.00583119.wav -> 12 clip(s)
+  [OK] queenless/sound_6a15714ff207c4.44629187.wav -> 12 clip(s)
+  [OK] queenless/sound_6a15715eaf7258.58591299.wav -> 12 clip(s)
+  [OK] swarming/sound_6a1400c168b367.84991399.wav -> 2 clip(s)
+  [OK] swarming/sound_6a1400eb704c16.54386989.wav -> 2 clip(s)
 
-[Data] Loaded 84 samples across classes: ['normal' 'queenless' 'swarming' 'varroa_mite']
-[Data] Label encoder saved -> C:\xampp\htdocs\beemonitoring\ml\models\label_encoder.pkl
-[Data] Scaler saved -> C:\xampp\htdocs\beemonitoring\ml\models\scaler.pkl
-[Train] 67 train  |  17 val  |  stratify=True
-Iteration 1, loss = 1.48340385
-Validation score: 0.571429
-Iteration 2, loss = 1.19861294
-Validation score: 0.714286
-Iteration 3, loss = 1.01835204
-Validation score: 0.571429
-Iteration 4, loss = 0.90124716
-Validation score: 0.714286
-Iteration 5, loss = 0.81141379
-Validation score: 0.714286
-Iteration 6, loss = 0.72783683
-Validation score: 0.714286
-Iteration 7, loss = 0.64492188
-Validation score: 0.714286
-Iteration 8, loss = 0.56753292
-Validation score: 0.571429
-Iteration 9, loss = 0.49905310
-Validation score: 0.714286
-Iteration 10, loss = 0.44221144
-Validation score: 0.714286
-Iteration 11, loss = 0.39435469
-Validation score: 0.714286
-Iteration 12, loss = 0.35188593
-Validation score: 0.714286
-Iteration 13, loss = 0.31199878
-Validation score: 0.714286
-Iteration 14, loss = 0.27480955
-Validation score: 0.714286
-Iteration 15, loss = 0.24127452
-Validation score: 0.857143
-Iteration 16, loss = 0.21169601
-Validation score: 0.857143
-Iteration 17, loss = 0.18598421
-Validation score: 0.857143
-Iteration 18, loss = 0.16387166
-Validation score: 0.857143
-Iteration 19, loss = 0.14474105
-Validation score: 0.857143
-Iteration 20, loss = 0.12811323
-Validation score: 0.857143
-Iteration 21, loss = 0.11358456
-Validation score: 0.857143
-Iteration 22, loss = 0.10089698
-Validation score: 0.857143
-Iteration 23, loss = 0.08993808
-Validation score: 0.857143
-Iteration 24, loss = 0.08056469
-Validation score: 0.857143
-Iteration 25, loss = 0.07240264
-Validation score: 0.857143
-Iteration 26, loss = 0.06510667
-Validation score: 0.857143
-Iteration 27, loss = 0.05904250
-Validation score: 0.857143
-Iteration 28, loss = 0.05400454
-Validation score: 0.857143
-Iteration 29, loss = 0.04971188
-Validation score: 0.857143
-Iteration 30, loss = 0.04588580
-Validation score: 0.857143
-Iteration 31, loss = 0.04267203
-Validation score: 0.857143
-Validation score did not improve more than tol=0.000100 for 15 consecutive epochs. Stopping.
+[Data] Total clips: 772
+       normal: 502 clips
+       queenless: 266 clips
+       swarming: 4 clips
+
+[Data] 772 total clips loaded  |  shape: (40, 216, 1)
+
+[Split] Train: 611 clips  |  Val: 161 clips
+        normal: train=395  val=107
+        queenless: train=214  val=52
+        swarming: train=2  val=2
+
+[WARNING] Class 'swarming' has only 2 validation clips (recommended: 10+). Accuracy for this class may be low.
+Model: "beeguard_cnn"
+┌─────────────────────────────────┬────────────────────────┬───────────────┐
+│ Layer (type)                    │ Output Shape           │       Param # │
+├─────────────────────────────────┼────────────────────────┼───────────────┤
+│ mfcc_input (InputLayer)         │ (None, 40, 216, 1)     │             0 │
+├─────────────────────────────────┼────────────────────────┼───────────────┤
+│ conv1 (Conv2D)                  │ (None, 40, 216, 32)    │           320 │
+├─────────────────────────────────┼────────────────────────┼───────────────┤
+│ bn1 (BatchNormalization)        │ (None, 40, 216, 32)    │           128 │
+├─────────────────────────────────┼────────────────────────┼───────────────┤
+│ pool1 (MaxPooling2D)            │ (None, 20, 108, 32)    │             0 │
+├─────────────────────────────────┼────────────────────────┼───────────────┤
+│ conv2 (Conv2D)                  │ (None, 20, 108, 64)    │        18,496 │
+├─────────────────────────────────┼────────────────────────┼───────────────┤
+│ bn2 (BatchNormalization)        │ (None, 20, 108, 64)    │           256 │
+├─────────────────────────────────┼────────────────────────┼───────────────┤
+│ pool2 (MaxPooling2D)            │ (None, 10, 54, 64)     │             0 │
+├─────────────────────────────────┼────────────────────────┼───────────────┤
+│ conv3 (Conv2D)                  │ (None, 10, 54, 128)    │        73,856 │
+├─────────────────────────────────┼────────────────────────┼───────────────┤
+│ bn3 (BatchNormalization)        │ (None, 10, 54, 128)    │           512 │
+├─────────────────────────────────┼────────────────────────┼───────────────┤
+│ pool3 (MaxPooling2D)            │ (None, 5, 27, 128)     │             0 │
+├─────────────────────────────────┼────────────────────────┼───────────────┤
+│ gap (GlobalAveragePooling2D)    │ (None, 128)            │             0 │
+├─────────────────────────────────┼────────────────────────┼───────────────┤
+│ fc1 (Dense)                     │ (None, 128)            │        16,512 │
+├─────────────────────────────────┼────────────────────────┼───────────────┤
+│ dropout (Dropout)               │ (None, 128)            │             0 │
+├─────────────────────────────────┼────────────────────────┼───────────────┤
+│ output (Dense)                  │ (None, 3)              │           387 │
+└─────────────────────────────────┴────────────────────────┴───────────────┘
+ Total params: 110,467 (431.51 KB)
+ Trainable params: 110,019 (429.76 KB)
+ Non-trainable params: 448 (1.75 KB)
+Epoch 1/30
+
+[1m 1/39[0m [37m━━━━━━━━━━━━━━━━━━━━[0m [1m1:08[0m 2s/step - accuracy: 0.5625 - loss: 0.7839
+[1m 2/39[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m2s[0m 59ms/step - accuracy: 0.7188 - loss: 0.5942
+[1m 3/39[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m2s[0m 58ms/step - accuracy: 0.7083 - loss: 0.7076
+[1m 4/39[0m [32m━━[0m[37m━━━━━━━━━━━━━━━━━━[0m [1m1s[0m 56ms/step - accuracy: 0.7188 - loss: 0.7107
+[1m 5/39[0m [32m━━[0m[37m━━━━━━━━━━━━━━━━━━[0m [1m1s[0m 56ms/step - accuracy: 0.7250 - loss: 0.7022
+[1m 6/39[0m [32m━━━[0m[37m━━━━━━━━━━━━━━━━━[0m [1m1s[0m 56ms/step - accuracy: 0.6875 - loss: 0.7339
+[1m 7/39[0m [32m━━━[0m[37m━━━━━━━━━━━━━━━━━[0m [1m1s[0m 56ms/step - accuracy: 0.7143 - loss: 0.6980
+[1m 8/39[0m [32m━━━━[0m[37m━━━━━━━━━━━━━━━━[0m [1m1s[0m 56ms/step - accuracy: 0.7031 - loss: 0.6956
+[1m 9/39[0m [32m━━━━[0m[37m━━━━━━━━━━━━━━━━[0m [1m1s[0m 56ms/step - accuracy: 0.7014 - loss: 0.6804
+[1m10/39[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m1s[0m 56ms/step - accuracy: 0.6938 - loss: 0.6848
+[1m11/39[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m1s[0m 56ms/step - accuracy: 0.6932 - loss: 0.6698
+[1m12/39[0m [32m━━━━━━[0m[37m━━━━━━━━━━━━━━[0m [1m1s[0m 56ms/step - accuracy: 0.6927 - loss: 0.6541
+[1m13/39[0m [32m━━━━━━[0m[37m━━━━━━━━━━━━━━[0m [1m1s[0m 56ms/step - accuracy: 0.6875 - loss: 0.6575
+[1m14/39[0m [32m━━━━━━━[0m[37m━━━━━━━━━━━━━[0m [1m1s[0m 56ms/step - accuracy: 0.6875 - loss: 0.6459
+[1m15/39[0m [32m━━━━━━━[0m[37m━━━━━━━━━━━━━[0m [1m1s[0m 56ms/step - accuracy: 0.6833 - loss: 0.6516
+[1m16/39[0m [32m━━━━━━━━[0m[37m━━━━━━━━━━━━[0m [1m1s[0m 56ms/step - accuracy: 0.6797 - loss: 0.6424
+[1m17/39[0m [32m━━━━━━━━[0m[37m━━━━━━━━━━━━[0m [1m1s[0m 56ms/step - accuracy: 0.6838 - loss: 0.6343
+[1m18/39[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m1s[0m 56ms/step - accuracy: 0.6806 - loss: 0.6523
+[1m19/39[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m1s[0m 56ms/step - accuracy: 0.6842 - loss: 0.6438
+[1m20/39[0m [32m━━━━━━━━━━[0m[37m━━━━━━━━━━[0m [1m1s[0m 56ms/step - accuracy: 0.6938 - loss: 0.6313
+[1m21/39[0m [32m━━━━━━━━━━[0m[37m━━━━━━━━━━[0m [1m0s[0m 55ms/step - accuracy: 0.6935 - loss: 0.6294
+[1m22/39[0m [32m━━━━━━━━━━━[0m[37m━━━━━━━━━[0m [1m0s[0m 55ms/step - accuracy: 0.6960 - loss: 0.6188
+[1m23/39[0m [32m━━━━━━━━━━━[0m[37m━━━━━━━━━[0m [1m0s[0m 55ms/step - accuracy: 0.6984 - loss: 0.6163
+[1m24/39[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m0s[0m 55ms/step - accuracy: 0.6979 - loss: 0.6093
+[1m25/39[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m0s[0m 55ms/step - accuracy: 0.6975 - loss: 0.6094
+[1m26/39[0m [32m━━━━━━━━━━━━━[0m[37m━━━━━━━[0m [1m0s[0m 56ms/step - accuracy: 0.7043 - loss: 0.5980
+[1m27/39[0m [32m━━━━━━━━━━━━━[0m[37m━━━━━━━[0m [1m0s[0m 56ms/step - accuracy: 0.7083 - loss: 0.5882
+[1m28/39[0m [32m━━━━━━━━━━━━━━[0m[37m━━━━━━[0m [1m0s[0m 56ms/step - accuracy: 0.7098 - loss: 0.5822
+[1m29/39[0m [32m━━━━━━━━━━━━━━[0m[37m━━━━━━[0m [1m0s[0m 56ms/step - accuracy: 0.7004 - loss: 0.5988
+[1m30/39[0m [32m━━━━━━━━━━━━━━━[0m[37m━━━━━[0m [1m0s[0m 56ms/step - accuracy: 0.7021 - loss: 0.5915
+[1m31/39[0m [32m━━━━━━━━━━━━━━━[0m[37m━━━━━[0m [1m0s[0m 56ms/step - accuracy: 0.7056 - loss: 0.5869
+[1m32/39[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 56ms/step - accuracy: 0.7109 - loss: 0.5789
+[1m33/39[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 56ms/step - accuracy: 0.7159 - loss: 0.5763
+[1m34/39[0m [32m━━━━━━━━━━━━━━━━━[0m[37m━━━[0m [1m0s[0m 56ms/step - accuracy: 0.7151 - loss: 0.5732
+[1m35/39[0m [32m━━━━━━━━━━━━━━━━━[0m[37m━━━[0m [1m0s[0m 56ms/step - accuracy: 0.7179 - loss: 0.5693
+[1m36/39[0m [32m━━━━━━━━━━━━━━━━━━[0m[37m━━[0m [1m0s[0m 56ms/step - accuracy: 0.7101 - loss: 0.5742
+[1m37/39[0m [32m━━━━━━━━━━━━━━━━━━[0m[37m━━[0m [1m0s[0m 56ms/step - accuracy: 0.7111 - loss: 0.5842
+[1m38/39[0m [32m━━━━━━━━━━━━━━━━━━━[0m[37m━[0m [1m0s[0m 56ms/step - accuracy: 0.7155 - loss: 0.5860
+[1m39/39[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m4s[0m 65ms/step - accuracy: 0.7136 - loss: 0.5864 - val_accuracy: 0.6646 - val_loss: 1.5098 - learning_rate: 0.0010
+Epoch 2/30
+
+[1m 1/39[0m [37m━━━━━━━━━━━━━━━━━━━━[0m [1m3s[0m 81ms/step - accuracy: 0.5625 - loss: 0.5845
+[1m 2/39[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m2s[0m 65ms/step - accuracy: 0.6250 - loss: 0.5278
+[1m 3/39[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m2s[0m 63ms/step - accuracy: 0.7500 - loss: 0.4429
+[1m 4/39[0m [32m━━[0m[37m━━━━━━━━━━━━━━━━━━[0m [1m2s[0m 62ms/step - accuracy: 0.7188 - loss: 0.5126
+[1m 5/39[0m [32m━━[0m[37m━━━━━━━━━━━━━━━━━━[0m [1m2s[0m 63ms/step - accuracy: 0.7500 - loss: 0.4762
+[1m 6/39[0m [32m━━━[0m[37m━━━━━━━━━━━━━━━━━[0m [1m2s[0m 63ms/step - accuracy: 0.7604 - loss: 0.4947
+[1m 7/39[0m [32m━━━[0m[37m━━━━━━━━━━━━━━━━━[0m [1m2s[0m 64ms/step - accuracy: 0.7500 - loss: 0.4971
+[1m 8/39[0m [32m━━━━[0m[37m━━━━━━━━━━━━━━━━[0m [1m1s[0m 64ms/step - accuracy: 0.7578 - loss: 0.4840
+[1m 9/39[0m [32m━━━━[0m[37m━━━━━━━━━━━━━━━━[0m [1m1s[0m 64ms/step - accuracy: 0.7778 - loss: 0.4784
+[1m10/39[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m1s[0m 63ms/step - accuracy: 0.7937 - loss: 0.4701
+[1m11/39[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m1s[0m 63ms/step - accuracy: 0.8068 - loss: 0.4490
+[1m12/39[0m [32m━━━━━━[0m[37m━━━━━━━━━━━━━━[0m [1m1s[0m 63ms/step - accuracy: 0.8125 - loss: 0.4449
+[1m13/39[0m [32m━━━━━━[0m[37m━━━━━━━━━━━━━━[0m [1m1s[0m 62ms/step - accuracy: 0.8125 - loss: 0.4464
+[1m14/39[0m [32m━━━━━━━[0m[37m━━━━━━━━━━━━━[0m [1m1s[0m 62ms/step - accuracy: 0.8125 - loss: 0.4469
+[1m15/39[0m [32m━━━━━━━[0m[37m━━━━━━━━━━━━━[0m [1m1s[0m 62ms/step - accuracy: 0.8083 - loss: 0.4562
+[1m16/39[0m [32m━━━━━━━━[0m[37m━━━━━━━━━━━━[0m [1m1s[0m 62ms/step - accuracy: 0.8047 - loss: 0.4536
+[1m17/39[0m [32m━━━━━━━━[0m[37m━━━━━━━━━━━━[0m [1m1s[0m 62ms/step - accuracy: 0.8088 - loss: 0.4450
+[1m18/39[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m1s[0m 62ms/step - accuracy: 0.8125 - loss: 0.4375
+[1m19/39[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m1s[0m 62ms/step - accuracy: 0.8092 - loss: 0.4347
+[1m20/39[0m [32m━━━━━━━━━━[0m[37m━━━━━━━━━━[0m [1m1s[0m 61ms/step - accuracy: 0.8094 - loss: 0.4423
+[1m21/39[0m [32m━━━━━━━━━━[0m[37m━━━━━━━━━━[0m [1m1s[0m 61ms/step - accuracy: 0.8125 - loss: 0.4332
+[1m22/39[0m [32m━━━━━━━━━━━[0m[37m━━━━━━━━━[0m [1m1s[0m 61ms/step - accuracy: 0.8153 - loss: 0.4233
+[1m23/39[0m [32m━━━━━━━━━━━[0m[37m━━━━━━━━━[0m [1m0s[0m 61ms/step - accuracy: 0.8071 - loss: 0.4515
+[1m24/39[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m0s[0m 61ms/step - accuracy: 0.8099 - loss: 0.4463
+[1m25/39[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m0s[0m 61ms/step - accuracy: 0.8025 - loss: 0.4629
+[1m26/39[0m [32m━━━━━━━━━━━━━[0m[37m━━━━━━━[0m [1m0s[0m 61ms/step - accuracy: 0.7957 - loss: 0.4793
+[1m27/39[0m [32m━━━━━━━━━━━━━[0m[37m━━━━━━━[0m [1m0s[0m 61ms/step - accuracy: 0.7917 - loss: 0.4832
+[1m28/39[0m [32m━━━━━━━━━━━━━━[0m[37m━━━━━━[0m [1m0s[0m 61ms/step - accuracy: 0.7812 - loss: 0.4906
+[1m29/39[0m [32m━━━━━━━━━━━━━━[0m[37m━━━━━━[0m [1m0s[0m 61ms/step - accuracy: 0.7802 - loss: 0.4907
+[1m30/39[0m [32m━━━━━━━━━━━━━━━[0m[37m━━━━━[0m [1m0s[0m 61ms/step - accuracy: 0.7833 - loss: 0.4850
+[1m31/39[0m [32m━━━━━━━━━━━━━━━[0m[37m━━━━━[0m [1m0s[0m 60ms/step - accuracy: 0.7782 - loss: 0.4918
+[1m32/39[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 60ms/step - accuracy: 0.7773 - loss: 0.4907
+[1m33/39[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 60ms/step - accuracy: 0.7803 - loss: 0.4845
+[1m34/39[0m [32m━━━━━━━━━━━━━━━━━[0m[37m━━━[0m [1m0s[0m 60ms/step - accuracy: 0.7849 - loss: 0.4806
+[1m35/39[0m [32m━━━━━━━━━━━━━━━━━[0m[37m━━━[0m [1m0s[0m 60ms/step - accuracy: 0.7857 - loss: 0.4787
+[1m36/39[0m [32m━━━━━━━━━━━━━━━━━━[0m[37m━━[0m [1m0s[0m 60ms/step - accuracy: 0.7917 - loss: 0.4705
+[1m37/39[0m [32m━━━━━━━━━━━━━━━━━━[0m[37m━━[0m [1m0s[0m 60ms/step - accuracy: 0.7889 - loss: 0.4700
+[1m38/39[0m [32m━━━━━━━━━━━━━━━━━━━[0m[37m━[0m [1m0s[0m 60ms/step - accuracy: 0.7862 - loss: 0.4719
+[1m39/39[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m2s[0m 63ms/step - accuracy: 0.7856 - loss: 0.4723 - val_accuracy: 0.7019 - val_loss: 1.0408 - learning_rate: 0.0010
+Epoch 3/30
+
+[1m 1/39[0m [37m━━━━━━━━━━━━━━━━━━━━[0m [1m3s[0m 87ms/step - accuracy: 1.0000 - loss: 0.1969
+[1m 2/39[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m2s[0m 54ms/step - accuracy: 1.0000 - loss: 0.2099
+[1m 3/39[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m1s[0m 54ms/step - accuracy: 0.8958 - loss: 0.3217
+[1m 4/39[0m [32m━━[0m[37m━━━━━━━━━━━━━━━━━━[0m [1m1s[0m 54ms/step - accuracy: 0.8750 - loss: 0.3246
+[1m 5/39[0m [32m━━[0m[37m━━━━━━━━━━━━━━━━━━[0m [1m1s[0m 55ms/step - accuracy: 0.8375 - loss: 0.3593
+[1m 6/39[0m [32m━━━[0m[37m━━━━━━━━━━━━━━━━━[0m [1m1s[0m 55ms/step - accuracy: 0.8646 - loss: 0.3255
+[1m 7/39[0m [32m━━━[0m[37m━━━━━━━━━━━━━━━━━[0m [1m1s[0m 55ms/step - accuracy: 0.8571 - loss: 0.3207
+[1m 8/39[0m [32m━━━━[0m[37m━━━━━━━━━━━━━━━━[0m [1m1s[0m 55ms/step - accuracy: 0.8594 - loss: 0.3333
+[1m 9/39[0m [32m━━━━[0m[37m━━━━━━━━━━━━━━━━[0m [1m1s[0m 55ms/step - accuracy: 0.8611 - loss: 0.3282
+[1m10/39[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m1s[0m 55ms/step - accuracy: 0.8625 - loss: 0.3210
+[1m11/39[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m1s[0m 55ms/step - accuracy: 0.8693 - loss: 0.3123
+[1m12/39[0m [32m━━━━━━[0m[37m━━━━━━━━━━━━━━[0m [1m1s[0m 55ms/step - accuracy: 0.8750 - loss: 0.3070
+[1m13/39[0m [32m━━━━━━[0m[37m━━━━━━━━━━━━━━[0m [1m1s[0m 55ms/step - accuracy: 0.8750 - loss: 0.3153
+[1m14/39[0m [32m━━━━━━━[0m[37m━━━━━━━━━━━━━[0m [1m1s[0m 55ms/step - accuracy: 0.8705 - loss: 0.3238
+[1m15/39[0m [32m━━━━━━━[0m[37m━━━━━━━━━━━━━[0m [1m1s[0m 55ms/step - accuracy: 0.8667 - loss: 0.3476
+[1m16/39[0m [32m━━━━━━━━[0m[37m━━━━━━━━━━━━[0m [1m1s[0m 55ms/step - accuracy: 0.8750 - loss: 0.3407
+[1m17/39[0m [32m━━━━━━━━[0m[37m━━━━━━━━━━━━[0m [1m1s[0m 55ms/step - accuracy: 0.8676 - loss: 0.3497
+[1m18/39[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m1s[0m 55ms/step - accuracy: 0.8681 - loss: 0.3479
+[1m19/39[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m1s[0m 55ms/step - accuracy: 0.8651 - loss: 0.3515
+[1m20/39[0m [32m━━━━━━━━━━[0m[37m━━━━━━━━━━[0m [1m1s[0m 55ms/step - accuracy: 0.8687 - loss: 0.3515
+[1m21/39[0m [32m━━━━━━━━━━[0m[37m━━━━━━━━━━[0m [1m0s[0m 55ms/step - accuracy: 0.8720 - loss: 0.3484
+[1m22/39[0m [32m━━━━━━━━━━━[0m[37m━━━━━━━━━[0m [1m0s[0m 56ms/step - accuracy: 0.8665 - loss: 0.3528
+[1m23/39[0m [32m━━━━━━━━━━━[0m[37m━━━━━━━━━[0m [1m0s[0m 56ms/step - accuracy: 0.8696 - loss: 0.3478
+[1m24/39[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m0s[0m 56ms/step - accuracy: 0.8698 - loss: 0.3456
+[1m25/39[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m0s[0m 56ms/step - accuracy: 0.8650 - loss: 0.3471
+[1m26/39[0m [32m━━━━━━━━━━━━━[0m[37m━━━━━━━[0m [1m0s[0m 56ms/step - accuracy: 0.8630 - loss: 0.3507
+[1m27/39[0m [32m━━━━━━━━━━━━━[0m[37m━━━━━━━[0m [1m0s[0m 56ms/step - accuracy: 0.8634 - loss: 0.3504
+[1m28/39[0m [32m━━━━━━━━━━━━━━[0m[37m━━━━━━[0m [1m0s[0m 56ms/step - accuracy: 0.8594 - loss: 0.3523
+[1m29/39[0m [32m━━━━━━━━━━━━━━[0m[37m━━━━━━[0m [1m0s[0m 56ms/step - accuracy: 0.8556 - loss: 0.3517
+[1m30/39[0m [32m━━━━━━━━━━━━━━━[0m[37m━━━━━[0m [1m0s[0m 56ms/step - accuracy: 0.8562 - loss: 0.3546
+[1m31/39[0m [32m━━━━━━━━━━━━━━━[0m[37m━━━━━[0m [1m0s[0m 56ms/step - accuracy: 0.8569 - loss: 0.3497
+[1m32/39[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 55ms/step - accuracy: 0.8613 - loss: 0.3460
+[1m33/39[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 55ms/step - accuracy: 0.8598 - loss: 0.3454
+[1m34/39[0m [32m━━━━━━━━━━━━━━━━━[0m[37m━━━[0m [1m0s[0m 55ms/step - accuracy: 0.8603 - loss: 0.3465
+[1m35/39[0m [32m━━━━━━━━━━━━━━━━━[0m[37m━━━[0m [1m0s[0m 55ms/step - accuracy: 0.8607 - loss: 0.3464
+[1m36/39[0m [32m━━━━━━━━━━━━━━━━━━[0m[37m━━[0m [1m0s[0m 55ms/step - accuracy: 0.8628 - loss: 0.3455
+[1m37/39[0m [32m━━━━━━━━━━━━━━━━━━[0m[37m━━[0m [1m0s[0m 55ms/step - accuracy: 0.8666 - loss: 0.3398
+[1m38/39[0m [32m━━━━━━━━━━━━━━━━━━━[0m[37m━[0m [1m0s[0m 55ms/step - accuracy: 0.8684 - loss: 0.3350
+[1m39/39[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m2s[0m 59ms/step - accuracy: 0.8674 - loss: 0.3403 - val_accuracy: 0.7329 - val_loss: 0.7001 - learning_rate: 0.0010
+Epoch 4/30
+
+[1m 1/39[0m [37m━━━━━━━━━━━━━━━━━━━━[0m [1m3s[0m 88ms/step - accuracy: 0.9375 - loss: 0.1268
+[1m 2/39[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m2s[0m 58ms/step - accuracy: 0.9375 - loss: 0.1898
+[1m 3/39[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m2s[0m 56ms/step - accuracy: 0.9375 - loss: 0.1897
+[1m 4/39[0m [32m━━[0m[37m━━━━━━━━━━━━━━━━━━[0m [1m1s[0m 55ms/step - accuracy: 0.9062 - loss: 0.2356
+[1m 5/39[0m [32m━━[0m[37m━━━━━━━━━━━━━━━━━━[0m [1m1s[0m 55ms/step - accuracy: 0.9000 - loss: 0.2415
+[1m 6/39[0m [32m━━━[0m[37m━━━━━━━━━━━━━━━━━[0m [1m1s[0m 55ms/step - accuracy: 0.8646 - loss: 0.2791
+[1m 7/39[0m [32m━━━[0m[37m━━━━━━━━━━━━━━━━━[0m [1m1s[0m 57ms/step - accuracy: 0.8750 - loss: 0.2645
+[1m 8/39[0m [32m━━━━[0m[37m━━━━━━━━━━━━━━━━[0m [1m1s[0m 57ms/step - accuracy: 0.8672 - loss: 0.2741
+[1m 9/39[0m [32m━━━━[0m[37m━━━━━━━━━━━━━━━━[0m [1m1s[0m 56ms/step - accuracy: 0.8403 - loss: 0.3085
+[1m10/39[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m1s[0m 56ms/step - accuracy: 0.8313 - loss: 0.3104
+[1m11/39[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m1s[0m 56ms/step - accuracy: 0.8239 - loss: 0.3192
+[1m12/39[0m [32m━━━━━━[0m[37m━━━━━━━━━━━━━━[0m [1m1s[0m 56ms/step - accuracy: 0.8333 - loss: 0.3115
+[1m13/39[0m [32m━━━━━━[0m[37m━━━━━━━━━━━━━━[0m [1m1s[0m 57ms/step - accuracy: 0.8413 - loss: 0.3127
+[1m14/39[0m [32m━━━━━━━[0m[37m━━━━━━━━━━━━━[0m [1m1s[0m 57ms/step - accuracy: 0.8482 - loss: 0.3069
+[1m15/39[0m [32m━━━━━━━[0m[37m━━━━━━━━━━━━━[0m [1m1s[0m 57ms/step - accuracy: 0.8458 - loss: 0.3120
+[1m16/39[0m [32m━━━━━━━━[0m[37m━━━━━━━━━━━━[0m [1m1s[0m 57ms/step - accuracy: 0.8281 - loss: 0.3314
+[1m17/39[0m [32m━━━━━━━━[0m[37m━━━━━━━━━━━━[0m [1m1s[0m 57ms/step - accuracy: 0.8309 - loss: 0.3293
+[1m18/39[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m1s[0m 57ms/step - accuracy: 0.8368 - loss: 0.3198
+[1m19/39[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m1s[0m 57ms/step - accuracy: 0.8289 - loss: 0.3263
+[1m20/39[0m [32m━━━━━━━━━━[0m[37m━━━━━━━━━━[0m [1m1s[0m 57ms/step - accuracy: 0.8250 - loss: 0.3301
+[1m21/39[0m [32m━━━━━━━━━━[0m[37m━━━━━━━━━━[0m [1m1s[0m 57ms/step - accuracy: 0.8333 - loss: 0.3242
+[1m22/39[0m [32m━━━━━━━━━━━[0m[37m━━━━━━━━━[0m [1m0s[0m 56ms/step - accuracy: 0.8352 - loss: 0.3203
+[1m23/39[0m [32m━━━━━━━━━━━[0m[37m━━━━━━━━━[0m [1m0s[0m 56ms/step - accuracy: 0.8397 - loss: 0.3160
+[1m24/39[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m0s[0m 56ms/step - accuracy: 0.8438 - loss: 0.3112
+[1m25/39[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m0s[0m 56ms/step - accuracy: 0.8425 - loss: 0.3112
+[1m26/39[0m [32m━━━━━━━━━━━━━[0m[37m━━━━━━━[0m [1m0s[0m 56ms/step - accuracy: 0.8438 - loss: 0.3097
+[1m27/39[0m [32m━━━━━━━━━━━━━[0m[37m━━━━━━━[0m [1m0s[0m 56ms/step - accuracy: 0.8472 - loss: 0.3071
+[1m28/39[0m [32m━━━━━━━━━━━━━━[0m[37m━━━━━━[0m [1m0s[0m 56ms/step - accuracy: 0.8460 - loss: 0.3091
+[1m29/39[0m [32m━━━━━━━━━━━━━━[0m[37m━━━━━━[0m [1m0s[0m 56ms/step - accuracy: 0.8427 - loss: 0.3131
+[1m30/39[0m [32m━━━━━━━━━━━━━━━[0m[37m━━━━━[0m [1m0s[0m 56ms/step - accuracy: 0.8458 - loss: 0.3079
+[1m31/39[0m [32m━━━━━━━━━━━━━━━[0m[37m━━━━━[0m [1m0s[0m 56ms/step - accuracy: 0.8448 - loss: 0.3127
+[1m32/39[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 56ms/step - accuracy: 0.8418 - loss: 0.3225
+[1m33/39[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 56ms/step - accuracy: 0.8428 - loss: 0.3209
+[1m34/39[0m [32m━━━━━━━━━━━━━━━━━[0m[37m━━━[0m [1m0s[0m 56ms/step - accuracy: 0.8419 - loss: 0.3201
+[1m35/39[0m [32m━━━━━━━━━━━━━━━━━[0m[37m━━━[0m [1m0s[0m 56ms/step - accuracy: 0.8411 - loss: 0.3185
+[1m36/39[0m [32m━━━━━━━━━━━━━━━━━━[0m[37m━━[0m [1m0s[0m 56ms/step - accuracy: 0.8438 - loss: 0.3165
+[1m37/39[0m [32m━━━━━━━━━━━━━━━━━━[0m[37m━━[0m [1m0s[0m 56ms/step - accuracy: 0.8463 - loss: 0.3158
+[1m38/39[0m [32m━━━━━━━━━━━━━━━━━━━[0m[37m━[0m [1m0s[0m 56ms/step - accuracy: 0.8503 - loss: 0.3107
+[1m39/39[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m2s[0m 59ms/step - accuracy: 0.8511 - loss: 0.3100 - val_accuracy: 0.6460 - val_loss: 0.7609 - learning_rate: 0.0010
+Epoch 5/30
+
+[1m 1/39[0m [37m━━━━━━━━━━━━━━━━━━━━[0m [1m3s[0m 83ms/step - accuracy: 0.8750 - loss: 0.5285
+[1m 2/39[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m2s[0m 54ms/step - accuracy: 0.7812 - loss: 0.5067
+[1m 3/39[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m1s[0m 55ms/step - accuracy: 0.8542 - loss: 0.3659
+[1m 4/39[0m [32m━━[0m[37m━━━━━━━━━━━━━━━━━━[0m [1m1s[0m 55ms/step - accuracy: 0.8750 - loss: 0.3263
+[1m 5/39[0m [32m━━[0m[37m━━━━━━━━━━━━━━━━━━[0m [1m1s[0m 55ms/step - accuracy: 0.8750 - loss: 0.3264
+[1m 6/39[0m [32m━━━[0m[37m━━━━━━━━━━━━━━━━━[0m [1m1s[0m 55ms/step - accuracy: 0.8958 - loss: 0.3121
+[1m 7/39[0m [32m━━━[0m[37m━━━━━━━━━━━━━━━━━[0m [1m1s[0m 55ms/step - accuracy: 0.9107 - loss: 0.2843
+[1m 8/39[0m [32m━━━━[0m[37m━━━━━━━━━━━━━━━━[0m [1m1s[0m 55ms/step - accuracy: 0.9062 - loss: 0.2777
+[1m 9/39[0m [32m━━━━[0m[37m━━━━━━━━━━━━━━━━[0m [1m1s[0m 55ms/step - accuracy: 0.9167 - loss: 0.2618
+[1m10/39[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m1s[0m 55ms/step - accuracy: 0.9125 - loss: 0.2666
+[1m11/39[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m1s[0m 55ms/step - accuracy: 0.9148 - loss: 0.2647
+[1m12/39[0m [32m━━━━━━[0m[37m━━━━━━━━━━━━━━[0m [1m1s[0m 55ms/step - accuracy: 0.9167 - loss: 0.2533
+[1m13/39[0m [32m━━━━━━[0m[37m━━━━━━━━━━━━━━[0m [1m1s[0m 56ms/step - accuracy: 0.9183 - loss: 0.2688
+[1m14/39[0m [32m━━━━━━━[0m[37m━━━━━━━━━━━━━[0m [1m1s[0m 57ms/step - accuracy: 0.9152 - loss: 0.2686
+[1m15/39[0m [32m━━━━━━━[0m[37m━━━━━━━━━━━━━[0m [1m1s[0m 57ms/step - accuracy: 0.9125 - loss: 0.2726
+[1m16/39[0m [32m━━━━━━━━[0m[37m━━━━━━━━━━━━[0m [1m1s[0m 56ms/step - accuracy: 0.9062 - loss: 0.2757
+[1m17/39[0m [32m━━━━━━━━[0m[37m━━━━━━━━━━━━[0m [1m1s[0m 56ms/step - accuracy: 0.9081 - loss: 0.2711
+[1m18/39[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m1s[0m 56ms/step - accuracy: 0.8958 - loss: 0.2839
+[1m19/39[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m1s[0m 56ms/step - accuracy: 0.8980 - loss: 0.2749
+[1m20/39[0m [32m━━━━━━━━━━[0m[37m━━━━━━━━━━[0m [1m1s[0m 56ms/step - accuracy: 0.8969 - loss: 0.2763
+[1m21/39[0m [32m━━━━━━━━━━[0m[37m━━━━━━━━━━[0m [1m1s[0m 56ms/step - accuracy: 0.8899 - loss: 0.2836
+[1m22/39[0m [32m━━━━━━━━━━━[0m[37m━━━━━━━━━[0m [1m0s[0m 57ms/step - accuracy: 0.8864 - loss: 0.2871
+[1m23/39[0m [32m━━━━━━━━━━━[0m[37m━━━━━━━━━[0m [1m0s[0m 57ms/step - accuracy: 0.8913 - loss: 0.2792
+[1m24/39[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m0s[0m 57ms/step - accuracy: 0.8958 - loss: 0.2740
+[1m25/39[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m0s[0m 57ms/step - accuracy: 0.8975 - loss: 0.2759
+[1m26/39[0m [32m━━━━━━━━━━━━━[0m[37m━━━━━━━[0m [1m0s[0m 57ms/step - accuracy: 0.8990 - loss: 0.2722
+[1m27/39[0m [32m━━━━━━━━━━━━━[0m[37m━━━━━━━[0m [1m0s[0m 57ms/step - accuracy: 0.9028 - loss: 0.2693
+[1m28/39[0m [32m━━━━━━━━━━━━━━[0m[37m━━━━━━[0m [1m0s[0m 57ms/step - accuracy: 0.8996 - loss: 0.2750
+[1m29/39[0m [32m━━━━━━━━━━━━━━[0m[37m━━━━━━[0m [1m0s[0m 57ms/step - accuracy: 0.9009 - loss: 0.2727
+[1m30/39[0m [32m━━━━━━━━━━━━━━━[0m[37m━━━━━[0m [1m0s[0m 58ms/step - accuracy: 0.9000 - loss: 0.2764
+[1m31/39[0m [32m━━━━━━━━━━━━━━━[0m[37m━━━━━[0m [1m0s[0m 58ms/step - accuracy: 0.8972 - loss: 0.2745
+[1m32/39[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 58ms/step - accuracy: 0.9004 - loss: 0.2693
+[1m33/39[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 58ms/step - accuracy: 0.9015 - loss: 0.2692
+[1m34/39[0m [32m━━━━━━━━━━━━━━━━━[0m[37m━━━[0m [1m0s[0m 58ms/step - accuracy: 0.9044 - loss: 0.2641
+[1m35/39[0m [32m━━━━━━━━━━━━━━━━━[0m[37m━━━[0m [1m0s[0m 58ms/step - accuracy: 0.9054 - loss: 0.2619
+[1m36/39[0m [32m━━━━━━━━━━━━━━━━━━[0m[37m━━[0m [1m0s[0m 58ms/step - accuracy: 0.9080 - loss: 0.2575
+[1m37/39[0m [32m━━━━━━━━━━━━━━━━━━[0m[37m━━[0m [1m0s[0m 58ms/step - accuracy: 0.9054 - loss: 0.2629
+[1m38/39[0m [32m━━━━━━━━━━━━━━━━━━━[0m[37m━[0m [1m0s[0m 58ms/step - accuracy: 0.9062 - loss: 0.2615
+[1m39/39[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m2s[0m 61ms/step - accuracy: 0.9051 - loss: 0.2617 - val_accuracy: 0.4099 - val_loss: 0.8906 - learning_rate: 0.0010
+Epoch 6/30
+
+[1m 1/39[0m [37m━━━━━━━━━━━━━━━━━━━━[0m [1m3s[0m 84ms/step - accuracy: 1.0000 - loss: 0.1384
+[1m 2/39[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m2s[0m 56ms/step - accuracy: 0.8750 - loss: 0.2945
+[1m 3/39[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m2s[0m 57ms/step - accuracy: 0.8542 - loss: 0.2712
+[1m 4/39[0m [32m━━[0m[37m━━━━━━━━━━━━━━━━━━[0m [1m1s[0m 56ms/step - accuracy: 0.8906 - loss: 0.2210
+[1m 5/39[0m [32m━━[0m[37m━━━━━━━━━━━━━━━━━━[0m [1m1s[0m 55ms/step - accuracy: 0.8875 - loss: 0.2221
+[1m 6/39[0m [32m━━━[0m[37m━━━━━━━━━━━━━━━━━[0m [1m1s[0m 55ms/step - accuracy: 0.8438 - loss: 0.2649
+[1m 7/39[0m [32m━━━[0m[37m━━━━━━━━━━━━━━━━━[0m [1m1s[0m 57ms/step - accuracy: 0.8482 - loss: 0.2610
+[1m 8/39[0m [32m━━━━[0m[37m━━━━━━━━━━━━━━━━[0m [1m1s[0m 58ms/step - accuracy: 0.8516 - loss: 0.2627
+[1m 9/39[0m [32m━━━━[0m[37m━━━━━━━━━━━━━━━━[0m [1m1s[0m 58ms/step - accuracy: 0.8681 - loss: 0.2525
+[1m10/39[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m1s[0m 58ms/step - accuracy: 0.8625 - loss: 0.2733
+[1m11/39[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m1s[0m 58ms/step - accuracy: 0.8693 - loss: 0.2641
+[1m12/39[0m [32m━━━━━━[0m[37m━━━━━━━━━━━━━━[0m [1m1s[0m 58ms/step - accuracy: 0.8750 - loss: 0.2586
+[1m13/39[0m [32m━━━━━━[0m[37m━━━━━━━━━━━━━━[0m [1m1s[0m 58ms/step - accuracy: 0.8846 - loss: 0.2460
+[1m14/39[0m [32m━━━━━━━[0m[37m━━━━━━━━━━━━━[0m [1m1s[0m 58ms/step - accuracy: 0.8839 - loss: 0.2501
+[1m15/39[0m [32m━━━━━━━[0m[37m━━━━━━━━━━━━━[0m [1m1s[0m 58ms/step - accuracy: 0.8875 - loss: 0.2429
+[1m16/39[0m [32m━━━━━━━━[0m[37m━━━━━━━━━━━━[0m [1m1s[0m 58ms/step - accuracy: 0.8945 - loss: 0.2335
+[1m17/39[0m [32m━━━━━━━━[0m[37m━━━━━━━━━━━━[0m [1m1s[0m 59ms/step - accuracy: 0.8971 - loss: 0.2281
+[1m18/39[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m1s[0m 59ms/step - accuracy: 0.9028 - loss: 0.2212
+[1m19/39[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m1s[0m 59ms/step - accuracy: 0.9046 - loss: 0.2179
+[1m20/39[0m [32m━━━━━━━━━━[0m[37m━━━━━━━━━━[0m [1m1s[0m 59ms/step - accuracy: 0.9062 - loss: 0.2154
+[1m21/39[0m [32m━━━━━━━━━━[0m[37m━━━━━━━━━━[0m [1m1s[0m 59ms/step - accuracy: 0.9048 - loss: 0.2161
+[1m22/39[0m [32m━━━━━━━━━━━[0m[37m━━━━━━━━━[0m [1m0s[0m 59ms/step - accuracy: 0.9034 - loss: 0.2201
+[1m23/39[0m [32m━━━━━━━━━━━[0m[37m━━━━━━━━━[0m [1m0s[0m 59ms/step - accuracy: 0.9049 - loss: 0.2186
+[1m24/39[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m0s[0m 59ms/step - accuracy: 0.9089 - loss: 0.2123
+[1m25/39[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m0s[0m 59ms/step - accuracy: 0.9125 - loss: 0.2089
+[1m26/39[0m [32m━━━━━━━━━━━━━[0m[37m━━━━━━━[0m [1m0s[0m 59ms/step - accuracy: 0.9159 - loss: 0.2055
+[1m27/39[0m [32m━━━━━━━━━━━━━[0m[37m━━━━━━━[0m [1m0s[0m 59ms/step - accuracy: 0.9167 - loss: 0.2053
+[1m28/39[0m [32m━━━━━━━━━━━━━━[0m[37m━━━━━━[0m [1m0s[0m 59ms/step - accuracy: 0.9196 - loss: 0.2006
+[1m29/39[0m [32m━━━━━━━━━━━━━━[0m[37m━━━━━━[0m [1m0s[0m 59ms/step - accuracy: 0.9203 - loss: 0.1995
+[1m30/39[0m [32m━━━━━━━━━━━━━━━[0m[37m━━━━━[0m [1m0s[0m 59ms/step - accuracy: 0.9229 - loss: 0.1962
+[1m31/39[0m [32m━━━━━━━━━━━━━━━[0m[37m━━━━━[0m [1m0s[0m 59ms/step - accuracy: 0.9234 - loss: 0.1959
+[1m32/39[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 59ms/step - accuracy: 0.9238 - loss: 0.1954
+[1m33/39[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 59ms/step - accuracy: 0.9242 - loss: 0.1982
+[1m34/39[0m [32m━━━━━━━━━━━━━━━━━[0m[37m━━━[0m [1m0s[0m 59ms/step - accuracy: 0.9265 - loss: 0.1945
+[1m35/39[0m [32m━━━━━━━━━━━━━━━━━[0m[37m━━━[0m [1m0s[0m 59ms/step - accuracy: 0.9286 - loss: 0.1904
+[1m36/39[0m [32m━━━━━━━━━━━━━━━━━━[0m[37m━━[0m [1m0s[0m 59ms/step - accuracy: 0.9271 - loss: 0.1955
+[1m37/39[0m [32m━━━━━━━━━━━━━━━━━━[0m[37m━━[0m [1m0s[0m 59ms/step - accuracy: 0.9274 - loss: 0.1926
+[1m38/39[0m [32m━━━━━━━━━━━━━━━━━━━[0m[37m━[0m [1m0s[0m 59ms/step - accuracy: 0.9243 - loss: 0.1995
+Epoch 6: ReduceLROnPlateau reducing learning rate to 0.0005000000237487257.
+
+[1m39/39[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m2s[0m 63ms/step - accuracy: 0.9247 - loss: 0.1986 - val_accuracy: 0.4472 - val_loss: 0.9654 - learning_rate: 0.0010
+Epoch 7/30
+
+[1m 1/39[0m [37m━━━━━━━━━━━━━━━━━━━━[0m [1m3s[0m 81ms/step - accuracy: 0.9375 - loss: 0.1096
+[1m 2/39[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m2s[0m 57ms/step - accuracy: 0.9062 - loss: 0.1510
+[1m 3/39[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m2s[0m 59ms/step - accuracy: 0.9375 - loss: 0.1233
+[1m 4/39[0m [32m━━[0m[37m━━━━━━━━━━━━━━━━━━[0m [1m2s[0m 59ms/step - accuracy: 0.9375 - loss: 0.1368
+[1m 5/39[0m [32m━━[0m[37m━━━━━━━━━━━━━━━━━━[0m [1m1s[0m 59ms/step - accuracy: 0.9500 - loss: 0.1288
+[1m 6/39[0m [32m━━━[0m[37m━━━━━━━━━━━━━━━━━[0m [1m1s[0m 61ms/step - accuracy: 0.9583 - loss: 0.1185
+[1m 7/39[0m [32m━━━[0m[37m━━━━━━━━━━━━━━━━━[0m [1m1s[0m 61ms/step - accuracy: 0.9554 - loss: 0.1269
+[1m 8/39[0m [32m━━━━[0m[37m━━━━━━━━━━━━━━━━[0m [1m1s[0m 60ms/step - accuracy: 0.9609 - loss: 0.1228
+[1m 9/39[0m [32m━━━━[0m[37m━━━━━━━━━━━━━━━━[0m [1m1s[0m 62ms/step - accuracy: 0.9583 - loss: 0.1392
+[1m10/39[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m1s[0m 61ms/step - accuracy: 0.9500 - loss: 0.1502
+[1m11/39[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m1s[0m 61ms/step - accuracy: 0.9545 - loss: 0.1431
+[1m12/39[0m [32m━━━━━━[0m[37m━━━━━━━━━━━━━━[0m [1m1s[0m 60ms/step - accuracy: 0.9531 - loss: 0.1428
+[1m13/39[0m [32m━━━━━━[0m[37m━━━━━━━━━━━━━━[0m [1m1s[0m 60ms/step - accuracy: 0.9519 - loss: 0.1391
+[1m14/39[0m [32m━━━━━━━[0m[37m━━━━━━━━━━━━━[0m [1m1s[0m 60ms/step - accuracy: 0.9509 - loss: 0.1366
+[1m15/39[0m [32m━━━━━━━[0m[37m━━━━━━━━━━━━━[0m [1m1s[0m 60ms/step - accuracy: 0.9458 - loss: 0.1456
+[1m16/39[0m [32m━━━━━━━━[0m[37m━━━━━━━━━━━━[0m [1m1s[0m 60ms/step - accuracy: 0.9453 - loss: 0.1459
+[1m17/39[0m [32m━━━━━━━━[0m[37m━━━━━━━━━━━━[0m [1m1s[0m 60ms/step - accuracy: 0.9412 - loss: 0.1539
+[1m18/39[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m1s[0m 60ms/step - accuracy: 0.9444 - loss: 0.1485
+[1m19/39[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m1s[0m 60ms/step - accuracy: 0.9474 - loss: 0.1454
+[1m20/39[0m [32m━━━━━━━━━━[0m[37m━━━━━━━━━━[0m [1m1s[0m 60ms/step - accuracy: 0.9500 - loss: 0.1404
+[1m21/39[0m [32m━━━━━━━━━━[0m[37m━━━━━━━━━━[0m [1m1s[0m 60ms/step - accuracy: 0.9524 - loss: 0.1349
+[1m22/39[0m [32m━━━━━━━━━━━[0m[37m━━━━━━━━━[0m [1m1s[0m 60ms/step - accuracy: 0.9517 - loss: 0.1339
+[1m23/39[0m [32m━━━━━━━━━━━[0m[37m━━━━━━━━━[0m [1m0s[0m 60ms/step - accuracy: 0.9511 - loss: 0.1418
+[1m24/39[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m0s[0m 60ms/step - accuracy: 0.9505 - loss: 0.1450
+[1m25/39[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m0s[0m 60ms/step - accuracy: 0.9525 - loss: 0.1428
+[1m26/39[0m [32m━━━━━━━━━━━━━[0m[37m━━━━━━━[0m [1m0s[0m 59ms/step - accuracy: 0.9519 - loss: 0.1405
+[1m27/39[0m [32m━━━━━━━━━━━━━[0m[37m━━━━━━━[0m [1m0s[0m 59ms/step - accuracy: 0.9514 - loss: 0.1409
+[1m28/39[0m [32m━━━━━━━━━━━━━━[0m[37m━━━━━━[0m [1m0s[0m 59ms/step - accuracy: 0.9531 - loss: 0.1384
+[1m29/39[0m [32m━━━━━━━━━━━━━━[0m[37m━━━━━━[0m [1m0s[0m 59ms/step - accuracy: 0.9526 - loss: 0.1369
+[1m30/39[0m [32m━━━━━━━━━━━━━━━[0m[37m━━━━━[0m [1m0s[0m 59ms/step - accuracy: 0.9521 - loss: 0.1372
+[1m31/39[0m [32m━━━━━━━━━━━━━━━[0m[37m━━━━━[0m [1m0s[0m 59ms/step - accuracy: 0.9536 - loss: 0.1362
+[1m32/39[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 59ms/step - accuracy: 0.9531 - loss: 0.1357
+[1m33/39[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 59ms/step - accuracy: 0.9545 - loss: 0.1332
+[1m34/39[0m [32m━━━━━━━━━━━━━━━━━[0m[37m━━━[0m [1m0s[0m 59ms/step - accuracy: 0.9559 - loss: 0.1316
+[1m35/39[0m [32m━━━━━━━━━━━━━━━━━[0m[37m━━━[0m [1m0s[0m 59ms/step - accuracy: 0.9571 - loss: 0.1309
+[1m36/39[0m [32m━━━━━━━━━━━━━━━━━━[0m[37m━━[0m [1m0s[0m 59ms/step - accuracy: 0.9583 - loss: 0.1282
+[1m37/39[0m [32m━━━━━━━━━━━━━━━━━━[0m[37m━━[0m [1m0s[0m 59ms/step - accuracy: 0.9595 - loss: 0.1268
+[1m38/39[0m [32m━━━━━━━━━━━━━━━━━━━[0m[37m━[0m [1m0s[0m 59ms/step - accuracy: 0.9605 - loss: 0.1247
+[1m39/39[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m2s[0m 62ms/step - accuracy: 0.9607 - loss: 0.1242 - val_accuracy: 0.4907 - val_loss: 0.8784 - learning_rate: 5.0000e-04
+Epoch 8/30
+
+[1m 1/39[0m [37m━━━━━━━━━━━━━━━━━━━━[0m [1m3s[0m 81ms/step - accuracy: 1.0000 - loss: 0.0821
+[1m 2/39[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m1s[0m 53ms/step - accuracy: 0.9688 - loss: 0.1135
+[1m 3/39[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m1s[0m 54ms/step - accuracy: 0.9583 - loss: 0.1640
+[1m 4/39[0m [32m━━[0m[37m━━━━━━━━━━━━━━━━━━[0m [1m1s[0m 55ms/step - accuracy: 0.9531 - loss: 0.1584
+[1m 5/39[0m [32m━━[0m[37m━━━━━━━━━━━━━━━━━━[0m [1m1s[0m 56ms/step - accuracy: 0.9625 - loss: 0.1332
+[1m 6/39[0m [32m━━━[0m[37m━━━━━━━━━━━━━━━━━[0m [1m1s[0m 57ms/step - accuracy: 0.9688 - loss: 0.1164
+[1m 7/39[0m [32m━━━[0m[37m━━━━━━━━━━━━━━━━━[0m [1m1s[0m 57ms/step - accuracy: 0.9732 - loss: 0.1085
+[1m 8/39[0m [32m━━━━[0m[37m━━━━━━━━━━━━━━━━[0m [1m1s[0m 57ms/step - accuracy: 0.9766 - loss: 0.1054
+[1m 9/39[0m [32m━━━━[0m[37m━━━━━━━━━━━━━━━━[0m [1m1s[0m 57ms/step - accuracy: 0.9722 - loss: 0.1062
+[1m10/39[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m1s[0m 57ms/step - accuracy: 0.9688 - loss: 0.1129
+[1m11/39[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m1s[0m 57ms/step - accuracy: 0.9659 - loss: 0.1163
+[1m12/39[0m [32m━━━━━━[0m[37m━━━━━━━━━━━━━━[0m [1m1s[0m 58ms/step - accuracy: 0.9635 - loss: 0.1223
+[1m13/39[0m [32m━━━━━━[0m[37m━━━━━━━━━━━━━━[0m [1m1s[0m 58ms/step - accuracy: 0.9663 - loss: 0.1264
+[1m14/39[0m [32m━━━━━━━[0m[37m━━━━━━━━━━━━━[0m [1m1s[0m 58ms/step - accuracy: 0.9688 - loss: 0.1214
+[1m15/39[0m [32m━━━━━━━[0m[37m━━━━━━━━━━━━━[0m [1m1s[0m 58ms/step - accuracy: 0.9708 - loss: 0.1151
+[1m16/39[0m [32m━━━━━━━━[0m[37m━━━━━━━━━━━━[0m [1m1s[0m 58ms/step - accuracy: 0.9727 - loss: 0.1106
+[1m17/39[0m [32m━━━━━━━━[0m[37m━━━━━━━━━━━━[0m [1m1s[0m 58ms/step - accuracy: 0.9706 - loss: 0.1081
+[1m18/39[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m1s[0m 58ms/step - accuracy: 0.9722 - loss: 0.1042
+[1m19/39[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m1s[0m 58ms/step - accuracy: 0.9671 - loss: 0.1051
+[1m20/39[0m [32m━━━━━━━━━━[0m[37m━━━━━━━━━━[0m [1m1s[0m 59ms/step - accuracy: 0.9688 - loss: 0.1026
+[1m21/39[0m [32m━━━━━━━━━━[0m[37m━━━━━━━━━━[0m [1m1s[0m 59ms/step - accuracy: 0.9643 - loss: 0.1130
+[1m22/39[0m [32m━━━━━━━━━━━[0m[37m━━━━━━━━━[0m [1m0s[0m 59ms/step - accuracy: 0.9659 - loss: 0.1098
+[1m23/39[0m [32m━━━━━━━━━━━[0m[37m━━━━━━━━━[0m [1m0s[0m 59ms/step - accuracy: 0.9620 - loss: 0.1111
+[1m24/39[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m0s[0m 59ms/step - accuracy: 0.9635 - loss: 0.1086
+[1m25/39[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m0s[0m 59ms/step - accuracy: 0.9650 - loss: 0.1067
+[1m26/39[0m [32m━━━━━━━━━━━━━[0m[37m━━━━━━━[0m [1m0s[0m 59ms/step - accuracy: 0.9639 - loss: 0.1151
+[1m27/39[0m [32m━━━━━━━━━━━━━[0m[37m━━━━━━━[0m [1m0s[0m 59ms/step - accuracy: 0.9653 - loss: 0.1113
+[1m28/39[0m [32m━━━━━━━━━━━━━━[0m[37m━━━━━━[0m [1m0s[0m 59ms/step - accuracy: 0.9643 - loss: 0.1154
+[1m29/39[0m [32m━━━━━━━━━━━━━━[0m[37m━━━━━━[0m [1m0s[0m 59ms/step - accuracy: 0.9634 - loss: 0.1163
+[1m30/39[0m [32m━━━━━━━━━━━━━━━[0m[37m━━━━━[0m [1m0s[0m 60ms/step - accuracy: 0.9646 - loss: 0.1144
+[1m31/39[0m [32m━━━━━━━━━━━━━━━[0m[37m━━━━━[0m [1m0s[0m 60ms/step - accuracy: 0.9637 - loss: 0.1192
+[1m32/39[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 60ms/step - accuracy: 0.9629 - loss: 0.1203
+[1m33/39[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 60ms/step - accuracy: 0.9640 - loss: 0.1187
+[1m34/39[0m [32m━━━━━━━━━━━━━━━━━[0m[37m━━━[0m [1m0s[0m 60ms/step - accuracy: 0.9651 - loss: 0.1162
+[1m35/39[0m [32m━━━━━━━━━━━━━━━━━[0m[37m━━━[0m [1m0s[0m 60ms/step - accuracy: 0.9661 - loss: 0.1175
+[1m36/39[0m [32m━━━━━━━━━━━━━━━━━━[0m[37m━━[0m [1m0s[0m 60ms/step - accuracy: 0.9635 - loss: 0.1210
+[1m37/39[0m [32m━━━━━━━━━━━━━━━━━━[0m[37m━━[0m [1m0s[0m 61ms/step - accuracy: 0.9628 - loss: 0.1205
+[1m38/39[0m [32m━━━━━━━━━━━━━━━━━━━[0m[37m━[0m [1m0s[0m 61ms/step - accuracy: 0.9605 - loss: 0.1226
+[1m39/39[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m3s[0m 66ms/step - accuracy: 0.9591 - loss: 0.1238 - val_accuracy: 0.5466 - val_loss: 0.8498 - learning_rate: 5.0000e-04
+Epoch 8: early stopping
+Restoring model weights from the end of the best epoch: 3.
+[Model] Saved -> C:\xampp\htdocs\beemonitoring\ml\models\beeguard_cnn.keras
+[Eval] Confusion matrix saved
+[Eval] metrics.json saved  (val_accuracy=73.29%)
+[Eval] classification_report.txt saved
 
 [Results]
               precision    recall  f1-score   support
 
-      normal       0.50      0.44      0.47         9
-   queenless       0.33      0.75      0.46         4
-    swarming       0.00      0.00      0.00         0
- varroa_mite       0.00      0.00      0.00         4
+      normal       0.73      0.95      0.83       107
+   queenless       0.76      0.31      0.44        52
+    swarming       0.00      0.00      0.00         2
 
-    accuracy                           0.41        17
-   macro avg       0.21      0.30      0.23        17
-weighted avg       0.34      0.41      0.36        17
+    accuracy                           0.73       161
+   macro avg       0.50      0.42      0.42       161
+weighted avg       0.73      0.73      0.69       161
 
-[Model] Saved -> C:\xampp\htdocs\beemonitoring\ml\models\beeguard_mlp.pkl
-[Metrics] val_accuracy=41.2%
+[Eval] Training history plot saved
+
 [Done] Training complete!
 

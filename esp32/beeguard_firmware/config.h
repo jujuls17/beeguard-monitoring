@@ -14,7 +14,7 @@
 // --- Server Settings ---
 // Run ipconfig (Windows) or ifconfig (Linux/Mac) to get your PC IP
 // Example: "192.168.1.100"
-#define SERVER_HOST         "10.50.225.103"
+#define SERVER_HOST         "10.164.152.103"
 #define SERVER_PORT         80
 #define API_BASE            "/beemonitoring/api"
 #define API_KEY             "BEEGUARD_SECRET_2026"
@@ -42,7 +42,7 @@
 
 // --- Timing ---
 // --- Timing ---
-#define SEND_INTERVAL_MS    30000   // 30 seconds
+#define SEND_INTERVAL_MS    15000   // 15 seconds
 #define OLED_REFRESH_MS     2000    // OLED updates every 2 seconds
 #define WIFI_RETRY_DELAY_MS 5000
 #define MAX_WIFI_RETRIES    10
