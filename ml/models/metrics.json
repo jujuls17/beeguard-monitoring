@@ -1,32 +1,32 @@
 {
-  "val_accuracy": 81.99,
-  "final_accuracy": 81.99,
+  "val_accuracy": 79.5,
+  "final_accuracy": 79.5,
   "per_class": {
     "normal": {
-      "precision": 0.9239,
-      "recall": 0.7944,
-      "f1": 0.8543,
+      "precision": 0.9205,
+      "recall": 0.757,
+      "f1": 0.8308,
       "support": 107
     },
     "queenless": {
-      "precision": 0.6866,
-      "recall": 0.8846,
-      "f1": 0.7731,
+      "precision": 0.6438,
+      "recall": 0.9038,
+      "f1": 0.752,
       "support": 52
     },
     "swarming": {
-      "precision": 0.5,
-      "recall": 0.5,
-      "f1": 0.5,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
       "support": 2
     }
   },
   "macro_avg": {
-    "precision": 0.7035,
-    "recall": 0.7263,
-    "f1": 0.7091
+    "precision": 0.5214,
+    "recall": 0.5536,
+    "f1": 0.5276
   },
-  "overall_accuracy": 81.99,
+  "overall_accuracy": 79.5,
   "train_clip_counts": {
     "normal": 395,
     "queenless": 214,
@@ -37,8 +37,8 @@
     "queenless": 52,
     "swarming": 2
   },
-  "epochs_run": 14,
-  "training_date": "2026-10-22 15:52:49",
+  "epochs_run": 12,
+  "training_date": "2026-10-22 17:54:48",
   "classes": [
     "normal",
     "queenless",
@@ -46,5 +46,5 @@
   ],
   "model": "BeeGuard CNN (Conv2D x3 + GAP)",
   "sample_count": 772,
-  "trained_at": "Oct 22, 2026 15:52"
+  "trained_at": "Oct 22, 2026 17:54"
 }

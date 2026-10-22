@@ -95,7 +95,7 @@ if (!$s) {
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+            <div class="flex flex-col gap-5 lg:grid lg:grid-cols-2">
                 <div class="bg-white rounded-xl p-5 border border-gray-100">
                     <h3 class="font-semibold text-gray-900 mb-4 flex items-center gap-2 text-sm"><i class="fas fa-bell text-yellow-500"></i>Notification Preferences</h3>
 
@@ -158,7 +158,7 @@ if (!$s) {
             </div>
 
             <!-- ML Model Training Section -->
-            <div class="bg-white rounded-xl p-5 mt-5 border border-gray-100">
+            <div class="bg-white rounded-xl p-5 mt-5 border border-gray-100 overflow-hidden">
                 <!-- Header row -->
                 <div class="flex items-start justify-between mb-1 gap-4">
                     <div>
@@ -213,7 +213,7 @@ if (!$s) {
                 <!-- Training status panel (shown during/after training) -->
                 <div id="trainingPanel" class="hidden mb-5 rounded-xl overflow-hidden border border-gray-200">
                     <!-- Status bar -->
-                    <div class="flex items-center gap-3 px-4 py-3 bg-gray-50 border-b border-gray-200">
+                    <div class="flex flex-wrap items-center gap-2 px-4 py-3 bg-gray-50 border-b border-gray-200">
                         <span id="trainingStatusBadge" class="inline-flex items-center gap-2 text-sm px-3 py-1.5 rounded-full font-bold bg-yellow-100 text-yellow-700">
                             <i class="fas fa-circle-notch fa-spin"></i>Training in progress…
                         </span>
@@ -226,9 +226,9 @@ if (!$s) {
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+                <div class="flex flex-col gap-5 lg:grid lg:grid-cols-2">
                     <!-- Upload Form -->
-                    <div>
+                    <div class="w-full min-w-0">
                         <div class="mb-4">
                             <label class="block text-xs font-semibold text-gray-600 mb-1.5">Sound Classification <span class="text-red-500">*</span></label>
                             <select id="soundClassification" class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-yellow-400 text-sm">
@@ -241,9 +241,9 @@ if (!$s) {
 
                         <div class="mb-4">
                             <label class="block text-xs font-semibold text-gray-600 mb-1.5">Upload Audio File <span class="text-red-500">*</span></label>
-                            <div id="dropZone" class="border border-dashed border-yellow-300 rounded-xl p-5 text-center cursor-pointer hover:bg-yellow-50 transition-colors" onclick="document.getElementById('audioFile').click()">
+                            <div id="dropZone" class="border border-dashed border-yellow-300 rounded-xl p-4 text-center cursor-pointer hover:bg-yellow-50 transition-colors overflow-hidden" onclick="document.getElementById('audioFile').click()">
                                 <i class="fas fa-upload text-yellow-500 text-2xl mb-2"></i>
-                                <p class="text-sm font-medium text-gray-700">Click to upload or drag and drop</p>
+                                <p class="text-sm font-medium text-gray-700 break-words">Click to upload or drag and drop</p>
                                 <p class="text-xs text-gray-400 mt-0.5">WAV, MP3, M4A, OGG (max 50MB)</p>
                                 <p id="fileName" class="text-sm text-yellow-600 mt-2 hidden"></p>
                             </div>
@@ -251,7 +251,7 @@ if (!$s) {
                         </div>
 
                         <button id="uploadBtn" onclick="uploadSound()" disabled
-                            class="w-full py-3 bg-gray-300 text-gray-500 rounded-lg font-semibold flex items-center justify-center gap-2 cursor-not-allowed transition-all">
+                            class="w-full py-2.5 bg-gray-300 text-gray-500 rounded-lg font-semibold flex items-center justify-center gap-2 cursor-not-allowed transition-all text-sm">
                             <i class="fas fa-upload"></i> Upload Sound Sample
                         </button>
 
@@ -272,7 +272,7 @@ if (!$s) {
                     </div>
 
                     <!-- Recent Uploads -->
-                    <div>
+                    <div class="w-full min-w-0">
                         <p class="text-xs font-semibold text-gray-600 mb-2">Recent Uploads</p>
                         <div id="uploadsWrapper" class="border border-gray-100 rounded-xl p-3 bg-gray-50 min-h-48 max-h-96 overflow-y-auto">
                             <div id="recentUploads">
@@ -877,15 +877,15 @@ if (!$s) {
                         ? (typeof clsData === 'object' ? clsData.f1 : clsData / 100)
                         : null;
                     const perClassAcc = f1Val !== null
-                        ? `<span class="text-xs text-gray-400 ml-1">${(f1Val * 100).toFixed(1)}% F1</span>` : '';
-                    return `<div class="flex items-center gap-3">
-                        <span class="text-xs text-gray-600 w-36 truncate flex-shrink-0">${CLASS_LABELS[cls] || cls}</span>
-                        <div class="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
+                        ? `<span class="text-xs text-gray-400 flex-shrink-0 hidden sm:inline">${(f1Val * 100).toFixed(1)}% F1</span>` : '';
+                    return `<div class="flex items-center gap-2">
+                        <span class="text-xs text-gray-600 w-20 sm:w-28 truncate flex-shrink-0">${CLASS_LABELS[cls] || cls}</span>
+                        <div class="flex-1 min-w-0 h-2 bg-gray-100 rounded-full overflow-hidden">
                             <div class="h-full rounded-full transition-all duration-500"
                                  style="width:${barW}%;background:${color}"></div>
                         </div>
-                        <span class="text-xs font-bold text-gray-700 w-6 text-right">${count}</span>
-                        <span class="text-xs text-gray-400 w-8">${pct}%</span>
+                        <span class="text-xs font-bold text-gray-700 w-6 text-right flex-shrink-0">${count}</span>
+                        <span class="text-xs text-gray-400 w-8 flex-shrink-0">${pct}%</span>
                         ${perClassAcc}
                     </div>`;
                 }).join('');
