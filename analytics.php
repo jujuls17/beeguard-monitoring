@@ -38,20 +38,14 @@ $healthyCount = countHealthyHives($conn);
 // ── Build chart data ───────────────────────────────────────────
 // Health Distribution pie
 $statusLabels = [
-    'normal'               => 'Normal',
-    'environmental_stress' => 'Environmental Stress',
-    'swarming_preparation' => 'Swarming',
-    'queenless'            => 'Queenless',
-    'varroa_mite_stress'   => 'Pest Detected',
-    'robbing_behavior'     => 'Robbing',
+    'normal'    => 'Normal',
+    'swarming'  => 'Swarming',
+    'queenless' => 'Queenless',
 ];
 $statusColors = [
-    'normal'               => '#10B981',
-    'environmental_stress' => '#F59E0B',
-    'swarming_preparation' => '#F97316',
-    'queenless'            => '#EF4444',
-    'varroa_mite_stress'   => '#DC2626',
-    'robbing_behavior'     => '#7C3AED',
+    'normal'    => '#10B981',
+    'swarming'  => '#F97316',
+    'queenless' => '#EF4444',
 ];
 
 $totalDist  = array_sum(array_column($distribution, 'count'));

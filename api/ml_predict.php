@@ -11,13 +11,15 @@ ob_clean();
 
 define('ML_DIR',     realpath(__DIR__ . '/../ml'));
 define('SOUNDS_DIR', realpath(__DIR__ . '/../uploads/sounds'));
-define('MODEL_FILE', ML_DIR . DIRECTORY_SEPARATOR . 'models' . DIRECTORY_SEPARATOR . 'beeguard_cnn.h5');
+// Try .keras first (new format), fall back to .h5
+$_cnn_keras = ML_DIR . DIRECTORY_SEPARATOR . 'models' . DIRECTORY_SEPARATOR . 'beeguard_cnn.keras';
+$_cnn_h5    = ML_DIR . DIRECTORY_SEPARATOR . 'models' . DIRECTORY_SEPARATOR . 'beeguard_cnn.h5';
+define('MODEL_FILE', file_exists($_cnn_keras) ? $_cnn_keras : $_cnn_h5);
 
 $LABELS = [
-    'normal'      => 'Normal',
-    'queenless'   => 'Queenless',
-    'swarming'    => 'Swarming',
-    'varroa_mite' => 'Pest Detected',
+    'normal'    => 'Normal',
+    'queenless' => 'Queenless',
+    'swarming'  => 'Swarming',
 ];
 
 try {

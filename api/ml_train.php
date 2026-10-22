@@ -12,8 +12,8 @@ ob_clean();
 define('ML_DIR',      realpath(__DIR__ . '/../ml'));
 define('LOG_FILE',    ML_DIR . DIRECTORY_SEPARATOR . 'training.log');
 define('STATUS_FILE', ML_DIR . DIRECTORY_SEPARATOR . 'training_status.json');
-// Support both old CNN (.h5) and new MLP (.pkl) model files
-define('MODEL_FILE',  ML_DIR . DIRECTORY_SEPARATOR . 'models' . DIRECTORY_SEPARATOR . 'beeguard_mlp.pkl');
+// Primary: .keras (TF SavedModel format); fallback: .h5
+define('MODEL_FILE',        ML_DIR . DIRECTORY_SEPARATOR . 'models' . DIRECTORY_SEPARATOR . 'beeguard_cnn.keras');
 define('MODEL_FILE_LEGACY', ML_DIR . DIRECTORY_SEPARATOR . 'models' . DIRECTORY_SEPARATOR . 'beeguard_cnn.h5');
 
 $action = $_REQUEST['action'] ?? 'status';

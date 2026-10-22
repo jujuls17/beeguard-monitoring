@@ -15,7 +15,7 @@ $conn->query("
         id INT PRIMARY KEY AUTO_INCREMENT,
         original_filename VARCHAR(255) NOT NULL,
         stored_filename VARCHAR(255) NOT NULL,
-        classification ENUM('normal','queenless','swarming','varroa_mite') NOT NULL,
+        classification ENUM('normal','queenless','swarming') NOT NULL,
         file_size_kb DECIMAL(10,2),
         uploaded_by INT,
         uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -28,10 +28,9 @@ $conn->query("
 header('Content-Type: application/json');
 
 $labelMap = [
-    'normal'      => 'Normal',
-    'queenless'   => 'Queenless',
-    'swarming'    => 'Swarming',
-    'varroa_mite' => 'Pest Detected',
+    'normal'    => 'Normal',
+    'queenless' => 'Queenless',
+    'swarming'  => 'Swarming',
 ];
 
 // LIST action
@@ -153,11 +152,13 @@ $response = [
     'message'          => 'Sound file uploaded! Train the model in Settings to enable auto-classification.',
 ];
 
-// Auto-predict if a trained model already exists
-$modelPath  = __DIR__ . '/ml/models/beeguard_cnn.h5';
+// Auto-predict if a trained CNN model already exists
+$modelPath  = __DIR__ . '/ml/models/beeguard_cnn.keras';
+$modelPathH5 = __DIR__ . '/ml/models/beeguard_cnn.h5';
 $scriptPath = __DIR__ . '/ml/predict.py';
+$activeModel = file_exists($modelPath) ? $modelPath : (file_exists($modelPathH5) ? $modelPathH5 : null);
 
-if (file_exists($modelPath) && file_exists($scriptPath)) {
+if ($activeModel && file_exists($scriptPath)) {
     $python = PHP_OS_FAMILY === 'Windows' ? 'python' : 'python3';
     $out    = [];
     exec(
@@ -167,20 +168,19 @@ if (file_exists($modelPath) && file_exists($scriptPath)) {
     $pred = json_decode(trim(implode("\n", $out)), true);
 
     if (is_array($pred) && !isset($pred['error'])) {
-        $labelMap = [
-            'normal'      => 'Normal',
-            'queenless'   => 'Queenless',
-            'swarming'    => 'Swarming',
-            'varroa_mite' => 'Pest Detected',
+        $labelMapPredict = [
+            'normal'    => 'Normal',
+            'queenless' => 'Queenless',
+            'swarming'  => 'Swarming',
         ];
         $status = $pred['colony_status'] ?? '';
         $response['prediction'] = [
             'status'     => $status,
-            'label'      => $labelMap[$status] ?? ucfirst(str_replace('_', ' ', $status)),
+            'label'      => $labelMapPredict[$status] ?? ucfirst(str_replace('_', ' ', $status)),
             'confidence' => $pred['confidence'] ?? 0,
             'all_probs'  => $pred['all_probabilities'] ?? [],
         ];
-        $response['message'] = 'Sound uploaded and classified by the ML model!';
+        $response['message'] = 'Sound uploaded and classified by the CNN model!';
     }
 }
 

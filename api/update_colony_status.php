@@ -6,12 +6,13 @@
  * POST JSON:
  * {
  *   "api_key":        "BEEGUARD_SECRET_2026",
- *   "device_id":      "ESP32-001",
  *   "hive_id":        1,
- *   "colony_status":  "normal",       // normal|queenless|swarming|environmental_stress|varroa_mite|robbing
+ *   "colony_status":  "normal",       // normal|queenless|swarming (CNN classes only)
  *   "confidence":     87.5,
- *   "dominant_freq":  245.0,
- *   "sound_level":    65.0
+ *   "prob_normal":    70.0,
+ *   "prob_queenless": 20.0,
+ *   "prob_swarming":  10.0,
+ *   "inference_ms":   143
  * }
  */
 
@@ -41,12 +42,14 @@ if (($data['api_key'] ?? '') !== API_KEY) {
     exit;
 }
 
-$validStatuses = ['normal', 'queenless', 'swarming', 'varroa_mite'];
+$validStatuses = ['normal', 'queenless', 'swarming'];
 $hiveId       = (int)($data['hive_id'] ?? 0);
 $status       = $data['colony_status'] ?? '';
 $confidence   = round((float)($data['confidence'] ?? 0), 2);
-$dominantFreq = round((float)($data['dominant_freq'] ?? 0), 2);
-$soundLevel   = round((float)($data['sound_level'] ?? 0), 2);
+$probNormal   = round((float)($data['prob_normal']    ?? 0), 2);
+$probQueenless = round((float)($data['prob_queenless'] ?? 0), 2);
+$probSwarming = round((float)($data['prob_swarming']  ?? 0), 2);
+$inferenceMs  = isset($data['inference_ms']) ? (int)$data['inference_ms'] : null;
 $deviceId     = $conn->real_escape_string($data['device_id'] ?? '');
 
 if (!$hiveId || !in_array($status, $validStatuses)) {
@@ -55,28 +58,23 @@ if (!$hiveId || !in_array($status, $validStatuses)) {
     exit;
 }
 
-// Insert audio analysis
+// Insert audio analysis (inference_ms may be NULL if not provided)
 $stmt = $conn->prepare(
-    "INSERT INTO audio_analysis (hive_id, colony_status, confidence, dominant_freq, sound_level)
-     VALUES (?, ?, ?, ?, ?)"
+    "INSERT INTO audio_analysis (hive_id, colony_status, confidence, inference_ms)
+     VALUES (?, ?, ?, ?)"
 );
-$stmt->bind_param("isddd", $hiveId, $status, $confidence, $dominantFreq, $soundLevel);
+$stmt->bind_param("isdi", $hiveId, $status, $confidence, $inferenceMs);
 $stmt->execute();
 $stmt->close();
 
 // Create alert for non-normal statuses
-$criticalStatuses = ['queenless', 'varroa_mite'];
-$warningStatuses  = ['swarming'];
-
 $alertMessages = [
-    'queenless'   => ['Queenless colony detected. Immediate inspection required.', 'Verify by visual inspection within 24 hours and introduce new queen if confirmed.'],
-    'varroa_mite' => ['Varroa mite infestation suspected.', 'Perform alcohol wash test and apply treatment if over 3 mites per 100 bees.'],
-    'swarming'    => ['Swarming preparation detected.', 'Inspect for queen cells and consider hive split to prevent swarm loss.'],
+    'queenless' => ['critical', 'Queenless colony detected by CNN audio model.', 'Verify by visual inspection within 24 hours and introduce new queen if confirmed.'],
+    'swarming'  => ['warning',  'Swarming preparation detected by CNN audio model.', 'Inspect for queen cells and consider hive split to prevent swarm loss.'],
 ];
 
 if (isset($alertMessages[$status])) {
-    [$msg, $action] = $alertMessages[$status];
-    $severity = in_array($status, $criticalStatuses) ? 'critical' : 'warning';
+    [$severity, $msg, $action] = $alertMessages[$status];
     $alertStmt = $conn->prepare(
         "INSERT INTO alerts (hive_id, alert_type, severity, message, recommended_action)
          VALUES (?, 'colony_status', ?, ?, ?)"
@@ -84,6 +82,12 @@ if (isset($alertMessages[$status])) {
     $alertStmt->bind_param("isss", $hiveId, $severity, $msg, $action);
     $alertStmt->execute();
     $alertStmt->close();
+} elseif ($status === 'normal') {
+    // Auto-dismiss colony_status alerts when CNN reports normal
+    $conn->query(
+        "UPDATE alerts SET is_read = 1
+         WHERE hive_id = {$hiveId} AND alert_type = 'colony_status' AND is_read = 0"
+    );
 }
 
 // Update device sync time

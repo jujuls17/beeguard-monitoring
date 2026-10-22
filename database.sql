@@ -155,7 +155,7 @@ CREATE TABLE IF NOT EXISTS sound_uploads (
     id INT PRIMARY KEY AUTO_INCREMENT,
     original_filename VARCHAR(255) NOT NULL,
     stored_filename VARCHAR(255) NOT NULL,
-    classification ENUM('normal', 'environmental_stress', 'queenless', 'swarming', 'varroa_mite') NOT NULL,
+    classification ENUM('normal','queenless','swarming') NOT NULL,
     file_size_kb DECIMAL(10,2),
     uploaded_by INT,
     uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -197,5 +197,12 @@ CREATE TABLE IF NOT EXISTS chat_reads (
     last_read_id INT DEFAULT 0,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
+
+-- -------------------------------------------------------
+-- Migration: align colony status to 3 CNN classes
+-- Run once on an existing database to update ENUMs.
+-- -------------------------------------------------------
+ALTER TABLE sound_uploads MODIFY classification ENUM('normal','queenless','swarming') NULL;
+ALTER TABLE audio_analysis ADD COLUMN IF NOT EXISTS inference_ms INT NULL;
 
 SELECT 'Database created successfully!' AS status;

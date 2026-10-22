@@ -235,7 +235,6 @@ if (!$s) {
                                 <option value="normal">Normal</option>
                                 <option value="queenless">Queenless</option>
                                 <option value="swarming">Swarming</option>
-                                <option value="varroa_mite">Pest Detected</option>
                             </select>
                             <p class="text-xs text-gray-500 mt-1">Select the condition that matches this sound sample</p>
                         </div>
@@ -601,10 +600,9 @@ if (!$s) {
         function showPrediction(pred) {
             const el = document.getElementById('predictionResult');
             const colorMap = {
-                normal:      { bg:'#D1FAE5', border:'#6EE7B7', text:'#065F46', icon:'fa-check-circle' },
-                queenless:   { bg:'#FEE2E2', border:'#FCA5A5', text:'#991B1B', icon:'fa-times-circle' },
-                swarming:    { bg:'#EDE9FE', border:'#C4B5FD', text:'#5B21B6', icon:'fa-arrow-circle-right' },
-                varroa_mite: { bg:'#FEE2E2', border:'#FCA5A5', text:'#991B1B', icon:'fa-bug' },
+                normal:    { bg:'#D1FAE5', border:'#6EE7B7', text:'#065F46', icon:'fa-check-circle' },
+                queenless: { bg:'#FEE2E2', border:'#FCA5A5', text:'#991B1B', icon:'fa-times-circle' },
+                swarming:  { bg:'#EDE9FE', border:'#C4B5FD', text:'#5B21B6', icon:'fa-arrow-circle-right' },
             };
             const c = colorMap[pred.status] || { bg:'#F3F4F6', border:'#D1D5DB', text:'#374151', icon:'fa-question-circle' };
             el.style.cssText = `background:${c.bg};border-color:${c.border};color:${c.text}`;
@@ -649,10 +647,9 @@ if (!$s) {
         let _currentBtn   = null;
 
         const CAT_COLORS = {
-            normal:      { bg:'#D1FAE5', text:'#065F46', dot:'#10B981' },
-            queenless:   { bg:'#FEE2E2', text:'#991B1B', dot:'#EF4444' },
-            swarming:    { bg:'#EDE9FE', text:'#5B21B6', dot:'#8B5CF6' },
-            varroa_mite: { bg:'#FFF7ED', text:'#9A3412', dot:'#F97316' },
+            normal:    { bg:'#D1FAE5', text:'#065F46', dot:'#10B981' },
+            queenless: { bg:'#FEE2E2', text:'#991B1B', dot:'#EF4444' },
+            swarming:  { bg:'#EDE9FE', text:'#5B21B6', dot:'#8B5CF6' },
         };
 
         function playSound(btn, url) {
@@ -739,11 +736,10 @@ if (!$s) {
 
                     // Build category tabs above the list
                     const tabs = [
-                        { key:'all',         label:'All',          count: _allUploads.length },
-                        { key:'normal',       label:'Normal',       count: counts['normal']      || 0 },
-                        { key:'queenless',    label:'Queenless',    count: counts['queenless']   || 0 },
-                        { key:'swarming',     label:'Swarming',     count: counts['swarming']    || 0 },
-                        { key:'varroa_mite',  label:'Pest',         count: counts['varroa_mite'] || 0 },
+                        { key:'all',       label:'All',      count: _allUploads.length },
+                        { key:'normal',    label:'Normal',   count: counts['normal']    || 0 },
+                        { key:'queenless', label:'Queenless', count: counts['queenless'] || 0 },
+                        { key:'swarming',  label:'Swarming', count: counts['swarming']  || 0 },
                     ];
 
                     const tabsHtml = `
@@ -808,16 +804,14 @@ if (!$s) {
         }
 
         const CLASS_LABELS = {
-            normal:      'Normal',
-            queenless:   'Queenless',
-            swarming:    'Swarming',
-            varroa_mite: 'Pest Detected',
+            normal:    'Normal',
+            queenless: 'Queenless',
+            swarming:  'Swarming',
         };
         const CLASS_COLORS = {
-            normal:      '#22C55E',
-            queenless:   '#EF4444',
-            swarming:    '#8B5CF6',
-            varroa_mite: '#EC4899',
+            normal:    '#22C55E',
+            queenless: '#EF4444',
+            swarming:  '#8B5CF6',
         };
 
         function updateModelStatusUI(data) {
@@ -872,7 +866,7 @@ if (!$s) {
             if (total > 0) {
                 breakdown.classList.remove('hidden');
                 const maxCount = Math.max(...Object.values(counts));
-                const allClasses = ['normal','queenless','swarming','varroa_mite'];
+                const allClasses = ['normal','queenless','swarming'];
                 barsContainer.innerHTML = allClasses.map(cls => {
                     const count = counts[cls] || 0;
                     const pct   = total > 0 ? Math.round((count / total) * 100) : 0;

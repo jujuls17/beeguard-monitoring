@@ -67,7 +67,7 @@ checkAuth();
                              'Sensor data is posted by the ESP32 every 10 seconds and stored in the database. The dashboard auto-refreshes every 30 seconds to show the latest readings. The ML audio analysis runs every 60 seconds. All historical data is kept and can be exported at any time.'],
 
                             ['🔔 &nbsp;What kinds of alerts does the system generate?',
-                             'BeeGuard generates 12+ alert types including: High/Low Temperature, High Humidity, High CO₂, Queenless Colony, Swarming Detected, Varroa Mite Stress, Robbing Behavior, Environmental Stress, Camera Insect Intrusion, ESP32 Offline, and Low Battery. Each alert has a severity level (info / warning / critical) and is logged with a timestamp per hive.'],
+                             'BeeGuard generates alert types including: High/Low Temperature, High Humidity, High CO₂, Queenless Colony, Swarming Detected, Camera Insect Intrusion, and ESP32 Offline. Each alert has a severity level (info / warning / critical) and is logged with a timestamp per hive.'],
 
                             ['📷 &nbsp;How does the camera insect detection work?',
                              'A USB webcam streams live video from the hive entrance. A custom-trained YOLOv8 (nano) AI model — trained on 2,000+ bee and insect photos — detects and classifies bees (green box), wasps, hornets, moths, and flies (red box) in real time. If a non-bee insect is detected, an alert is automatically created in the database. The camera runs 24/7 on a separate Python process.'],
@@ -76,7 +76,7 @@ checkAuth();
                              'The audio classification CNN achieves approximately 92% accuracy across 6 colony states. The camera insect detector (YOLOv8n) uses a confidence threshold of 0.25 — meaning it only labels a detection when it is at least 25% confident. You can improve accuracy over time by collecting more labeled hive audio samples and retraining via the ML Training page.'],
 
                             ['💾 &nbsp;What should I do when I receive a critical alert?',
-                             'Critical alerts require immediate attention. Open the Alerts page, read the recommended action for that alert type, then physically inspect the hive. For a Queenless alert: look for queen cells or eggs. For Varroa Mite Stress: check bees for deformed wings and perform a sugar roll. For Swarming: inspect for queen cells and consider splitting the hive. Dismiss the alert once resolved.'],
+                             'Critical alerts require immediate attention. Open the Alerts page, read the recommended action for that alert type, then physically inspect the hive. For a Queenless alert: look for queen cells or eggs. For Swarming: inspect for queen cells and consider splitting the hive. Dismiss the alert once resolved.'],
 
                             // ── Sensors ───────────────────────────────────────────────
                             ['🌡️ &nbsp;What sensors are used in each hive?',
@@ -92,7 +92,7 @@ checkAuth();
                              'The MQ-135 sensor measures the concentration of CO₂ and other gases in the air near the hive entrance (in ppm — parts per million). Normal outdoor CO₂ is ~400 ppm. Inside a well-ventilated hive it stays below 3,000 ppm. Readings above 5,000 ppm suggest poor ventilation, overcrowding, or a closed entrance, which can stress the colony and reduce honey production.'],
 
                             ['🔊 &nbsp;What does the sound sensor detect?',
-                             'The MAX4466 microphone captures continuous audio from inside or near the hive. The system extracts MFCC (Mel-Frequency Cepstral Coefficient) features from the audio and passes them to a CNN model trained to recognize 6 colony states: <b>Normal</b>, <b>Queenless</b>, <b>Swarming</b>, <b>Varroa Mite Stress</b>, <b>Environmental Stress</b>, and <b>Robbing Behavior</b>. Each state produces a distinct sound pattern beekeepers can learn to recognize.'],
+                             'The MAX4466 microphone captures continuous audio from inside the hive. The system extracts 40 MFCC (Mel-Frequency Cepstral Coefficient) features from the audio and passes them to a CNN model (3 Conv2D layers + GlobalAveragePooling) trained to recognize 3 colony states: <b>Normal</b>, <b>Queenless</b>, and <b>Swarming</b>. Each state produces a distinct sound pattern beekeepers can learn to recognize. Colony status is inferred by audio_service.py running on the laptop, not by the ESP32.'],
 
                             ['📡 &nbsp;What is the ESP32 and how does it connect?',
                              'The ESP32 is a low-cost Wi-Fi + Bluetooth microcontroller that acts as the "brain" of each hive sensor node. It reads the DHT22, MQ-135, and MAX4466 every 10 seconds and sends the data to this dashboard via an HTTP POST request over your local Wi-Fi network. The firmware version is ESP32 v2.4.1. If an ESP32 goes offline (no data received for 5 minutes), an alert is generated automatically.'],

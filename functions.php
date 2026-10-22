@@ -229,7 +229,6 @@ function getHiveStatusBadge($status) {
         'normal'      => ['text' => 'Normal',       'bg' => '#D1FAE5', 'color' => '#065F46', 'icon' => 'fas fa-check-circle'],
         'queenless'   => ['text' => 'Queenless',    'bg' => '#FEE2E2', 'color' => '#991B1B', 'icon' => 'fas fa-crown'],
         'swarming'    => ['text' => 'Swarming',     'bg' => '#FFEDD5', 'color' => '#9A3412', 'icon' => 'fas fa-arrows-alt'],
-        'varroa_mite' => ['text' => 'Pest Detected','bg' => '#FEE2E2', 'color' => '#991B1B', 'icon' => 'fas fa-bug'],
     ];
     return $badges[$status] ?? $badges['normal'];
 }

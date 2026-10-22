@@ -233,113 +233,13 @@ if ($co2 <= 4000) {
     }
 }
 
-// ── Rule-based colony status detection from sound metrics ────
-// MIC IS MOUNTED INSIDE THE HIVE (MAX4466, zero-crossing frequency detection).
-// Inside-hive reference ranges — calibrated for inside-hive placement:
-//
-//   Normal colony:    250–550 Hz  |  Sound 35–85%   — steady worker bee buzz
-//   Swarming:         >550 Hz     |  Sound >85%     — very loud chaotic roar + high pitch
-//   Queenless (pipe): >600 Hz     |  any sound      — queen piping (very high pitch)
-//   Queenless (quiet):<20% sound  |  freq 100–300 Hz — colony abnormally silent/dying
-//   Varroa stress:    400–550 Hz  |  Sound 70–85%   — agitated but not swarming level
-//   Normal (default): everything else
-function detectColonyStatus(float $soundLevel, float $dominantFreq): array {
-    // No sensor signal at all → treat as normal
-    if ($dominantFreq <= 0 && $soundLevel <= 0) {
-        return ['normal', 80];
-    }
-
-    // ── SWARMING — very high freq + very loud ─────────────────────
-    // Requires BOTH: high pitch (>550 Hz) AND very loud (>85%)
-    // This prevents normal loud activity from being misclassified
-    if ($dominantFreq > 550 && $soundLevel > 85) {
-        return ['swarming', 75];
-    }
-
-    // ── QUEENLESS (queen piping) — very high pitch ────────────────
-    // Queen piping: distinctive very high frequency, any sound level
-    if ($dominantFreq > 600) {
-        return ['queenless', 70];
-    }
-
-    // ── QUEENLESS (silent colony) — abnormally quiet ──────────────
-    // Colony is dying or has no bees actively working
-    if ($soundLevel < 20 && $dominantFreq > 0 && $dominantFreq < 300) {
-        return ['queenless', 65];
-    }
-
-    // ── VARROA MITE — elevated agitation, mid-high frequency ──────
-    // Colony is stressed: more active than normal but not swarming
-    if ($dominantFreq >= 400 && $dominantFreq <= 550 && $soundLevel >= 70 && $soundLevel <= 85) {
-        return ['varroa_mite', 62];
-    }
-
-    // ── NORMAL — steady working colony ────────────────────────────
-    return ['normal', 85];
-}
-
-[$colonyStatus, $confidence] = detectColonyStatus($soundLevel, $dominantFreq);
-
-// Save audio analysis with detected status
-$audioStmt = $conn->prepare(
-    "INSERT INTO audio_analysis (hive_id, colony_status, confidence, dominant_freq, sound_level)
-     VALUES (?, ?, ?, ?, ?)"
-);
-$audioStmt->bind_param("isddd", $hiveId, $colonyStatus, $confidence, $dominantFreq, $soundLevel);
-$audioStmt->execute();
-$audioStmt->close();
-
-// ── Alert logic for non-normal colony status ──────────────────
-$alertMessages = [
-    'queenless'   => ['critical', 'Queenless colony detected by sound sensor.',   'Inspect hive within 24 hours. Introduce a new queen if confirmed.'],
-    'varroa_mite' => ['critical', 'Varroa mite stress detected by sound sensor.', 'Perform alcohol wash test. Treat if >3 mites per 100 bees.'],
-    'swarming'    => ['warning',  'Swarming detected by sound sensor.',           'Check for queen cells and consider splitting the hive.'],
-];
-
-if ($colonyStatus !== 'normal') {
-    // Require 3 consecutive readings with the same non-normal status before alerting.
-    // This prevents single noisy sensor readings from triggering false alarms.
-    $consecChk = $conn->prepare(
-        "SELECT colony_status FROM audio_analysis
-         WHERE hive_id = ? AND colony_status = ?
-         ORDER BY timestamp DESC LIMIT 3"
-    );
-    $consecChk->bind_param("is", $hiveId, $colonyStatus);
-    $consecChk->execute();
-    $consecRows = $consecChk->get_result()->fetch_all(MYSQLI_ASSOC);
-    $consecChk->close();
-    $confirmedStatus = count($consecRows) >= 3;
-
-    if ($confirmedStatus) {
-        $dupChk = $conn->prepare(
-            "SELECT id FROM alerts WHERE hive_id = ? AND alert_type = 'colony_status' AND is_read = 0 LIMIT 1"
-        );
-        $dupChk->bind_param("i", $hiveId);
-        $dupChk->execute();
-        $alreadyAlerted = $dupChk->get_result()->num_rows > 0;
-        $dupChk->close();
-
-        if (!$alreadyAlerted && isset($alertMessages[$colonyStatus])) {
-            [$sev, $msg, $action] = $alertMessages[$colonyStatus];
-            $aStmt = $conn->prepare(
-                "INSERT INTO alerts (hive_id, alert_type, severity, message, recommended_action)
-                 VALUES (?, 'colony_status', ?, ?, ?)"
-            );
-            $aStmt->bind_param("isss", $hiveId, $sev, $msg, $action);
-            $aStmt->execute();
-            $aStmt->close();
-        }
-    }
-} else {
-    // Auto-dismiss colony_status alerts when sound returns to normal
-    $conn->query(
-        "UPDATE alerts SET is_read = 1
-         WHERE hive_id = {$hiveId} AND alert_type = 'colony_status' AND is_read = 0"
-    );
-}
+// ── Colony status is set by CNN inference in audio_service.py ────
+// sound_level and dominant_freq are stored as raw readings only.
+// detectColonyStatus() has been removed per Chapter 3 specification.
+// Colony status must NOT be set from rule-based heuristics here.
 
 // Log to activity
-$logMsg = "ESP32 {$deviceId}: T={$temp}°C H={$humidity}% CO2={$co2}ppm Sound={$soundLevel}% Freq={$dominantFreq}Hz Status={$colonyStatus}({$confidence}%)";
+$logMsg = "ESP32 {$deviceId}: T={$temp}°C H={$humidity}% CO2={$co2}ppm Sound={$soundLevel}% Freq={$dominantFreq}Hz";
 $logStmt = $conn->prepare(
     "INSERT INTO activity_log (hive_id, event_type, details, severity)
      VALUES (?, 'Data Collection', ?, 'info')"
@@ -349,10 +249,8 @@ $logStmt->execute();
 $logStmt->close();
 
 echo json_encode([
-    'success'        => true,
-    'message'        => 'Data received',
-    'hive_id'        => $hiveId,
-    'colony_status'  => $colonyStatus,
-    'confidence'     => $confidence,
-    'timestamp'      => date('Y-m-d H:i:s'),
+    'success'   => true,
+    'message'   => 'Data received',
+    'hive_id'   => $hiveId,
+    'timestamp' => date('Y-m-d H:i:s'),
 ]);

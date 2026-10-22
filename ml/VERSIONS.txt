@@ -1,0 +1,13 @@
+Python: 3.13.7
+librosa: 1.0.0
+numpy: 2.3.5
+scikit-learn: 1.9.0
+ultralytics: 8.4.140
+tensorflow: NOT INSTALLED
+keras: NOT INSTALLED (bundled with tensorflow when installed)
+soundfile: (installed as librosa dependency)
+matplotlib: (installed as librosa/ultralytics dependency)
+
+NOTE: tensorflow and keras are not currently installed.
+Install with: pip install tensorflow==2.17.0
+The CNN train_model.py and audio_service.py require tensorflow>=2.13.

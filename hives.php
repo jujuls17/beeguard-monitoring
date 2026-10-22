@@ -275,12 +275,9 @@ foreach ($hives as $_hive) {
                                     <?php
                                         $colonyStatus = $audio['colony_status'] ?? 'normal';
                                         $conclusionMap = [
-                                            'normal'               => ['🟢', 'Colony Normal',         '#16a34a', '#dcfce7'],
-                                            'environmental_stress' => ['🟡', 'Environmental Stress',   '#b45309', '#fef9c3'],
-                                            'swarming_preparation' => ['🟠', 'Swarming Preparation',   '#c2410c', '#ffedd5'],
-                                            'queenless'            => ['🔴', 'Queenless Detected',     '#dc2626', '#fee2e2'],
-                                            'varroa_mite_stress'   => ['🔴', 'Varroa Mite Stress',     '#dc2626', '#fee2e2'],
-                                            'robbing_behavior'     => ['🟣', 'Robbing Behavior',        '#7c3aed', '#ede9fe'],
+                                            'normal'    => ['🟢', 'Colony Normal',     '#16a34a', '#dcfce7'],
+                                            'swarming'  => ['🟠', 'Swarming Detected', '#c2410c', '#ffedd5'],
+                                            'queenless' => ['🔴', 'Queenless Detected','#dc2626', '#fee2e2'],
                                         ];
                                         $c = $conclusionMap[$colonyStatus] ?? ['⚪', ucfirst(str_replace('_',' ',$colonyStatus)), '#6b7280', '#f3f4f6'];
                                     ?>
@@ -878,12 +875,9 @@ foreach ($hives as $_hive) {
                     const conclusionText = document.getElementById(`colony-text-${id}`);
                     if (conclusionEl) {
                         const conclusionMap = {
-                            'normal':               ['🟢', 'Colony Normal',        '#16a34a', '#dcfce7'],
-                            'environmental_stress': ['🟡', 'Environmental Stress',  '#b45309', '#fef9c3'],
-                            'swarming_preparation': ['🟠', 'Swarming Preparation',  '#c2410c', '#ffedd5'],
-                            'queenless':            ['🔴', 'Queenless Detected',    '#dc2626', '#fee2e2'],
-                            'varroa_mite_stress':   ['🔴', 'Varroa Mite Stress',    '#dc2626', '#fee2e2'],
-                            'robbing_behavior':     ['🟣', 'Robbing Behavior',       '#7c3aed', '#ede9fe'],
+                            'normal':    ['🟢', 'Colony Normal',     '#16a34a', '#dcfce7'],
+                            'swarming':  ['🟠', 'Swarming Detected', '#c2410c', '#ffedd5'],
+                            'queenless': ['🔴', 'Queenless Detected','#dc2626', '#fee2e2'],
                         };
                         if (h.badge) {
                             const raw = h.badge.raw_status || 'normal';
