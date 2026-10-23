@@ -416,7 +416,7 @@ $warningCount = count(array_filter($devices, fn($d) => $d['status'] == 'warning'
 
         // Load immediately then poll every 10 seconds
         fetchDevices();
-        setInterval(fetchDevices, 10000);
+        setInterval(fetchDevices, 15000);
         setInterval(updateSyncCounters, 1000);
 
         <?php if (isAdmin()): ?>

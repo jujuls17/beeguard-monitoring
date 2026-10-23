@@ -3,6 +3,7 @@ session_start();
 require_once '../config.php';
 require_once '../functions.php';
 checkAuth();
+session_write_close(); // release session lock so concurrent requests don't queue
 
 header('Content-Type: application/json');
 
@@ -31,6 +32,11 @@ $result = $conn->query(
      ORDER BY d.status DESC, d.id ASC"
 );
 
+// Check camera once outside the loop — not per device
+$camSocket  = @fsockopen('127.0.0.1', 5050, $errno, $errstr, 0.3);
+$cameraLive = $camSocket !== false;
+if ($camSocket) fclose($camSocket);
+
 $devices = [];
 if ($result) {
     while ($row = $result->fetch_assoc()) {
@@ -39,16 +45,11 @@ if ($result) {
         $hasReading = $row['latest_ts'] !== null
             && (time() - strtotime($row['latest_ts'])) <= 300; // reading within last 5 min
 
-        // Check if camera stream (port 5050) is live
-        $camSocket = @fsockopen('127.0.0.1', 5050, $errno, $errstr, 0.3);
-        $cameraLive = $camSocket !== false;
-        if ($camSocket) fclose($camSocket);
-
         $sensors = [
-            'temperature' => $isOnline && $hasReading && $row['latest_temp']     !== null,
-            'humidity'    => $isOnline && $hasReading && $row['latest_humidity']  !== null,
-            'co2'         => $isOnline && $hasReading && $row['latest_co2']       !== null && (float)$row['latest_co2'] > 0,
-            'sound'       => $isOnline && $hasReading && $row['latest_sound']     !== null,
+            'temperature' => $isOnline && $hasReading && $row['latest_temp']    !== null && (float)$row['latest_temp']    > 0,
+            'humidity'    => $isOnline && $hasReading && $row['latest_humidity'] !== null && (float)$row['latest_humidity'] > 0,
+            'co2'         => $isOnline && $hasReading && $row['latest_co2']      !== null && (float)$row['latest_co2']     > 0,
+            'sound'       => $isOnline && $hasReading && $row['latest_sound']    !== null && (float)$row['latest_sound'] > 0,
             'camera'      => $cameraLive,
         ];
 

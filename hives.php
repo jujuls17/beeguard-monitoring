@@ -266,10 +266,10 @@ foreach ($hives as $_hive) {
                                 <div class="bg-gray-50 p-3 rounded-lg mb-3">
                                     <div class="flex justify-between items-center mb-2">
                                         <p class="text-xs text-gray-600">Sound Activity</p>
-                                        <p class="text-sm font-bold" id="sound-val-<?php echo $hive['id']; ?>"><?php echo $audio ? round($audio['sound_level']) : 0; ?>%</p>
+                                        <p class="text-sm font-bold" id="sound-val-<?php echo $hive['id']; ?>"><?php echo $sensor ? round($sensor['sound_level']) : 0; ?>%</p>
                                     </div>
                                     <div class="h-2 bg-gray-200 rounded-full overflow-hidden mb-2">
-                                        <div class="h-full bg-yellow-500" id="sound-bar-<?php echo $hive['id']; ?>" style="width:<?php echo $audio ? round($audio['sound_level']) : 0; ?>%"></div>
+                                        <div class="h-full bg-yellow-500" id="sound-bar-<?php echo $hive['id']; ?>" style="width:<?php echo $sensor ? round($sensor['sound_level']) : 0; ?>%"></div>
                                     </div>
                                     <!-- Colony status conclusion — visible on card -->
                                     <?php
@@ -469,9 +469,9 @@ foreach ($hives as $_hive) {
                                         <p class="text-xs text-gray-500 mb-2 font-semibold">Sound Activity</p>
                                         <div class="flex items-center gap-3 mb-1">
                                             <div class="flex-1 h-3 bg-yellow-100 rounded-full overflow-hidden">
-                                                <div class="h-full rounded-full" style="width:<?php echo round($audio['sound_level']); ?>%;background:linear-gradient(90deg,#F59E0B,#F97316);"></div>
+                                                <div class="h-full rounded-full" style="width:<?php echo $sensor ? round($sensor['sound_level']) : 0; ?>%;background:linear-gradient(90deg,#F59E0B,#F97316);"></div>
                                             </div>
-                                            <span class="text-xl font-black text-yellow-600"><?php echo round($audio['sound_level']); ?>%</span>
+                                            <span class="text-xl font-black text-yellow-600"><?php echo $sensor ? round($sensor['sound_level']) : 0; ?>%</span>
                                         </div>
                                         <p class="text-xs text-gray-500">
                                             <i class="fas fa-microphone text-yellow-500 mr-1"></i>
@@ -727,7 +727,7 @@ foreach ($hives as $_hive) {
     }
 
     // Auto-refresh every 5 seconds
-    setInterval(refreshHiveCards, 5000);
+    setInterval(refreshHiveCards, 15000);
 
     // ── Sparkline charts ─────────────────────────────────────
     function loadHiveCharts() {

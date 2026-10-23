@@ -1,73 +1,73 @@
-Requirement already satisfied: tensorflow==2.21.0 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from -r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 1)) (2.21.0)
-Requirement already satisfied: librosa==1.0.0 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from -r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 2)) (1.0.0)
-Requirement already satisfied: numpy==2.3.5 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from -r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 3)) (2.3.5)
-Requirement already satisfied: scikit-learn==1.9.0 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from -r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 4)) (1.9.0)
-Requirement already satisfied: matplotlib>=3.7 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from -r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 5)) (3.11.1)
-Requirement already satisfied: pandas>=2.0 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from -r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 6)) (3.0.5)
-Requirement already satisfied: mysql-connector-python>=8.1 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from -r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 7)) (9.5.0)
-Requirement already satisfied: joblib>=1.3 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from -r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 8)) (1.6.0)
-Requirement already satisfied: soundfile>=0.12 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from -r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 9)) (0.14.0)
-Requirement already satisfied: pyaudio>=0.2.13 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from -r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 10)) (0.2.14)
-Requirement already satisfied: requests>=2.31 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from -r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 11)) (2.34.2)
-Requirement already satisfied: absl-py>=1.0.0 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from tensorflow==2.21.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 1)) (2.5.1)
-Requirement already satisfied: astunparse>=1.6.0 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from tensorflow==2.21.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 1)) (1.6.3)
-Requirement already satisfied: flatbuffers>=25.9.23 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from tensorflow==2.21.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 1)) (25.12.19)
-Requirement already satisfied: gast!=0.5.0,!=0.5.1,!=0.5.2,>=0.2.1 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from tensorflow==2.21.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 1)) (0.7.0)
-Requirement already satisfied: google_pasta>=0.1.1 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from tensorflow==2.21.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 1)) (0.2.0)
-Requirement already satisfied: libclang>=13.0.0 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from tensorflow==2.21.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 1)) (18.1.1)
-Requirement already satisfied: opt_einsum>=2.3.2 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from tensorflow==2.21.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 1)) (3.4.0)
-Requirement already satisfied: packaging in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from tensorflow==2.21.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 1)) (26.3)
-Requirement already satisfied: protobuf<8.0.0,>=6.31.1 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from tensorflow==2.21.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 1)) (7.36.2)
-Requirement already satisfied: setuptools in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from tensorflow==2.21.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 1)) (84.0.0)
-Requirement already satisfied: six>=1.12.0 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from tensorflow==2.21.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 1)) (1.17.0)
-Requirement already satisfied: termcolor>=1.1.0 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from tensorflow==2.21.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 1)) (3.3.0)
-Requirement already satisfied: typing_extensions>=3.6.6 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from tensorflow==2.21.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 1)) (4.16.0)
-Requirement already satisfied: wrapt>=1.11.0 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from tensorflow==2.21.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 1)) (2.4.0)
-Requirement already satisfied: grpcio<2.0,>=1.24.3 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from tensorflow==2.21.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 1)) (1.84.0)
-Requirement already satisfied: keras>=3.12.0 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from tensorflow==2.21.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 1)) (3.15.1)
-Requirement already satisfied: h5py<3.15.0,>=3.11.0 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from tensorflow==2.21.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 1)) (3.14.0)
-Requirement already satisfied: ml_dtypes<1.0.0,>=0.5.1 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from tensorflow==2.21.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 1)) (0.6.0)
-Requirement already satisfied: numba>=0.61.0 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from librosa==1.0.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 2)) (0.68.0)
-Requirement already satisfied: scipy>=1.15.0 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from librosa==1.0.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 2)) (1.18.1)
-Requirement already satisfied: decorator>=5.2.1 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from librosa==1.0.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 2)) (5.3.1)
-Requirement already satisfied: pooch>=1.7 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from librosa==1.0.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 2)) (1.9.0)
-Requirement already satisfied: soxr>=1.0.0 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from librosa==1.0.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 2)) (1.1.0)
-Requirement already satisfied: lazy_loader>=0.3 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from librosa==1.0.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 2)) (0.5)
-Requirement already satisfied: msgpack>=1.0.5 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from librosa==1.0.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 2)) (1.2.3)
-Requirement already satisfied: narwhals>=2.0.1 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from scikit-learn==1.9.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 4)) (2.26.0)
-Requirement already satisfied: threadpoolctl>=3.5.0 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from scikit-learn==1.9.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 4)) (3.6.0)
-Requirement already satisfied: charset_normalizer<4,>=2 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from requests>=2.31->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 11)) (3.5.1)
-Requirement already satisfied: idna<4,>=2.5 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from requests>=2.31->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 11)) (3.19)
-Requirement already satisfied: urllib3<3,>=1.26 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from requests>=2.31->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 11)) (2.7.0)
-Requirement already satisfied: certifi>=2023.5.7 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from requests>=2.31->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 11)) (2026.7.22)
-Requirement already satisfied: contourpy>=1.0.1 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from matplotlib>=3.7->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 5)) (1.3.3)
-Requirement already satisfied: cycler>=0.10 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from matplotlib>=3.7->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 5)) (0.12.1)
-Requirement already satisfied: fonttools>=4.28.2 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from matplotlib>=3.7->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 5)) (4.64.0)
-Requirement already satisfied: kiwisolver>=1.3.1 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from matplotlib>=3.7->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 5)) (1.5.1)
-Requirement already satisfied: pillow>=9 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from matplotlib>=3.7->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 5)) (12.3.0)
-Requirement already satisfied: pyparsing>=3 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from matplotlib>=3.7->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 5)) (3.3.2)
-Requirement already satisfied: python-dateutil>=2.7 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from matplotlib>=3.7->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 5)) (2.9.0.post0)
-Requirement already satisfied: tzdata in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from pandas>=2.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 6)) (2026.3)
-Requirement already satisfied: cloudpickle>=3.0 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from joblib>=1.3->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 8)) (3.1.2)
-Requirement already satisfied: cffi>=1.0 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from soundfile>=0.12->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 9)) (2.1.1)
-Requirement already satisfied: wheel<1.0,>=0.23.0 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from astunparse>=1.6.0->tensorflow==2.21.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 1)) (0.48.0)
-Requirement already satisfied: pycparser in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from cffi>=1.0->soundfile>=0.12->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 9)) (3.0)
-Requirement already satisfied: rich in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from keras>=3.12.0->tensorflow==2.21.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 1)) (15.0.0)
-Requirement already satisfied: namex in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from keras>=3.12.0->tensorflow==2.21.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 1)) (0.1.0)
-Requirement already satisfied: optree in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from keras>=3.12.0->tensorflow==2.21.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 1)) (0.20.0)
-Requirement already satisfied: llvmlite<0.51,>=0.50.0dev0 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from numba>=0.61.0->librosa==1.0.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 2)) (0.50.0)
-Requirement already satisfied: platformdirs>=2.5.0 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from pooch>=1.7->librosa==1.0.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 2)) (4.12.4)
-Requirement already satisfied: markdown-it-py>=2.2.0 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from rich->keras>=3.12.0->tensorflow==2.21.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 1)) (4.2.0)
-Requirement already satisfied: pygments<3.0.0,>=2.13.0 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from rich->keras>=3.12.0->tensorflow==2.21.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 1)) (2.21.0)
-Requirement already satisfied: mdurl~=0.1 in c:\users\kantu\appdata\local\programs\python\python313\lib\site-packages (from markdown-it-py>=2.2.0->rich->keras>=3.12.0->tensorflow==2.21.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 1)) (0.1.2)
+Requirement already satisfied: tensorflow==2.21.0 in c:\users\kantu\appdata\local\programs\python\python312\lib\site-packages (from -r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 1)) (2.21.0)
+Requirement already satisfied: librosa==1.0.0 in c:\users\kantu\appdata\local\programs\python\python312\lib\site-packages (from -r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 2)) (1.0.0)
+Requirement already satisfied: numpy==2.3.5 in c:\users\kantu\appdata\local\programs\python\python312\lib\site-packages (from -r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 3)) (2.3.5)
+Requirement already satisfied: scikit-learn==1.9.0 in c:\users\kantu\appdata\local\programs\python\python312\lib\site-packages (from -r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 4)) (1.9.0)
+Requirement already satisfied: matplotlib>=3.7 in c:\users\kantu\appdata\local\programs\python\python312\lib\site-packages (from -r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 5)) (3.11.2)
+Requirement already satisfied: pandas>=2.0 in c:\users\kantu\appdata\local\programs\python\python312\lib\site-packages (from -r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 6)) (3.1.0)
+Requirement already satisfied: mysql-connector-python>=8.1 in c:\users\kantu\appdata\local\programs\python\python312\lib\site-packages (from -r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 7)) (26.10.0)
+Requirement already satisfied: joblib>=1.3 in c:\users\kantu\appdata\local\programs\python\python312\lib\site-packages (from -r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 8)) (1.6.0)
+Requirement already satisfied: soundfile>=0.12 in c:\users\kantu\appdata\local\programs\python\python312\lib\site-packages (from -r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 9)) (0.14.0)
+Requirement already satisfied: pyaudio>=0.2.13 in c:\users\kantu\appdata\local\programs\python\python312\lib\site-packages (from -r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 10)) (0.2.14)
+Requirement already satisfied: requests>=2.31 in c:\users\kantu\appdata\local\programs\python\python312\lib\site-packages (from -r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 11)) (2.34.2)
+Requirement already satisfied: absl-py>=1.0.0 in c:\users\kantu\appdata\local\programs\python\python312\lib\site-packages (from tensorflow==2.21.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 1)) (2.5.1)
+Requirement already satisfied: astunparse>=1.6.0 in c:\users\kantu\appdata\local\programs\python\python312\lib\site-packages (from tensorflow==2.21.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 1)) (1.6.3)
+Requirement already satisfied: flatbuffers>=25.9.23 in c:\users\kantu\appdata\local\programs\python\python312\lib\site-packages (from tensorflow==2.21.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 1)) (25.12.19)
+Requirement already satisfied: gast!=0.5.0,!=0.5.1,!=0.5.2,>=0.2.1 in c:\users\kantu\appdata\local\programs\python\python312\lib\site-packages (from tensorflow==2.21.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 1)) (0.7.0)
+Requirement already satisfied: google_pasta>=0.1.1 in c:\users\kantu\appdata\local\programs\python\python312\lib\site-packages (from tensorflow==2.21.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 1)) (0.2.0)
+Requirement already satisfied: libclang>=13.0.0 in c:\users\kantu\appdata\local\programs\python\python312\lib\site-packages (from tensorflow==2.21.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 1)) (18.1.1)
+Requirement already satisfied: opt_einsum>=2.3.2 in c:\users\kantu\appdata\local\programs\python\python312\lib\site-packages (from tensorflow==2.21.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 1)) (3.4.0)
+Requirement already satisfied: packaging in c:\users\kantu\appdata\local\programs\python\python312\lib\site-packages (from tensorflow==2.21.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 1)) (26.3)
+Requirement already satisfied: protobuf<8.0.0,>=6.31.1 in c:\users\kantu\appdata\local\programs\python\python312\lib\site-packages (from tensorflow==2.21.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 1)) (7.36.2)
+Requirement already satisfied: setuptools in c:\users\kantu\appdata\local\programs\python\python312\lib\site-packages (from tensorflow==2.21.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 1)) (84.2.1)
+Requirement already satisfied: six>=1.12.0 in c:\users\kantu\appdata\local\programs\python\python312\lib\site-packages (from tensorflow==2.21.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 1)) (1.17.0)
+Requirement already satisfied: termcolor>=1.1.0 in c:\users\kantu\appdata\local\programs\python\python312\lib\site-packages (from tensorflow==2.21.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 1)) (3.3.0)
+Requirement already satisfied: typing_extensions>=3.6.6 in c:\users\kantu\appdata\local\programs\python\python312\lib\site-packages (from tensorflow==2.21.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 1)) (4.16.0)
+Requirement already satisfied: wrapt>=1.11.0 in c:\users\kantu\appdata\local\programs\python\python312\lib\site-packages (from tensorflow==2.21.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 1)) (2.5.1)
+Requirement already satisfied: grpcio<2.0,>=1.24.3 in c:\users\kantu\appdata\local\programs\python\python312\lib\site-packages (from tensorflow==2.21.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 1)) (1.84.1)
+Requirement already satisfied: keras>=3.12.0 in c:\users\kantu\appdata\local\programs\python\python312\lib\site-packages (from tensorflow==2.21.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 1)) (3.15.1)
+Requirement already satisfied: h5py<3.15.0,>=3.11.0 in c:\users\kantu\appdata\local\programs\python\python312\lib\site-packages (from tensorflow==2.21.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 1)) (3.14.0)
+Requirement already satisfied: ml_dtypes<1.0.0,>=0.5.1 in c:\users\kantu\appdata\local\programs\python\python312\lib\site-packages (from tensorflow==2.21.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 1)) (0.6.0)
+Requirement already satisfied: numba>=0.61.0 in c:\users\kantu\appdata\local\programs\python\python312\lib\site-packages (from librosa==1.0.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 2)) (0.68.0)
+Requirement already satisfied: scipy>=1.15.0 in c:\users\kantu\appdata\local\programs\python\python312\lib\site-packages (from librosa==1.0.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 2)) (1.18.1)
+Requirement already satisfied: decorator>=5.2.1 in c:\users\kantu\appdata\local\programs\python\python312\lib\site-packages (from librosa==1.0.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 2)) (5.3.1)
+Requirement already satisfied: pooch>=1.7 in c:\users\kantu\appdata\local\programs\python\python312\lib\site-packages (from librosa==1.0.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 2)) (1.9.0)
+Requirement already satisfied: soxr>=1.0.0 in c:\users\kantu\appdata\local\programs\python\python312\lib\site-packages (from librosa==1.0.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 2)) (1.1.0)
+Requirement already satisfied: lazy_loader>=0.3 in c:\users\kantu\appdata\local\programs\python\python312\lib\site-packages (from librosa==1.0.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 2)) (0.6)
+Requirement already satisfied: msgpack>=1.0.5 in c:\users\kantu\appdata\local\programs\python\python312\lib\site-packages (from librosa==1.0.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 2)) (1.2.3)
+Requirement already satisfied: narwhals>=2.0.1 in c:\users\kantu\appdata\local\programs\python\python312\lib\site-packages (from scikit-learn==1.9.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 4)) (2.27.1)
+Requirement already satisfied: threadpoolctl>=3.5.0 in c:\users\kantu\appdata\local\programs\python\python312\lib\site-packages (from scikit-learn==1.9.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 4)) (3.7.0)
+Requirement already satisfied: contourpy>=1.0.1 in c:\users\kantu\appdata\local\programs\python\python312\lib\site-packages (from matplotlib>=3.7->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 5)) (1.4.0)
+Requirement already satisfied: cycler>=0.10 in c:\users\kantu\appdata\local\programs\python\python312\lib\site-packages (from matplotlib>=3.7->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 5)) (0.12.1)
+Requirement already satisfied: fonttools>=4.28.2 in c:\users\kantu\appdata\local\programs\python\python312\lib\site-packages (from matplotlib>=3.7->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 5)) (4.67.0)
+Requirement already satisfied: kiwisolver>=1.3.1 in c:\users\kantu\appdata\local\programs\python\python312\lib\site-packages (from matplotlib>=3.7->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 5)) (1.5.1)
+Requirement already satisfied: pillow>=9 in c:\users\kantu\appdata\local\programs\python\python312\lib\site-packages (from matplotlib>=3.7->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 5)) (13.0.0)
+Requirement already satisfied: pyparsing>=3 in c:\users\kantu\appdata\local\programs\python\python312\lib\site-packages (from matplotlib>=3.7->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 5)) (3.3.3)
+Requirement already satisfied: python-dateutil>=2.7 in c:\users\kantu\appdata\local\programs\python\python312\lib\site-packages (from matplotlib>=3.7->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 5)) (3.0.0)
+Requirement already satisfied: tzdata in c:\users\kantu\appdata\local\programs\python\python312\lib\site-packages (from pandas>=2.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 6)) (2026.5)
+Requirement already satisfied: cloudpickle>=3.0 in c:\users\kantu\appdata\local\programs\python\python312\lib\site-packages (from joblib>=1.3->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 8)) (3.1.2)
+Requirement already satisfied: cffi>=1.0 in c:\users\kantu\appdata\local\programs\python\python312\lib\site-packages (from soundfile>=0.12->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 9)) (2.1.1)
+Requirement already satisfied: charset_normalizer<4,>=2 in c:\users\kantu\appdata\local\programs\python\python312\lib\site-packages (from requests>=2.31->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 11)) (3.5.2)
+Requirement already satisfied: idna<4,>=2.5 in c:\users\kantu\appdata\local\programs\python\python312\lib\site-packages (from requests>=2.31->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 11)) (3.20)
+Requirement already satisfied: urllib3<3,>=1.26 in c:\users\kantu\appdata\local\programs\python\python312\lib\site-packages (from requests>=2.31->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 11)) (2.8.0)
+Requirement already satisfied: certifi>=2023.5.7 in c:\users\kantu\appdata\local\programs\python\python312\lib\site-packages (from requests>=2.31->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 11)) (2026.10.19)
+Requirement already satisfied: wheel<1.0,>=0.23.0 in c:\users\kantu\appdata\local\programs\python\python312\lib\site-packages (from astunparse>=1.6.0->tensorflow==2.21.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 1)) (0.48.0)
+Requirement already satisfied: pycparser in c:\users\kantu\appdata\local\programs\python\python312\lib\site-packages (from cffi>=1.0->soundfile>=0.12->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 9)) (3.11)
+Requirement already satisfied: rich in c:\users\kantu\appdata\local\programs\python\python312\lib\site-packages (from keras>=3.12.0->tensorflow==2.21.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 1)) (15.0.0)
+Requirement already satisfied: namex in c:\users\kantu\appdata\local\programs\python\python312\lib\site-packages (from keras>=3.12.0->tensorflow==2.21.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 1)) (0.1.0)
+Requirement already satisfied: optree in c:\users\kantu\appdata\local\programs\python\python312\lib\site-packages (from keras>=3.12.0->tensorflow==2.21.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 1)) (0.20.0)
+Requirement already satisfied: llvmlite<0.51,>=0.50.0dev0 in c:\users\kantu\appdata\local\programs\python\python312\lib\site-packages (from numba>=0.61.0->librosa==1.0.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 2)) (0.50.0)
+Requirement already satisfied: platformdirs>=2.5.0 in c:\users\kantu\appdata\local\programs\python\python312\lib\site-packages (from pooch>=1.7->librosa==1.0.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 2)) (4.13.5)
+Requirement already satisfied: markdown-it-py>=2.2.0 in c:\users\kantu\appdata\local\programs\python\python312\lib\site-packages (from rich->keras>=3.12.0->tensorflow==2.21.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 1)) (4.2.0)
+Requirement already satisfied: pygments<3.0.0,>=2.13.0 in c:\users\kantu\appdata\local\programs\python\python312\lib\site-packages (from rich->keras>=3.12.0->tensorflow==2.21.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 1)) (2.21.0)
+Requirement already satisfied: mdurl~=0.1 in c:\users\kantu\appdata\local\programs\python\python312\lib\site-packages (from markdown-it-py>=2.2.0->rich->keras>=3.12.0->tensorflow==2.21.0->-r C:\xampp\htdocs\beemonitoring\ml\requirements.txt (line 1)) (0.1.2)
 
-[notice] A new release of pip is available: 25.2 -> 26.2.2
+[notice] A new release of pip is available: 25.0.1 -> 26.2.2
 [notice] To update, run: python.exe -m pip install --upgrade pip
 WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
-I0000 00:00:1792662828.406908   27084 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+I0000 00:00:1792734658.049100   25744 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
 WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
-I0000 00:00:1792662832.524380   27084 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
-I0000 00:00:1792662847.261734   27084 cpu_feature_guard.cc:227] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+I0000 00:00:1792734663.189953   25744 port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+I0000 00:00:1792734683.140797   25744 cpu_feature_guard.cc:227] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
 To enable the following instructions: SSE3 SSE4.1 SSE4.2 AVX AVX2 AVX512F AVX512_VNNI FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
 WARNING:tensorflow:TensorFlow GPU support is not available on native Windows for TensorFlow >= 2.11. Even if CUDA/cuDNN are installed, GPU will not be used. Please use WSL2 or the TensorFlow-DirectML plugin.
 
@@ -190,517 +190,392 @@ Model: "beeguard_cnn"
  Non-trainable params: 448 (1.75 KB)
 Epoch 1/30
 
-[1m 1/39[0m [37m━━━━━━━━━━━━━━━━━━━━[0m [1m1:22[0m 2s/step - accuracy: 0.3750 - loss: 1.4126
-[1m 2/39[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m3s[0m 81ms/step - accuracy: 0.5000 - loss: 1.0787
-[1m 3/39[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m2s[0m 76ms/step - accuracy: 0.5208 - loss: 1.0135
-[1m 4/39[0m [32m━━[0m[37m━━━━━━━━━━━━━━━━━━[0m [1m2s[0m 74ms/step - accuracy: 0.5625 - loss: 0.9691
-[1m 5/39[0m [32m━━[0m[37m━━━━━━━━━━━━━━━━━━[0m [1m2s[0m 73ms/step - accuracy: 0.6000 - loss: 0.9064
-[1m 6/39[0m [32m━━━[0m[37m━━━━━━━━━━━━━━━━━[0m [1m2s[0m 72ms/step - accuracy: 0.6042 - loss: 0.8637
-[1m 7/39[0m [32m━━━[0m[37m━━━━━━━━━━━━━━━━━[0m [1m2s[0m 73ms/step - accuracy: 0.6071 - loss: 0.8715
-[1m 8/39[0m [32m━━━━[0m[37m━━━━━━━━━━━━━━━━[0m [1m2s[0m 73ms/step - accuracy: 0.6172 - loss: 0.8523
-[1m 9/39[0m [32m━━━━[0m[37m━━━━━━━━━━━━━━━━[0m [1m2s[0m 74ms/step - accuracy: 0.6250 - loss: 0.8235
-[1m10/39[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m2s[0m 73ms/step - accuracy: 0.6125 - loss: 0.8162
-[1m11/39[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m2s[0m 73ms/step - accuracy: 0.6080 - loss: 0.8067
-[1m12/39[0m [32m━━━━━━[0m[37m━━━━━━━━━━━━━━[0m [1m1s[0m 74ms/step - accuracy: 0.6146 - loss: 0.8270
-[1m13/39[0m [32m━━━━━━[0m[37m━━━━━━━━━━━━━━[0m [1m1s[0m 75ms/step - accuracy: 0.6298 - loss: 0.8058
-[1m14/39[0m [32m━━━━━━━[0m[37m━━━━━━━━━━━━━[0m [1m1s[0m 76ms/step - accuracy: 0.6429 - loss: 0.7856
-[1m15/39[0m [32m━━━━━━━[0m[37m━━━━━━━━━━━━━[0m [1m1s[0m 77ms/step - accuracy: 0.6583 - loss: 0.7642
-[1m16/39[0m [32m━━━━━━━━[0m[37m━━━━━━━━━━━━[0m [1m1s[0m 76ms/step - accuracy: 0.6562 - loss: 0.7569
-[1m17/39[0m [32m━━━━━━━━[0m[37m━━━━━━━━━━━━[0m [1m1s[0m 78ms/step - accuracy: 0.6581 - loss: 0.7463
-[1m18/39[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m1s[0m 77ms/step - accuracy: 0.6562 - loss: 0.7444
-[1m19/39[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m1s[0m 78ms/step - accuracy: 0.6579 - loss: 0.7360
-[1m20/39[0m [32m━━━━━━━━━━[0m[37m━━━━━━━━━━[0m [1m1s[0m 78ms/step - accuracy: 0.6594 - loss: 0.7221
-[1m21/39[0m [32m━━━━━━━━━━[0m[37m━━━━━━━━━━[0m [1m1s[0m 78ms/step - accuracy: 0.6637 - loss: 0.7143
-[1m22/39[0m [32m━━━━━━━━━━━[0m[37m━━━━━━━━━[0m [1m1s[0m 79ms/step - accuracy: 0.6619 - loss: 0.7096
-[1m23/39[0m [32m━━━━━━━━━━━[0m[37m━━━━━━━━━[0m [1m1s[0m 79ms/step - accuracy: 0.6739 - loss: 0.6913
-[1m24/39[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m1s[0m 79ms/step - accuracy: 0.6849 - loss: 0.6826
-[1m25/39[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m1s[0m 79ms/step - accuracy: 0.6925 - loss: 0.6675
-[1m26/39[0m [32m━━━━━━━━━━━━━[0m[37m━━━━━━━[0m [1m1s[0m 79ms/step - accuracy: 0.6971 - loss: 0.6552
-[1m27/39[0m [32m━━━━━━━━━━━━━[0m[37m━━━━━━━[0m [1m0s[0m 80ms/step - accuracy: 0.6968 - loss: 0.6534
-[1m28/39[0m [32m━━━━━━━━━━━━━━[0m[37m━━━━━━[0m [1m0s[0m 80ms/step - accuracy: 0.6964 - loss: 0.6508
-[1m29/39[0m [32m━━━━━━━━━━━━━━[0m[37m━━━━━━[0m [1m0s[0m 80ms/step - accuracy: 0.6961 - loss: 0.6502
-[1m30/39[0m [32m━━━━━━━━━━━━━━━[0m[37m━━━━━[0m [1m0s[0m 80ms/step - accuracy: 0.7000 - loss: 0.6479
-[1m31/39[0m [32m━━━━━━━━━━━━━━━[0m[37m━━━━━[0m [1m0s[0m 80ms/step - accuracy: 0.7016 - loss: 0.6418
-[1m32/39[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 80ms/step - accuracy: 0.7031 - loss: 0.6389
-[1m33/39[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 80ms/step - accuracy: 0.7045 - loss: 0.6314
-[1m34/39[0m [32m━━━━━━━━━━━━━━━━━[0m[37m━━━[0m [1m0s[0m 80ms/step - accuracy: 0.7059 - loss: 0.6260
-[1m35/39[0m [32m━━━━━━━━━━━━━━━━━[0m[37m━━━[0m [1m0s[0m 80ms/step - accuracy: 0.7036 - loss: 0.6273
-[1m36/39[0m [32m━━━━━━━━━━━━━━━━━━[0m[37m━━[0m [1m0s[0m 80ms/step - accuracy: 0.7014 - loss: 0.6237
-[1m37/39[0m [32m━━━━━━━━━━━━━━━━━━[0m[37m━━[0m [1m0s[0m 81ms/step - accuracy: 0.7027 - loss: 0.6229
-[1m38/39[0m [32m━━━━━━━━━━━━━━━━━━━[0m[37m━[0m [1m0s[0m 81ms/step - accuracy: 0.7056 - loss: 0.6190
-[1m39/39[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m6s[0m 94ms/step - accuracy: 0.7070 - loss: 0.6184 - val_accuracy: 0.3230 - val_loss: 1.9263 - learning_rate: 0.0010
+[1m 1/39[0m [37m━━━━━━━━━━━━━━━━━━━━[0m [1m1:41[0m 3s/step - accuracy: 0.0625 - loss: 1.5369
+[1m 2/39[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m2s[0m 72ms/step - accuracy: 0.2812 - loss: 1.2770
+[1m 3/39[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m2s[0m 73ms/step - accuracy: 0.4167 - loss: 1.0592
+[1m 4/39[0m [32m━━[0m[37m━━━━━━━━━━━━━━━━━━[0m [1m2s[0m 71ms/step - accuracy: 0.4531 - loss: 1.0313
+[1m 5/39[0m [32m━━[0m[37m━━━━━━━━━━━━━━━━━━[0m [1m2s[0m 69ms/step - accuracy: 0.4875 - loss: 0.9969
+[1m 6/39[0m [32m━━━[0m[37m━━━━━━━━━━━━━━━━━[0m [1m2s[0m 70ms/step - accuracy: 0.5417 - loss: 0.9177
+[1m 7/39[0m [32m━━━[0m[37m━━━━━━━━━━━━━━━━━[0m [1m2s[0m 70ms/step - accuracy: 0.5804 - loss: 0.8564
+[1m 8/39[0m [32m━━━━[0m[37m━━━━━━━━━━━━━━━━[0m [1m2s[0m 70ms/step - accuracy: 0.6016 - loss: 0.8119
+[1m 9/39[0m [32m━━━━[0m[37m━━━━━━━━━━━━━━━━[0m [1m2s[0m 69ms/step - accuracy: 0.5903 - loss: 0.8010
+[1m10/39[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m2s[0m 70ms/step - accuracy: 0.6125 - loss: 0.7762
+[1m11/39[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m1s[0m 70ms/step - accuracy: 0.6193 - loss: 0.7500
+[1m12/39[0m [32m━━━━━━[0m[37m━━━━━━━━━━━━━━[0m [1m1s[0m 70ms/step - accuracy: 0.6146 - loss: 0.7367
+[1m13/39[0m [32m━━━━━━[0m[37m━━━━━━━━━━━━━━[0m [1m1s[0m 69ms/step - accuracy: 0.6058 - loss: 0.7429
+[1m14/39[0m [32m━━━━━━━[0m[37m━━━━━━━━━━━━━[0m [1m1s[0m 70ms/step - accuracy: 0.6071 - loss: 0.7400
+[1m15/39[0m [32m━━━━━━━[0m[37m━━━━━━━━━━━━━[0m [1m1s[0m 70ms/step - accuracy: 0.6250 - loss: 0.7237
+[1m16/39[0m [32m━━━━━━━━[0m[37m━━━━━━━━━━━━[0m [1m1s[0m 70ms/step - accuracy: 0.6406 - loss: 0.7027
+[1m17/39[0m [32m━━━━━━━━[0m[37m━━━━━━━━━━━━[0m [1m1s[0m 70ms/step - accuracy: 0.6471 - loss: 0.6896
+[1m18/39[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m1s[0m 70ms/step - accuracy: 0.6528 - loss: 0.6785
+[1m19/39[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m1s[0m 70ms/step - accuracy: 0.6579 - loss: 0.6654
+[1m20/39[0m [32m━━━━━━━━━━[0m[37m━━━━━━━━━━[0m [1m1s[0m 70ms/step - accuracy: 0.6594 - loss: 0.6648
+[1m21/39[0m [32m━━━━━━━━━━[0m[37m━━━━━━━━━━[0m [1m1s[0m 70ms/step - accuracy: 0.6667 - loss: 0.6584
+[1m22/39[0m [32m━━━━━━━━━━━[0m[37m━━━━━━━━━[0m [1m1s[0m 70ms/step - accuracy: 0.6676 - loss: 0.6554
+[1m23/39[0m [32m━━━━━━━━━━━[0m[37m━━━━━━━━━[0m [1m1s[0m 70ms/step - accuracy: 0.6712 - loss: 0.6466
+[1m24/39[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m1s[0m 70ms/step - accuracy: 0.6745 - loss: 0.6361
+[1m25/39[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m0s[0m 70ms/step - accuracy: 0.6800 - loss: 0.6294
+[1m26/39[0m [32m━━━━━━━━━━━━━[0m[37m━━━━━━━[0m [1m0s[0m 70ms/step - accuracy: 0.6755 - loss: 0.6481
+[1m27/39[0m [32m━━━━━━━━━━━━━[0m[37m━━━━━━━[0m [1m0s[0m 70ms/step - accuracy: 0.6852 - loss: 0.6356
+[1m28/39[0m [32m━━━━━━━━━━━━━━[0m[37m━━━━━━[0m [1m0s[0m 72ms/step - accuracy: 0.6875 - loss: 0.6287
+[1m29/39[0m [32m━━━━━━━━━━━━━━[0m[37m━━━━━━[0m [1m0s[0m 73ms/step - accuracy: 0.6918 - loss: 0.6290
+[1m30/39[0m [32m━━━━━━━━━━━━━━━[0m[37m━━━━━[0m [1m0s[0m 73ms/step - accuracy: 0.6938 - loss: 0.6241
+[1m31/39[0m [32m━━━━━━━━━━━━━━━[0m[37m━━━━━[0m [1m0s[0m 73ms/step - accuracy: 0.6935 - loss: 0.6228
+[1m32/39[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 73ms/step - accuracy: 0.6953 - loss: 0.6205
+[1m33/39[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 73ms/step - accuracy: 0.6989 - loss: 0.6170
+[1m34/39[0m [32m━━━━━━━━━━━━━━━━━[0m[37m━━━[0m [1m0s[0m 73ms/step - accuracy: 0.7022 - loss: 0.6115
+[1m35/39[0m [32m━━━━━━━━━━━━━━━━━[0m[37m━━━[0m [1m0s[0m 73ms/step - accuracy: 0.7089 - loss: 0.6015
+[1m36/39[0m [32m━━━━━━━━━━━━━━━━━━[0m[37m━━[0m [1m0s[0m 73ms/step - accuracy: 0.7066 - loss: 0.6028
+[1m37/39[0m [32m━━━━━━━━━━━━━━━━━━[0m[37m━━[0m [1m0s[0m 73ms/step - accuracy: 0.7145 - loss: 0.5932
+[1m38/39[0m [32m━━━━━━━━━━━━━━━━━━━[0m[37m━[0m [1m0s[0m 72ms/step - accuracy: 0.7220 - loss: 0.5833
+[1m39/39[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m6s[0m 85ms/step - accuracy: 0.7218 - loss: 0.5828 - val_accuracy: 0.6646 - val_loss: 1.1033 - learning_rate: 0.0010
 Epoch 2/30
 
-[1m 1/39[0m [37m━━━━━━━━━━━━━━━━━━━━[0m [1m4s[0m 108ms/step - accuracy: 0.8750 - loss: 0.4889
-[1m 2/39[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m3s[0m 85ms/step - accuracy: 0.8438 - loss: 0.5265 
-[1m 3/39[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m2s[0m 82ms/step - accuracy: 0.8333 - loss: 0.4974
-[1m 4/39[0m [32m━━[0m[37m━━━━━━━━━━━━━━━━━━[0m [1m2s[0m 86ms/step - accuracy: 0.8438 - loss: 0.4717
-[1m 5/39[0m [32m━━[0m[37m━━━━━━━━━━━━━━━━━━[0m [1m2s[0m 87ms/step - accuracy: 0.7875 - loss: 0.5144
-[1m 6/39[0m [32m━━━[0m[37m━━━━━━━━━━━━━━━━━[0m [1m2s[0m 88ms/step - accuracy: 0.7917 - loss: 0.4909
-[1m 7/39[0m [32m━━━[0m[37m━━━━━━━━━━━━━━━━━[0m [1m2s[0m 89ms/step - accuracy: 0.8036 - loss: 0.4628
-[1m 8/39[0m [32m━━━━[0m[37m━━━━━━━━━━━━━━━━[0m [1m2s[0m 89ms/step - accuracy: 0.7812 - loss: 0.4796
-[1m 9/39[0m [32m━━━━[0m[37m━━━━━━━━━━━━━━━━[0m [1m2s[0m 89ms/step - accuracy: 0.7778 - loss: 0.4819
-[1m10/39[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m2s[0m 88ms/step - accuracy: 0.7875 - loss: 0.4657
-[1m11/39[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m2s[0m 89ms/step - accuracy: 0.7955 - loss: 0.4610
-[1m12/39[0m [32m━━━━━━[0m[37m━━━━━━━━━━━━━━[0m [1m2s[0m 89ms/step - accuracy: 0.8021 - loss: 0.4488
-[1m13/39[0m [32m━━━━━━[0m[37m━━━━━━━━━━━━━━[0m [1m2s[0m 89ms/step - accuracy: 0.8077 - loss: 0.4391
-[1m14/39[0m [32m━━━━━━━[0m[37m━━━━━━━━━━━━━[0m [1m2s[0m 89ms/step - accuracy: 0.8170 - loss: 0.4389
-[1m15/39[0m [32m━━━━━━━[0m[37m━━━━━━━━━━━━━[0m [1m2s[0m 100ms/step - accuracy: 0.8208 - loss: 0.4270
-[1m16/39[0m [32m━━━━━━━━[0m[37m━━━━━━━━━━━━[0m [1m2s[0m 103ms/step - accuracy: 0.8203 - loss: 0.4266
-[1m17/39[0m [32m━━━━━━━━[0m[37m━━━━━━━━━━━━[0m [1m2s[0m 102ms/step - accuracy: 0.8199 - loss: 0.4326
-[1m18/39[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m2s[0m 101ms/step - accuracy: 0.8229 - loss: 0.4315
-[1m19/39[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m2s[0m 101ms/step - accuracy: 0.8191 - loss: 0.4429
-[1m20/39[0m [32m━━━━━━━━━━[0m[37m━━━━━━━━━━[0m [1m1s[0m 101ms/step - accuracy: 0.8188 - loss: 0.4359
-[1m21/39[0m [32m━━━━━━━━━━[0m[37m━━━━━━━━━━[0m [1m1s[0m 101ms/step - accuracy: 0.8185 - loss: 0.4415
-[1m22/39[0m [32m━━━━━━━━━━━[0m[37m━━━━━━━━━[0m [1m1s[0m 101ms/step - accuracy: 0.8182 - loss: 0.4351
-[1m23/39[0m [32m━━━━━━━━━━━[0m[37m━━━━━━━━━[0m [1m1s[0m 100ms/step - accuracy: 0.8234 - loss: 0.4264
-[1m24/39[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m1s[0m 100ms/step - accuracy: 0.8281 - loss: 0.4193
-[1m25/39[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m1s[0m 99ms/step - accuracy: 0.8300 - loss: 0.4200 
-[1m26/39[0m [32m━━━━━━━━━━━━━[0m[37m━━━━━━━[0m [1m1s[0m 99ms/step - accuracy: 0.8293 - loss: 0.4240
-[1m27/39[0m [32m━━━━━━━━━━━━━[0m[37m━━━━━━━[0m [1m1s[0m 99ms/step - accuracy: 0.8264 - loss: 0.4259
-[1m28/39[0m [32m━━━━━━━━━━━━━━[0m[37m━━━━━━[0m [1m1s[0m 99ms/step - accuracy: 0.8259 - loss: 0.4354
-[1m29/39[0m [32m━━━━━━━━━━━━━━[0m[37m━━━━━━[0m [1m0s[0m 98ms/step - accuracy: 0.8254 - loss: 0.4304
-[1m30/39[0m [32m━━━━━━━━━━━━━━━[0m[37m━━━━━[0m [1m0s[0m 97ms/step - accuracy: 0.8250 - loss: 0.4282
-[1m31/39[0m [32m━━━━━━━━━━━━━━━[0m[37m━━━━━[0m [1m0s[0m 96ms/step - accuracy: 0.8286 - loss: 0.4240
-[1m32/39[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 96ms/step - accuracy: 0.8281 - loss: 0.4215
-[1m33/39[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 95ms/step - accuracy: 0.8295 - loss: 0.4186
-[1m34/39[0m [32m━━━━━━━━━━━━━━━━━[0m[37m━━━[0m [1m0s[0m 94ms/step - accuracy: 0.8309 - loss: 0.4202
-[1m35/39[0m [32m━━━━━━━━━━━━━━━━━[0m[37m━━━[0m [1m0s[0m 94ms/step - accuracy: 0.8339 - loss: 0.4169
-[1m36/39[0m [32m━━━━━━━━━━━━━━━━━━[0m[37m━━[0m [1m0s[0m 93ms/step - accuracy: 0.8333 - loss: 0.4163
-[1m37/39[0m [32m━━━━━━━━━━━━━━━━━━[0m[37m━━[0m [1m0s[0m 92ms/step - accuracy: 0.8294 - loss: 0.4184
-[1m38/39[0m [32m━━━━━━━━━━━━━━━━━━━[0m[37m━[0m [1m0s[0m 92ms/step - accuracy: 0.8339 - loss: 0.4105
-[1m39/39[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m4s[0m 96ms/step - accuracy: 0.8347 - loss: 0.4097 - val_accuracy: 0.3106 - val_loss: 0.8952 - learning_rate: 0.0010
+[1m 1/39[0m [37m━━━━━━━━━━━━━━━━━━━━[0m [1m4s[0m 117ms/step - accuracy: 0.6875 - loss: 0.5436
+[1m 2/39[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m2s[0m 67ms/step - accuracy: 0.6562 - loss: 0.5563 
+[1m 3/39[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m2s[0m 66ms/step - accuracy: 0.7083 - loss: 0.4786
+[1m 4/39[0m [32m━━[0m[37m━━━━━━━━━━━━━━━━━━[0m [1m2s[0m 66ms/step - accuracy: 0.7344 - loss: 0.4786
+[1m 5/39[0m [32m━━[0m[37m━━━━━━━━━━━━━━━━━━[0m [1m2s[0m 67ms/step - accuracy: 0.7375 - loss: 0.4653
+[1m 6/39[0m [32m━━━[0m[37m━━━━━━━━━━━━━━━━━[0m [1m2s[0m 67ms/step - accuracy: 0.7396 - loss: 0.4653
+[1m 7/39[0m [32m━━━[0m[37m━━━━━━━━━━━━━━━━━[0m [1m2s[0m 66ms/step - accuracy: 0.7589 - loss: 0.4469
+[1m 8/39[0m [32m━━━━[0m[37m━━━━━━━━━━━━━━━━[0m [1m2s[0m 67ms/step - accuracy: 0.7734 - loss: 0.4344
+[1m 9/39[0m [32m━━━━[0m[37m━━━━━━━━━━━━━━━━[0m [1m2s[0m 67ms/step - accuracy: 0.7778 - loss: 0.4364
+[1m10/39[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m1s[0m 67ms/step - accuracy: 0.7875 - loss: 0.4219
+[1m11/39[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m1s[0m 67ms/step - accuracy: 0.7841 - loss: 0.4231
+[1m12/39[0m [32m━━━━━━[0m[37m━━━━━━━━━━━━━━[0m [1m1s[0m 67ms/step - accuracy: 0.7760 - loss: 0.4276
+[1m13/39[0m [32m━━━━━━[0m[37m━━━━━━━━━━━━━━[0m [1m1s[0m 68ms/step - accuracy: 0.7837 - loss: 0.4329
+[1m14/39[0m [32m━━━━━━━[0m[37m━━━━━━━━━━━━━[0m [1m1s[0m 69ms/step - accuracy: 0.7812 - loss: 0.4280
+[1m15/39[0m [32m━━━━━━━[0m[37m━━━━━━━━━━━━━[0m [1m1s[0m 70ms/step - accuracy: 0.7833 - loss: 0.4286
+[1m16/39[0m [32m━━━━━━━━[0m[37m━━━━━━━━━━━━[0m [1m1s[0m 70ms/step - accuracy: 0.7930 - loss: 0.4142
+[1m17/39[0m [32m━━━━━━━━[0m[37m━━━━━━━━━━━━[0m [1m1s[0m 70ms/step - accuracy: 0.8015 - loss: 0.4016
+[1m18/39[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m1s[0m 70ms/step - accuracy: 0.7986 - loss: 0.4043
+[1m19/39[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m1s[0m 70ms/step - accuracy: 0.7928 - loss: 0.4171
+[1m20/39[0m [32m━━━━━━━━━━[0m[37m━━━━━━━━━━[0m [1m1s[0m 70ms/step - accuracy: 0.8031 - loss: 0.4016
+[1m21/39[0m [32m━━━━━━━━━━[0m[37m━━━━━━━━━━[0m [1m1s[0m 70ms/step - accuracy: 0.8036 - loss: 0.4098
+[1m22/39[0m [32m━━━━━━━━━━━[0m[37m━━━━━━━━━[0m [1m1s[0m 70ms/step - accuracy: 0.8040 - loss: 0.4036
+[1m23/39[0m [32m━━━━━━━━━━━[0m[37m━━━━━━━━━[0m [1m1s[0m 70ms/step - accuracy: 0.8016 - loss: 0.4066
+[1m24/39[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m1s[0m 70ms/step - accuracy: 0.8047 - loss: 0.3998
+[1m25/39[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m0s[0m 70ms/step - accuracy: 0.8125 - loss: 0.3889
+[1m26/39[0m [32m━━━━━━━━━━━━━[0m[37m━━━━━━━[0m [1m0s[0m 70ms/step - accuracy: 0.8197 - loss: 0.3807
+[1m27/39[0m [32m━━━━━━━━━━━━━[0m[37m━━━━━━━[0m [1m0s[0m 70ms/step - accuracy: 0.8218 - loss: 0.3758
+[1m28/39[0m [32m━━━━━━━━━━━━━━[0m[37m━━━━━━[0m [1m0s[0m 71ms/step - accuracy: 0.8237 - loss: 0.3699
+[1m29/39[0m [32m━━━━━━━━━━━━━━[0m[37m━━━━━━[0m [1m0s[0m 71ms/step - accuracy: 0.8168 - loss: 0.3828
+[1m30/39[0m [32m━━━━━━━━━━━━━━━[0m[37m━━━━━[0m [1m0s[0m 71ms/step - accuracy: 0.8146 - loss: 0.3862
+[1m31/39[0m [32m━━━━━━━━━━━━━━━[0m[37m━━━━━[0m [1m0s[0m 71ms/step - accuracy: 0.8145 - loss: 0.3836
+[1m32/39[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 71ms/step - accuracy: 0.8125 - loss: 0.3853
+[1m33/39[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 71ms/step - accuracy: 0.8125 - loss: 0.3813
+[1m34/39[0m [32m━━━━━━━━━━━━━━━━━[0m[37m━━━[0m [1m0s[0m 71ms/step - accuracy: 0.8070 - loss: 0.3825
+[1m35/39[0m [32m━━━━━━━━━━━━━━━━━[0m[37m━━━[0m [1m0s[0m 72ms/step - accuracy: 0.8071 - loss: 0.3825
+[1m36/39[0m [32m━━━━━━━━━━━━━━━━━━[0m[37m━━[0m [1m0s[0m 72ms/step - accuracy: 0.8108 - loss: 0.3783
+[1m37/39[0m [32m━━━━━━━━━━━━━━━━━━[0m[37m━━[0m [1m0s[0m 72ms/step - accuracy: 0.8125 - loss: 0.3747
+[1m38/39[0m [32m━━━━━━━━━━━━━━━━━━━[0m[37m━[0m [1m0s[0m 72ms/step - accuracy: 0.8141 - loss: 0.3743
+[1m39/39[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m3s[0m 78ms/step - accuracy: 0.8118 - loss: 0.3779 - val_accuracy: 0.5342 - val_loss: 0.8271 - learning_rate: 0.0010
 Epoch 3/30
 
-[1m 1/39[0m [37m━━━━━━━━━━━━━━━━━━━━[0m [1m3s[0m 92ms/step - accuracy: 0.8125 - loss: 0.4069
-[1m 2/39[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m2s[0m 71ms/step - accuracy: 0.8750 - loss: 0.3334
-[1m 3/39[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m2s[0m 71ms/step - accuracy: 0.8958 - loss: 0.2789
-[1m 4/39[0m [32m━━[0m[37m━━━━━━━━━━━━━━━━━━[0m [1m2s[0m 73ms/step - accuracy: 0.8438 - loss: 0.3462
-[1m 5/39[0m [32m━━[0m[37m━━━━━━━━━━━━━━━━━━[0m [1m2s[0m 71ms/step - accuracy: 0.8375 - loss: 0.3561
-[1m 6/39[0m [32m━━━[0m[37m━━━━━━━━━━━━━━━━━[0m [1m2s[0m 72ms/step - accuracy: 0.8229 - loss: 0.3671
-[1m 7/39[0m [32m━━━[0m[37m━━━━━━━━━━━━━━━━━[0m [1m2s[0m 72ms/step - accuracy: 0.8482 - loss: 0.3423
-[1m 8/39[0m [32m━━━━[0m[37m━━━━━━━━━━━━━━━━[0m [1m2s[0m 73ms/step - accuracy: 0.8438 - loss: 0.3392
-[1m 9/39[0m [32m━━━━[0m[37m━━━━━━━━━━━━━━━━[0m [1m2s[0m 72ms/step - accuracy: 0.8542 - loss: 0.3223
-[1m10/39[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m2s[0m 72ms/step - accuracy: 0.8562 - loss: 0.3206
-[1m11/39[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m2s[0m 73ms/step - accuracy: 0.8523 - loss: 0.3242
-[1m12/39[0m [32m━━━━━━[0m[37m━━━━━━━━━━━━━━[0m [1m1s[0m 72ms/step - accuracy: 0.8542 - loss: 0.3195
-[1m13/39[0m [32m━━━━━━[0m[37m━━━━━━━━━━━━━━[0m [1m1s[0m 72ms/step - accuracy: 0.8606 - loss: 0.3133
-[1m14/39[0m [32m━━━━━━━[0m[37m━━━━━━━━━━━━━[0m [1m1s[0m 73ms/step - accuracy: 0.8616 - loss: 0.3163
-[1m15/39[0m [32m━━━━━━━[0m[37m━━━━━━━━━━━━━[0m [1m1s[0m 73ms/step - accuracy: 0.8500 - loss: 0.3242
-[1m16/39[0m [32m━━━━━━━━[0m[37m━━━━━━━━━━━━[0m [1m1s[0m 73ms/step - accuracy: 0.8359 - loss: 0.3410
-[1m17/39[0m [32m━━━━━━━━[0m[37m━━━━━━━━━━━━[0m [1m1s[0m 72ms/step - accuracy: 0.8346 - loss: 0.3416
-[1m18/39[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m1s[0m 72ms/step - accuracy: 0.8333 - loss: 0.3383
-[1m19/39[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m1s[0m 72ms/step - accuracy: 0.8289 - loss: 0.3429
-[1m20/39[0m [32m━━━━━━━━━━[0m[37m━━━━━━━━━━[0m [1m1s[0m 72ms/step - accuracy: 0.8344 - loss: 0.3486
-[1m21/39[0m [32m━━━━━━━━━━[0m[37m━━━━━━━━━━[0m [1m1s[0m 72ms/step - accuracy: 0.8333 - loss: 0.3516
-[1m22/39[0m [32m━━━━━━━━━━━[0m[37m━━━━━━━━━[0m [1m1s[0m 72ms/step - accuracy: 0.8295 - loss: 0.3537
-[1m23/39[0m [32m━━━━━━━━━━━[0m[37m━━━━━━━━━[0m [1m1s[0m 72ms/step - accuracy: 0.8288 - loss: 0.3665
-[1m24/39[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m1s[0m 72ms/step - accuracy: 0.8255 - loss: 0.3642
-[1m25/39[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m1s[0m 72ms/step - accuracy: 0.8300 - loss: 0.3701
-[1m26/39[0m [32m━━━━━━━━━━━━━[0m[37m━━━━━━━[0m [1m0s[0m 72ms/step - accuracy: 0.8269 - loss: 0.3705
-[1m27/39[0m [32m━━━━━━━━━━━━━[0m[37m━━━━━━━[0m [1m0s[0m 72ms/step - accuracy: 0.8287 - loss: 0.3687
-[1m28/39[0m [32m━━━━━━━━━━━━━━[0m[37m━━━━━━[0m [1m0s[0m 72ms/step - accuracy: 0.8281 - loss: 0.3667
-[1m29/39[0m [32m━━━━━━━━━━━━━━[0m[37m━━━━━━[0m [1m0s[0m 72ms/step - accuracy: 0.8341 - loss: 0.3600
-[1m30/39[0m [32m━━━━━━━━━━━━━━━[0m[37m━━━━━[0m [1m0s[0m 72ms/step - accuracy: 0.8333 - loss: 0.3622
-[1m31/39[0m [32m━━━━━━━━━━━━━━━[0m[37m━━━━━[0m [1m0s[0m 73ms/step - accuracy: 0.8327 - loss: 0.3638
-[1m32/39[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 73ms/step - accuracy: 0.8379 - loss: 0.3571
-[1m33/39[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 74ms/step - accuracy: 0.8428 - loss: 0.3517
-[1m34/39[0m [32m━━━━━━━━━━━━━━━━━[0m[37m━━━[0m [1m0s[0m 74ms/step - accuracy: 0.8419 - loss: 0.3540
-[1m35/39[0m [32m━━━━━━━━━━━━━━━━━[0m[37m━━━[0m [1m0s[0m 74ms/step - accuracy: 0.8393 - loss: 0.3567
-[1m36/39[0m [32m━━━━━━━━━━━━━━━━━━[0m[37m━━[0m [1m0s[0m 74ms/step - accuracy: 0.8403 - loss: 0.3553
-[1m37/39[0m [32m━━━━━━━━━━━━━━━━━━[0m[37m━━[0m [1m0s[0m 74ms/step - accuracy: 0.8446 - loss: 0.3479
-[1m38/39[0m [32m━━━━━━━━━━━━━━━━━━━[0m[37m━[0m [1m0s[0m 74ms/step - accuracy: 0.8487 - loss: 0.3429
-[1m39/39[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m3s[0m 80ms/step - accuracy: 0.8494 - loss: 0.3419 - val_accuracy: 0.3354 - val_loss: 1.1161 - learning_rate: 0.0010
+[1m 1/39[0m [37m━━━━━━━━━━━━━━━━━━━━[0m [1m4s[0m 111ms/step - accuracy: 0.8125 - loss: 0.3187
+[1m 2/39[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m2s[0m 73ms/step - accuracy: 0.8438 - loss: 0.3066 
+[1m 3/39[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m2s[0m 74ms/step - accuracy: 0.8958 - loss: 0.2981
+[1m 4/39[0m [32m━━[0m[37m━━━━━━━━━━━━━━━━━━[0m [1m2s[0m 71ms/step - accuracy: 0.8594 - loss: 0.3159
+[1m 5/39[0m [32m━━[0m[37m━━━━━━━━━━━━━━━━━━[0m [1m2s[0m 70ms/step - accuracy: 0.8875 - loss: 0.2856
+[1m 6/39[0m [32m━━━[0m[37m━━━━━━━━━━━━━━━━━[0m [1m2s[0m 70ms/step - accuracy: 0.8750 - loss: 0.3057
+[1m 7/39[0m [32m━━━[0m[37m━━━━━━━━━━━━━━━━━[0m [1m2s[0m 70ms/step - accuracy: 0.8661 - loss: 0.3206
+[1m 8/39[0m [32m━━━━[0m[37m━━━━━━━━━━━━━━━━[0m [1m2s[0m 70ms/step - accuracy: 0.8594 - loss: 0.3211
+[1m 9/39[0m [32m━━━━[0m[37m━━━━━━━━━━━━━━━━[0m [1m2s[0m 70ms/step - accuracy: 0.8611 - loss: 0.3282
+[1m10/39[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m1s[0m 69ms/step - accuracy: 0.8562 - loss: 0.3400
+[1m11/39[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m1s[0m 69ms/step - accuracy: 0.8580 - loss: 0.3379
+[1m12/39[0m [32m━━━━━━[0m[37m━━━━━━━━━━━━━━[0m [1m1s[0m 71ms/step - accuracy: 0.8646 - loss: 0.3354
+[1m13/39[0m [32m━━━━━━[0m[37m━━━━━━━━━━━━━━[0m [1m1s[0m 72ms/step - accuracy: 0.8702 - loss: 0.3283
+[1m14/39[0m [32m━━━━━━━[0m[37m━━━━━━━━━━━━━[0m [1m1s[0m 71ms/step - accuracy: 0.8661 - loss: 0.3303
+[1m15/39[0m [32m━━━━━━━[0m[37m━━━━━━━━━━━━━[0m [1m1s[0m 71ms/step - accuracy: 0.8708 - loss: 0.3220
+[1m16/39[0m [32m━━━━━━━━[0m[37m━━━━━━━━━━━━[0m [1m1s[0m 70ms/step - accuracy: 0.8750 - loss: 0.3142
+[1m17/39[0m [32m━━━━━━━━[0m[37m━━━━━━━━━━━━[0m [1m1s[0m 70ms/step - accuracy: 0.8713 - loss: 0.3197
+[1m18/39[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m1s[0m 70ms/step - accuracy: 0.8715 - loss: 0.3172
+[1m19/39[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m1s[0m 70ms/step - accuracy: 0.8750 - loss: 0.3171
+[1m20/39[0m [32m━━━━━━━━━━[0m[37m━━━━━━━━━━[0m [1m1s[0m 70ms/step - accuracy: 0.8687 - loss: 0.3294
+[1m21/39[0m [32m━━━━━━━━━━[0m[37m━━━━━━━━━━[0m [1m1s[0m 69ms/step - accuracy: 0.8720 - loss: 0.3238
+[1m22/39[0m [32m━━━━━━━━━━━[0m[37m━━━━━━━━━[0m [1m1s[0m 69ms/step - accuracy: 0.8778 - loss: 0.3156
+[1m23/39[0m [32m━━━━━━━━━━━[0m[37m━━━━━━━━━[0m [1m1s[0m 69ms/step - accuracy: 0.8750 - loss: 0.3153
+[1m24/39[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m1s[0m 69ms/step - accuracy: 0.8776 - loss: 0.3102
+[1m25/39[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m0s[0m 69ms/step - accuracy: 0.8775 - loss: 0.3086
+[1m26/39[0m [32m━━━━━━━━━━━━━[0m[37m━━━━━━━[0m [1m0s[0m 69ms/step - accuracy: 0.8726 - loss: 0.3143
+[1m27/39[0m [32m━━━━━━━━━━━━━[0m[37m━━━━━━━[0m [1m0s[0m 69ms/step - accuracy: 0.8750 - loss: 0.3075
+[1m28/39[0m [32m━━━━━━━━━━━━━━[0m[37m━━━━━━[0m [1m0s[0m 68ms/step - accuracy: 0.8728 - loss: 0.3087
+[1m29/39[0m [32m━━━━━━━━━━━━━━[0m[37m━━━━━━[0m [1m0s[0m 68ms/step - accuracy: 0.8750 - loss: 0.3057
+[1m30/39[0m [32m━━━━━━━━━━━━━━━[0m[37m━━━━━[0m [1m0s[0m 68ms/step - accuracy: 0.8729 - loss: 0.3133
+[1m31/39[0m [32m━━━━━━━━━━━━━━━[0m[37m━━━━━[0m [1m0s[0m 68ms/step - accuracy: 0.8750 - loss: 0.3112
+[1m32/39[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 68ms/step - accuracy: 0.8750 - loss: 0.3100
+[1m33/39[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 68ms/step - accuracy: 0.8769 - loss: 0.3072
+[1m34/39[0m [32m━━━━━━━━━━━━━━━━━[0m[37m━━━[0m [1m0s[0m 68ms/step - accuracy: 0.8768 - loss: 0.3052
+[1m35/39[0m [32m━━━━━━━━━━━━━━━━━[0m[37m━━━[0m [1m0s[0m 68ms/step - accuracy: 0.8786 - loss: 0.3068
+[1m36/39[0m [32m━━━━━━━━━━━━━━━━━━[0m[37m━━[0m [1m0s[0m 68ms/step - accuracy: 0.8785 - loss: 0.3107
+[1m37/39[0m [32m━━━━━━━━━━━━━━━━━━[0m[37m━━[0m [1m0s[0m 68ms/step - accuracy: 0.8801 - loss: 0.3063
+[1m38/39[0m [32m━━━━━━━━━━━━━━━━━━━[0m[37m━[0m [1m0s[0m 68ms/step - accuracy: 0.8816 - loss: 0.3046
+[1m39/39[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m3s[0m 73ms/step - accuracy: 0.8822 - loss: 0.3047 - val_accuracy: 0.4224 - val_loss: 0.8229 - learning_rate: 0.0010
 Epoch 4/30
 
-[1m 1/39[0m [37m━━━━━━━━━━━━━━━━━━━━[0m [1m4s[0m 115ms/step - accuracy: 1.0000 - loss: 0.1853
-[1m 2/39[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m2s[0m 72ms/step - accuracy: 0.8438 - loss: 0.3247 
-[1m 3/39[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m2s[0m 81ms/step - accuracy: 0.8542 - loss: 0.3021
-[1m 4/39[0m [32m━━[0m[37m━━━━━━━━━━━━━━━━━━[0m [1m2s[0m 81ms/step - accuracy: 0.8750 - loss: 0.3005
-[1m 5/39[0m [32m━━[0m[37m━━━━━━━━━━━━━━━━━━[0m [1m2s[0m 81ms/step - accuracy: 0.8625 - loss: 0.3218
-[1m 6/39[0m [32m━━━[0m[37m━━━━━━━━━━━━━━━━━[0m [1m2s[0m 80ms/step - accuracy: 0.8750 - loss: 0.2967
-[1m 7/39[0m [32m━━━[0m[37m━━━━━━━━━━━━━━━━━[0m [1m2s[0m 78ms/step - accuracy: 0.8661 - loss: 0.3132
-[1m 8/39[0m [32m━━━━[0m[37m━━━━━━━━━━━━━━━━[0m [1m2s[0m 79ms/step - accuracy: 0.8750 - loss: 0.2916
-[1m 9/39[0m [32m━━━━[0m[37m━━━━━━━━━━━━━━━━[0m [1m2s[0m 79ms/step - accuracy: 0.8750 - loss: 0.2896
-[1m10/39[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m2s[0m 79ms/step - accuracy: 0.8687 - loss: 0.2931
-[1m11/39[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m2s[0m 78ms/step - accuracy: 0.8807 - loss: 0.2756
-[1m12/39[0m [32m━━━━━━[0m[37m━━━━━━━━━━━━━━[0m [1m2s[0m 79ms/step - accuracy: 0.8750 - loss: 0.2940
-[1m13/39[0m [32m━━━━━━[0m[37m━━━━━━━━━━━━━━[0m [1m2s[0m 83ms/step - accuracy: 0.8750 - loss: 0.2890
-[1m14/39[0m [32m━━━━━━━[0m[37m━━━━━━━━━━━━━[0m [1m2s[0m 83ms/step - accuracy: 0.8705 - loss: 0.2958
-[1m15/39[0m [32m━━━━━━━[0m[37m━━━━━━━━━━━━━[0m [1m1s[0m 83ms/step - accuracy: 0.8792 - loss: 0.2884
-[1m16/39[0m [32m━━━━━━━━[0m[37m━━━━━━━━━━━━[0m [1m1s[0m 83ms/step - accuracy: 0.8750 - loss: 0.2942
-[1m17/39[0m [32m━━━━━━━━[0m[37m━━━━━━━━━━━━[0m [1m1s[0m 83ms/step - accuracy: 0.8787 - loss: 0.2876
-[1m18/39[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m1s[0m 83ms/step - accuracy: 0.8785 - loss: 0.2896
-[1m19/39[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m1s[0m 83ms/step - accuracy: 0.8783 - loss: 0.2834
-[1m20/39[0m [32m━━━━━━━━━━[0m[37m━━━━━━━━━━[0m [1m1s[0m 83ms/step - accuracy: 0.8844 - loss: 0.2747
-[1m21/39[0m [32m━━━━━━━━━━[0m[37m━━━━━━━━━━[0m [1m1s[0m 82ms/step - accuracy: 0.8839 - loss: 0.2786
-[1m22/39[0m [32m━━━━━━━━━━━[0m[37m━━━━━━━━━[0m [1m1s[0m 82ms/step - accuracy: 0.8892 - loss: 0.2734
-[1m23/39[0m [32m━━━━━━━━━━━[0m[37m━━━━━━━━━[0m [1m1s[0m 83ms/step - accuracy: 0.8886 - loss: 0.2749
-[1m24/39[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m1s[0m 83ms/step - accuracy: 0.8906 - loss: 0.2729
-[1m25/39[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m1s[0m 83ms/step - accuracy: 0.8925 - loss: 0.2700
-[1m26/39[0m [32m━━━━━━━━━━━━━[0m[37m━━━━━━━[0m [1m1s[0m 83ms/step - accuracy: 0.8942 - loss: 0.2692
-[1m27/39[0m [32m━━━━━━━━━━━━━[0m[37m━━━━━━━[0m [1m0s[0m 83ms/step - accuracy: 0.8935 - loss: 0.2727
-[1m28/39[0m [32m━━━━━━━━━━━━━━[0m[37m━━━━━━[0m [1m0s[0m 82ms/step - accuracy: 0.8906 - loss: 0.2844
-[1m29/39[0m [32m━━━━━━━━━━━━━━[0m[37m━━━━━━[0m [1m0s[0m 82ms/step - accuracy: 0.8901 - loss: 0.2824
-[1m30/39[0m [32m━━━━━━━━━━━━━━━[0m[37m━━━━━[0m [1m0s[0m 82ms/step - accuracy: 0.8938 - loss: 0.2754
-[1m31/39[0m [32m━━━━━━━━━━━━━━━[0m[37m━━━━━[0m [1m0s[0m 81ms/step - accuracy: 0.8952 - loss: 0.2747
-[1m32/39[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 81ms/step - accuracy: 0.8887 - loss: 0.2900
-[1m33/39[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 81ms/step - accuracy: 0.8902 - loss: 0.2856
-[1m34/39[0m [32m━━━━━━━━━━━━━━━━━[0m[37m━━━[0m [1m0s[0m 81ms/step - accuracy: 0.8934 - loss: 0.2800
-[1m35/39[0m [32m━━━━━━━━━━━━━━━━━[0m[37m━━━[0m [1m0s[0m 81ms/step - accuracy: 0.8946 - loss: 0.2794
-[1m36/39[0m [32m━━━━━━━━━━━━━━━━━━[0m[37m━━[0m [1m0s[0m 81ms/step - accuracy: 0.8958 - loss: 0.2783
-[1m37/39[0m [32m━━━━━━━━━━━━━━━━━━[0m[37m━━[0m [1m0s[0m 80ms/step - accuracy: 0.8919 - loss: 0.2809
-[1m38/39[0m [32m━━━━━━━━━━━━━━━━━━━[0m[37m━[0m [1m0s[0m 80ms/step - accuracy: 0.8931 - loss: 0.2776
-[1m39/39[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m3s[0m 85ms/step - accuracy: 0.8936 - loss: 0.2774 - val_accuracy: 0.5155 - val_loss: 1.0405 - learning_rate: 0.0010
+[1m 1/39[0m [37m━━━━━━━━━━━━━━━━━━━━[0m [1m4s[0m 117ms/step - accuracy: 0.9375 - loss: 0.2001
+[1m 2/39[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m2s[0m 70ms/step - accuracy: 0.9688 - loss: 0.1703 
+[1m 3/39[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m2s[0m 68ms/step - accuracy: 0.9167 - loss: 0.2464
+[1m 4/39[0m [32m━━[0m[37m━━━━━━━━━━━━━━━━━━[0m [1m2s[0m 68ms/step - accuracy: 0.9219 - loss: 0.2586
+[1m 5/39[0m [32m━━[0m[37m━━━━━━━━━━━━━━━━━━[0m [1m2s[0m 67ms/step - accuracy: 0.8875 - loss: 0.3197
+[1m 6/39[0m [32m━━━[0m[37m━━━━━━━━━━━━━━━━━[0m [1m2s[0m 67ms/step - accuracy: 0.8646 - loss: 0.3313
+[1m 7/39[0m [32m━━━[0m[37m━━━━━━━━━━━━━━━━━[0m [1m2s[0m 68ms/step - accuracy: 0.8750 - loss: 0.3199
+[1m 8/39[0m [32m━━━━[0m[37m━━━━━━━━━━━━━━━━[0m [1m2s[0m 68ms/step - accuracy: 0.8750 - loss: 0.3233
+[1m 9/39[0m [32m━━━━[0m[37m━━━━━━━━━━━━━━━━[0m [1m2s[0m 67ms/step - accuracy: 0.8750 - loss: 0.3211
+[1m10/39[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m1s[0m 67ms/step - accuracy: 0.8687 - loss: 0.3218
+[1m11/39[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m1s[0m 67ms/step - accuracy: 0.8750 - loss: 0.3165
+[1m12/39[0m [32m━━━━━━[0m[37m━━━━━━━━━━━━━━[0m [1m1s[0m 67ms/step - accuracy: 0.8750 - loss: 0.3238
+[1m13/39[0m [32m━━━━━━[0m[37m━━━━━━━━━━━━━━[0m [1m1s[0m 67ms/step - accuracy: 0.8750 - loss: 0.3217
+[1m14/39[0m [32m━━━━━━━[0m[37m━━━━━━━━━━━━━[0m [1m1s[0m 67ms/step - accuracy: 0.8839 - loss: 0.3118
+[1m15/39[0m [32m━━━━━━━[0m[37m━━━━━━━━━━━━━[0m [1m1s[0m 67ms/step - accuracy: 0.8708 - loss: 0.3225
+[1m16/39[0m [32m━━━━━━━━[0m[37m━━━━━━━━━━━━[0m [1m1s[0m 67ms/step - accuracy: 0.8672 - loss: 0.3207
+[1m17/39[0m [32m━━━━━━━━[0m[37m━━━━━━━━━━━━[0m [1m1s[0m 67ms/step - accuracy: 0.8713 - loss: 0.3161
+[1m18/39[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m1s[0m 67ms/step - accuracy: 0.8750 - loss: 0.3116
+[1m19/39[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m1s[0m 68ms/step - accuracy: 0.8717 - loss: 0.3095
+[1m20/39[0m [32m━━━━━━━━━━[0m[37m━━━━━━━━━━[0m [1m1s[0m 68ms/step - accuracy: 0.8781 - loss: 0.2983
+[1m21/39[0m [32m━━━━━━━━━━[0m[37m━━━━━━━━━━[0m [1m1s[0m 67ms/step - accuracy: 0.8780 - loss: 0.3036
+[1m22/39[0m [32m━━━━━━━━━━━[0m[37m━━━━━━━━━[0m [1m1s[0m 67ms/step - accuracy: 0.8835 - loss: 0.2967
+[1m23/39[0m [32m━━━━━━━━━━━[0m[37m━━━━━━━━━[0m [1m1s[0m 67ms/step - accuracy: 0.8859 - loss: 0.2901
+[1m24/39[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m1s[0m 67ms/step - accuracy: 0.8880 - loss: 0.2886
+[1m25/39[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m0s[0m 67ms/step - accuracy: 0.8850 - loss: 0.2923
+[1m26/39[0m [32m━━━━━━━━━━━━━[0m[37m━━━━━━━[0m [1m0s[0m 67ms/step - accuracy: 0.8870 - loss: 0.2925
+[1m27/39[0m [32m━━━━━━━━━━━━━[0m[37m━━━━━━━[0m [1m0s[0m 68ms/step - accuracy: 0.8912 - loss: 0.2861
+[1m28/39[0m [32m━━━━━━━━━━━━━━[0m[37m━━━━━━[0m [1m0s[0m 68ms/step - accuracy: 0.8951 - loss: 0.2801
+[1m29/39[0m [32m━━━━━━━━━━━━━━[0m[37m━━━━━━[0m [1m0s[0m 68ms/step - accuracy: 0.8987 - loss: 0.2746
+[1m30/39[0m [32m━━━━━━━━━━━━━━━[0m[37m━━━━━[0m [1m0s[0m 67ms/step - accuracy: 0.9021 - loss: 0.2671
+[1m31/39[0m [32m━━━━━━━━━━━━━━━[0m[37m━━━━━[0m [1m0s[0m 67ms/step - accuracy: 0.9052 - loss: 0.2604
+[1m32/39[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 67ms/step - accuracy: 0.9043 - loss: 0.2617
+[1m33/39[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 67ms/step - accuracy: 0.9034 - loss: 0.2593
+[1m34/39[0m [32m━━━━━━━━━━━━━━━━━[0m[37m━━━[0m [1m0s[0m 67ms/step - accuracy: 0.9026 - loss: 0.2581
+[1m35/39[0m [32m━━━━━━━━━━━━━━━━━[0m[37m━━━[0m [1m0s[0m 67ms/step - accuracy: 0.9054 - loss: 0.2536
+[1m36/39[0m [32m━━━━━━━━━━━━━━━━━━[0m[37m━━[0m [1m0s[0m 67ms/step - accuracy: 0.9080 - loss: 0.2500
+[1m37/39[0m [32m━━━━━━━━━━━━━━━━━━[0m[37m━━[0m [1m0s[0m 67ms/step - accuracy: 0.9071 - loss: 0.2486
+[1m38/39[0m [32m━━━━━━━━━━━━━━━━━━━[0m[37m━[0m [1m0s[0m 67ms/step - accuracy: 0.9062 - loss: 0.2505
+[1m39/39[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m3s[0m 72ms/step - accuracy: 0.9034 - loss: 0.2576 - val_accuracy: 0.5590 - val_loss: 0.7433 - learning_rate: 0.0010
 Epoch 5/30
 
-[1m 1/39[0m [37m━━━━━━━━━━━━━━━━━━━━[0m [1m4s[0m 118ms/step - accuracy: 0.8750 - loss: 0.5975
-[1m 2/39[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m2s[0m 77ms/step - accuracy: 0.8438 - loss: 0.4743 
-[1m 3/39[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m2s[0m 78ms/step - accuracy: 0.8750 - loss: 0.4117
-[1m 4/39[0m [32m━━[0m[37m━━━━━━━━━━━━━━━━━━[0m [1m2s[0m 77ms/step - accuracy: 0.8906 - loss: 0.3576
-[1m 5/39[0m [32m━━[0m[37m━━━━━━━━━━━━━━━━━━[0m [1m2s[0m 77ms/step - accuracy: 0.8750 - loss: 0.3556
-[1m 6/39[0m [32m━━━[0m[37m━━━━━━━━━━━━━━━━━[0m [1m2s[0m 76ms/step - accuracy: 0.8854 - loss: 0.3315
-[1m 7/39[0m [32m━━━[0m[37m━━━━━━━━━━━━━━━━━[0m [1m2s[0m 76ms/step - accuracy: 0.8750 - loss: 0.3351
-[1m 8/39[0m [32m━━━━[0m[37m━━━━━━━━━━━━━━━━[0m [1m2s[0m 76ms/step - accuracy: 0.8750 - loss: 0.3364
-[1m 9/39[0m [32m━━━━[0m[37m━━━━━━━━━━━━━━━━[0m [1m2s[0m 76ms/step - accuracy: 0.8819 - loss: 0.3139
-[1m10/39[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m2s[0m 76ms/step - accuracy: 0.8813 - loss: 0.3040
-[1m11/39[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m2s[0m 77ms/step - accuracy: 0.8807 - loss: 0.3002
-[1m12/39[0m [32m━━━━━━[0m[37m━━━━━━━━━━━━━━[0m [1m2s[0m 76ms/step - accuracy: 0.8906 - loss: 0.2866
-[1m13/39[0m [32m━━━━━━[0m[37m━━━━━━━━━━━━━━[0m [1m1s[0m 77ms/step - accuracy: 0.8942 - loss: 0.2819
-[1m14/39[0m [32m━━━━━━━[0m[37m━━━━━━━━━━━━━[0m [1m1s[0m 77ms/step - accuracy: 0.8929 - loss: 0.2800
-[1m15/39[0m [32m━━━━━━━[0m[37m━━━━━━━━━━━━━[0m [1m1s[0m 77ms/step - accuracy: 0.8958 - loss: 0.2742
-[1m16/39[0m [32m━━━━━━━━[0m[37m━━━━━━━━━━━━[0m [1m1s[0m 76ms/step - accuracy: 0.9023 - loss: 0.2648
-[1m17/39[0m [32m━━━━━━━━[0m[37m━━━━━━━━━━━━[0m [1m1s[0m 76ms/step - accuracy: 0.9007 - loss: 0.2631
-[1m18/39[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m1s[0m 75ms/step - accuracy: 0.9062 - loss: 0.2551
-[1m19/39[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m1s[0m 76ms/step - accuracy: 0.9079 - loss: 0.2518
-[1m20/39[0m [32m━━━━━━━━━━[0m[37m━━━━━━━━━━[0m [1m1s[0m 75ms/step - accuracy: 0.9062 - loss: 0.2526
-[1m21/39[0m [32m━━━━━━━━━━[0m[37m━━━━━━━━━━[0m [1m1s[0m 76ms/step - accuracy: 0.9077 - loss: 0.2499
-[1m22/39[0m [32m━━━━━━━━━━━[0m[37m━━━━━━━━━[0m [1m1s[0m 76ms/step - accuracy: 0.9091 - loss: 0.2518
-[1m23/39[0m [32m━━━━━━━━━━━[0m[37m━━━━━━━━━[0m [1m1s[0m 76ms/step - accuracy: 0.9130 - loss: 0.2482
-[1m24/39[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m1s[0m 75ms/step - accuracy: 0.9141 - loss: 0.2485
-[1m25/39[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m1s[0m 75ms/step - accuracy: 0.9150 - loss: 0.2487
-[1m26/39[0m [32m━━━━━━━━━━━━━[0m[37m━━━━━━━[0m [1m0s[0m 75ms/step - accuracy: 0.9159 - loss: 0.2482
-[1m27/39[0m [32m━━━━━━━━━━━━━[0m[37m━━━━━━━[0m [1m0s[0m 75ms/step - accuracy: 0.9144 - loss: 0.2484
-[1m28/39[0m [32m━━━━━━━━━━━━━━[0m[37m━━━━━━[0m [1m0s[0m 75ms/step - accuracy: 0.9152 - loss: 0.2474
-[1m29/39[0m [32m━━━━━━━━━━━━━━[0m[37m━━━━━━[0m [1m0s[0m 74ms/step - accuracy: 0.9181 - loss: 0.2430
-[1m30/39[0m [32m━━━━━━━━━━━━━━━[0m[37m━━━━━[0m [1m0s[0m 74ms/step - accuracy: 0.9208 - loss: 0.2380
-[1m31/39[0m [32m━━━━━━━━━━━━━━━[0m[37m━━━━━[0m [1m0s[0m 74ms/step - accuracy: 0.9234 - loss: 0.2328
-[1m32/39[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 74ms/step - accuracy: 0.9121 - loss: 0.2579
-[1m33/39[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 74ms/step - accuracy: 0.9129 - loss: 0.2551
-[1m34/39[0m [32m━━━━━━━━━━━━━━━━━[0m[37m━━━[0m [1m0s[0m 73ms/step - accuracy: 0.9136 - loss: 0.2525
-[1m35/39[0m [32m━━━━━━━━━━━━━━━━━[0m[37m━━━[0m [1m0s[0m 74ms/step - accuracy: 0.9143 - loss: 0.2492
-[1m36/39[0m [32m━━━━━━━━━━━━━━━━━━[0m[37m━━[0m [1m0s[0m 74ms/step - accuracy: 0.9149 - loss: 0.2484
-[1m37/39[0m [32m━━━━━━━━━━━━━━━━━━[0m[37m━━[0m [1m0s[0m 74ms/step - accuracy: 0.9155 - loss: 0.2436
-[1m38/39[0m [32m━━━━━━━━━━━━━━━━━━━[0m[37m━[0m [1m0s[0m 73ms/step - accuracy: 0.9161 - loss: 0.2447
-Epoch 5: ReduceLROnPlateau reducing learning rate to 0.0005000000237487257.
-
-[1m39/39[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m3s[0m 78ms/step - accuracy: 0.9165 - loss: 0.2435 - val_accuracy: 0.6025 - val_loss: 0.9424 - learning_rate: 0.0010
+[1m 1/39[0m [37m━━━━━━━━━━━━━━━━━━━━[0m [1m3s[0m 97ms/step - accuracy: 0.8750 - loss: 0.2470
+[1m 2/39[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m2s[0m 79ms/step - accuracy: 0.8750 - loss: 0.2671
+[1m 3/39[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m2s[0m 72ms/step - accuracy: 0.8958 - loss: 0.2207
+[1m 4/39[0m [32m━━[0m[37m━━━━━━━━━━━━━━━━━━[0m [1m2s[0m 71ms/step - accuracy: 0.8906 - loss: 0.2472
+[1m 5/39[0m [32m━━[0m[37m━━━━━━━━━━━━━━━━━━[0m [1m2s[0m 70ms/step - accuracy: 0.8875 - loss: 0.2480
+[1m 6/39[0m [32m━━━[0m[37m━━━━━━━━━━━━━━━━━[0m [1m2s[0m 68ms/step - accuracy: 0.8229 - loss: 0.3431
+[1m 7/39[0m [32m━━━[0m[37m━━━━━━━━━━━━━━━━━[0m [1m2s[0m 67ms/step - accuracy: 0.8304 - loss: 0.3422
+[1m 8/39[0m [32m━━━━[0m[37m━━━━━━━━━━━━━━━━[0m [1m2s[0m 67ms/step - accuracy: 0.8125 - loss: 0.3649
+[1m 9/39[0m [32m━━━━[0m[37m━━━━━━━━━━━━━━━━[0m [1m2s[0m 68ms/step - accuracy: 0.8333 - loss: 0.3390
+[1m10/39[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m1s[0m 69ms/step - accuracy: 0.8500 - loss: 0.3243
+[1m11/39[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m1s[0m 68ms/step - accuracy: 0.8466 - loss: 0.3158
+[1m12/39[0m [32m━━━━━━[0m[37m━━━━━━━━━━━━━━[0m [1m1s[0m 68ms/step - accuracy: 0.8542 - loss: 0.3025
+[1m13/39[0m [32m━━━━━━[0m[37m━━━━━━━━━━━━━━[0m [1m1s[0m 68ms/step - accuracy: 0.8558 - loss: 0.2984
+[1m14/39[0m [32m━━━━━━━[0m[37m━━━━━━━━━━━━━[0m [1m1s[0m 68ms/step - accuracy: 0.8616 - loss: 0.2947
+[1m15/39[0m [32m━━━━━━━[0m[37m━━━━━━━━━━━━━[0m [1m1s[0m 69ms/step - accuracy: 0.8667 - loss: 0.2855
+[1m16/39[0m [32m━━━━━━━━[0m[37m━━━━━━━━━━━━[0m [1m1s[0m 69ms/step - accuracy: 0.8711 - loss: 0.2795
+[1m17/39[0m [32m━━━━━━━━[0m[37m━━━━━━━━━━━━[0m [1m1s[0m 68ms/step - accuracy: 0.8750 - loss: 0.2753
+[1m18/39[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m1s[0m 69ms/step - accuracy: 0.8785 - loss: 0.2722
+[1m19/39[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m1s[0m 69ms/step - accuracy: 0.8783 - loss: 0.2804
+[1m20/39[0m [32m━━━━━━━━━━[0m[37m━━━━━━━━━━[0m [1m1s[0m 69ms/step - accuracy: 0.8781 - loss: 0.2872
+[1m21/39[0m [32m━━━━━━━━━━[0m[37m━━━━━━━━━━[0m [1m1s[0m 69ms/step - accuracy: 0.8750 - loss: 0.2910
+[1m22/39[0m [32m━━━━━━━━━━━[0m[37m━━━━━━━━━[0m [1m1s[0m 69ms/step - accuracy: 0.8722 - loss: 0.2913
+[1m23/39[0m [32m━━━━━━━━━━━[0m[37m━━━━━━━━━[0m [1m1s[0m 69ms/step - accuracy: 0.8723 - loss: 0.2898
+[1m24/39[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m1s[0m 69ms/step - accuracy: 0.8750 - loss: 0.2836
+[1m25/39[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m0s[0m 69ms/step - accuracy: 0.8800 - loss: 0.2771
+[1m26/39[0m [32m━━━━━━━━━━━━━[0m[37m━━━━━━━[0m [1m0s[0m 69ms/step - accuracy: 0.8822 - loss: 0.2711
+[1m27/39[0m [32m━━━━━━━━━━━━━[0m[37m━━━━━━━[0m [1m0s[0m 69ms/step - accuracy: 0.8866 - loss: 0.2669
+[1m28/39[0m [32m━━━━━━━━━━━━━━[0m[37m━━━━━━[0m [1m0s[0m 69ms/step - accuracy: 0.8906 - loss: 0.2617
+[1m29/39[0m [32m━━━━━━━━━━━━━━[0m[37m━━━━━━[0m [1m0s[0m 69ms/step - accuracy: 0.8944 - loss: 0.2556
+[1m30/39[0m [32m━━━━━━━━━━━━━━━[0m[37m━━━━━[0m [1m0s[0m 69ms/step - accuracy: 0.8938 - loss: 0.2557
+[1m31/39[0m [32m━━━━━━━━━━━━━━━[0m[37m━━━━━[0m [1m0s[0m 69ms/step - accuracy: 0.8931 - loss: 0.2520
+[1m32/39[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 69ms/step - accuracy: 0.8945 - loss: 0.2503
+[1m33/39[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 69ms/step - accuracy: 0.8958 - loss: 0.2458
+[1m34/39[0m [32m━━━━━━━━━━━━━━━━━[0m[37m━━━[0m [1m0s[0m 69ms/step - accuracy: 0.8971 - loss: 0.2471
+[1m35/39[0m [32m━━━━━━━━━━━━━━━━━[0m[37m━━━[0m [1m0s[0m 69ms/step - accuracy: 0.8982 - loss: 0.2445
+[1m36/39[0m [32m━━━━━━━━━━━━━━━━━━[0m[37m━━[0m [1m0s[0m 69ms/step - accuracy: 0.8993 - loss: 0.2412
+[1m37/39[0m [32m━━━━━━━━━━━━━━━━━━[0m[37m━━[0m [1m0s[0m 69ms/step - accuracy: 0.9020 - loss: 0.2380
+[1m38/39[0m [32m━━━━━━━━━━━━━━━━━━━[0m[37m━[0m [1m0s[0m 69ms/step - accuracy: 0.9046 - loss: 0.2346
+[1m39/39[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m3s[0m 74ms/step - accuracy: 0.9018 - loss: 0.2385 - val_accuracy: 0.4534 - val_loss: 0.8246 - learning_rate: 0.0010
 Epoch 6/30
 
-[1m 1/39[0m [37m━━━━━━━━━━━━━━━━━━━━[0m [1m3s[0m 99ms/step - accuracy: 0.9375 - loss: 0.2487
-[1m 2/39[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m2s[0m 65ms/step - accuracy: 0.9062 - loss: 0.2164
-[1m 3/39[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m2s[0m 68ms/step - accuracy: 0.9167 - loss: 0.1786
-[1m 4/39[0m [32m━━[0m[37m━━━━━━━━━━━━━━━━━━[0m [1m2s[0m 69ms/step - accuracy: 0.9219 - loss: 0.1595
-[1m 5/39[0m [32m━━[0m[37m━━━━━━━━━━━━━━━━━━[0m [1m2s[0m 69ms/step - accuracy: 0.9375 - loss: 0.1353
-[1m 6/39[0m [32m━━━[0m[37m━━━━━━━━━━━━━━━━━[0m [1m2s[0m 68ms/step - accuracy: 0.9375 - loss: 0.1268
-[1m 7/39[0m [32m━━━[0m[37m━━━━━━━━━━━━━━━━━[0m [1m2s[0m 68ms/step - accuracy: 0.9286 - loss: 0.1404
-[1m 8/39[0m [32m━━━━[0m[37m━━━━━━━━━━━━━━━━[0m [1m2s[0m 68ms/step - accuracy: 0.9141 - loss: 0.1654
-[1m 9/39[0m [32m━━━━[0m[37m━━━━━━━━━━━━━━━━[0m [1m2s[0m 69ms/step - accuracy: 0.9097 - loss: 0.1775
-[1m10/39[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m2s[0m 69ms/step - accuracy: 0.9187 - loss: 0.1704
-[1m11/39[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m1s[0m 69ms/step - accuracy: 0.9205 - loss: 0.1736
-[1m12/39[0m [32m━━━━━━[0m[37m━━━━━━━━━━━━━━[0m [1m1s[0m 69ms/step - accuracy: 0.9167 - loss: 0.1838
-[1m13/39[0m [32m━━━━━━[0m[37m━━━━━━━━━━━━━━[0m [1m1s[0m 68ms/step - accuracy: 0.9231 - loss: 0.1749
-[1m14/39[0m [32m━━━━━━━[0m[37m━━━━━━━━━━━━━[0m [1m1s[0m 67ms/step - accuracy: 0.9241 - loss: 0.1712
-[1m15/39[0m [32m━━━━━━━[0m[37m━━━━━━━━━━━━━[0m [1m1s[0m 68ms/step - accuracy: 0.9292 - loss: 0.1669
-[1m16/39[0m [32m━━━━━━━━[0m[37m━━━━━━━━━━━━[0m [1m1s[0m 69ms/step - accuracy: 0.9258 - loss: 0.1701
-[1m17/39[0m [32m━━━━━━━━[0m[37m━━━━━━━━━━━━[0m [1m1s[0m 69ms/step - accuracy: 0.9301 - loss: 0.1656
-[1m18/39[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m1s[0m 69ms/step - accuracy: 0.9271 - loss: 0.1684
-[1m19/39[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m1s[0m 69ms/step - accuracy: 0.9276 - loss: 0.1681
-[1m20/39[0m [32m━━━━━━━━━━[0m[37m━━━━━━━━━━[0m [1m1s[0m 69ms/step - accuracy: 0.9281 - loss: 0.1701
-[1m21/39[0m [32m━━━━━━━━━━[0m[37m━━━━━━━━━━[0m [1m1s[0m 69ms/step - accuracy: 0.9286 - loss: 0.1674
-[1m22/39[0m [32m━━━━━━━━━━━[0m[37m━━━━━━━━━[0m [1m1s[0m 69ms/step - accuracy: 0.9261 - loss: 0.1731
-[1m23/39[0m [32m━━━━━━━━━━━[0m[37m━━━━━━━━━[0m [1m1s[0m 69ms/step - accuracy: 0.9239 - loss: 0.1809
-[1m24/39[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m1s[0m 69ms/step - accuracy: 0.9245 - loss: 0.1784
-[1m25/39[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m0s[0m 69ms/step - accuracy: 0.9275 - loss: 0.1732
-[1m26/39[0m [32m━━━━━━━━━━━━━[0m[37m━━━━━━━[0m [1m0s[0m 70ms/step - accuracy: 0.9303 - loss: 0.1712
-[1m27/39[0m [32m━━━━━━━━━━━━━[0m[37m━━━━━━━[0m [1m0s[0m 70ms/step - accuracy: 0.9306 - loss: 0.1710
-[1m28/39[0m [32m━━━━━━━━━━━━━━[0m[37m━━━━━━[0m [1m0s[0m 70ms/step - accuracy: 0.9286 - loss: 0.1728
-[1m29/39[0m [32m━━━━━━━━━━━━━━[0m[37m━━━━━━[0m [1m0s[0m 70ms/step - accuracy: 0.9289 - loss: 0.1746
-[1m30/39[0m [32m━━━━━━━━━━━━━━━[0m[37m━━━━━[0m [1m0s[0m 71ms/step - accuracy: 0.9312 - loss: 0.1706
-[1m31/39[0m [32m━━━━━━━━━━━━━━━[0m[37m━━━━━[0m [1m0s[0m 71ms/step - accuracy: 0.9315 - loss: 0.1720
-[1m32/39[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 71ms/step - accuracy: 0.9297 - loss: 0.1734
-[1m33/39[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 71ms/step - accuracy: 0.9299 - loss: 0.1748
-[1m34/39[0m [32m━━━━━━━━━━━━━━━━━[0m[37m━━━[0m [1m0s[0m 71ms/step - accuracy: 0.9320 - loss: 0.1718
-[1m35/39[0m [32m━━━━━━━━━━━━━━━━━[0m[37m━━━[0m [1m0s[0m 71ms/step - accuracy: 0.9304 - loss: 0.1752
-[1m36/39[0m [32m━━━━━━━━━━━━━━━━━━[0m[37m━━[0m [1m0s[0m 71ms/step - accuracy: 0.9288 - loss: 0.1796
-[1m37/39[0m [32m━━━━━━━━━━━━━━━━━━[0m[37m━━[0m [1m0s[0m 71ms/step - accuracy: 0.9307 - loss: 0.1770
-[1m38/39[0m [32m━━━━━━━━━━━━━━━━━━━[0m[37m━[0m [1m0s[0m 71ms/step - accuracy: 0.9309 - loss: 0.1754
-[1m39/39[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m3s[0m 77ms/step - accuracy: 0.9313 - loss: 0.1749 - val_accuracy: 0.6957 - val_loss: 0.6420 - learning_rate: 5.0000e-04
+[1m 1/39[0m [37m━━━━━━━━━━━━━━━━━━━━[0m [1m3s[0m 102ms/step - accuracy: 0.9375 - loss: 0.0806
+[1m 2/39[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m2s[0m 80ms/step - accuracy: 0.9688 - loss: 0.1015 
+[1m 3/39[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m3s[0m 93ms/step - accuracy: 0.9375 - loss: 0.1611
+[1m 4/39[0m [32m━━[0m[37m━━━━━━━━━━━━━━━━━━[0m [1m3s[0m 87ms/step - accuracy: 0.9531 - loss: 0.1497
+[1m 5/39[0m [32m━━[0m[37m━━━━━━━━━━━━━━━━━━[0m [1m2s[0m 81ms/step - accuracy: 0.9500 - loss: 0.1543
+[1m 6/39[0m [32m━━━[0m[37m━━━━━━━━━━━━━━━━━[0m [1m2s[0m 79ms/step - accuracy: 0.9375 - loss: 0.1872
+[1m 7/39[0m [32m━━━[0m[37m━━━━━━━━━━━━━━━━━[0m [1m2s[0m 77ms/step - accuracy: 0.9464 - loss: 0.1667
+[1m 8/39[0m [32m━━━━[0m[37m━━━━━━━━━━━━━━━━[0m [1m2s[0m 76ms/step - accuracy: 0.9375 - loss: 0.1847
+[1m 9/39[0m [32m━━━━[0m[37m━━━━━━━━━━━━━━━━[0m [1m2s[0m 75ms/step - accuracy: 0.9306 - loss: 0.1903
+[1m10/39[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m2s[0m 74ms/step - accuracy: 0.9312 - loss: 0.1870
+[1m11/39[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m2s[0m 74ms/step - accuracy: 0.9375 - loss: 0.1760
+[1m12/39[0m [32m━━━━━━[0m[37m━━━━━━━━━━━━━━[0m [1m1s[0m 74ms/step - accuracy: 0.9427 - loss: 0.1716
+[1m13/39[0m [32m━━━━━━[0m[37m━━━━━━━━━━━━━━[0m [1m1s[0m 73ms/step - accuracy: 0.9423 - loss: 0.1715
+[1m14/39[0m [32m━━━━━━━[0m[37m━━━━━━━━━━━━━[0m [1m1s[0m 72ms/step - accuracy: 0.9464 - loss: 0.1668
+[1m15/39[0m [32m━━━━━━━[0m[37m━━━━━━━━━━━━━[0m [1m1s[0m 72ms/step - accuracy: 0.9458 - loss: 0.1647
+[1m16/39[0m [32m━━━━━━━━[0m[37m━━━━━━━━━━━━[0m [1m1s[0m 72ms/step - accuracy: 0.9297 - loss: 0.1836
+[1m17/39[0m [32m━━━━━━━━[0m[37m━━━━━━━━━━━━[0m [1m1s[0m 72ms/step - accuracy: 0.9265 - loss: 0.1926
+[1m18/39[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m1s[0m 71ms/step - accuracy: 0.9271 - loss: 0.1922
+[1m19/39[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m1s[0m 71ms/step - accuracy: 0.9309 - loss: 0.1879
+[1m20/39[0m [32m━━━━━━━━━━[0m[37m━━━━━━━━━━[0m [1m1s[0m 71ms/step - accuracy: 0.9344 - loss: 0.1869
+[1m21/39[0m [32m━━━━━━━━━━[0m[37m━━━━━━━━━━[0m [1m1s[0m 71ms/step - accuracy: 0.9315 - loss: 0.1863
+[1m22/39[0m [32m━━━━━━━━━━━[0m[37m━━━━━━━━━[0m [1m1s[0m 71ms/step - accuracy: 0.9261 - loss: 0.1959
+[1m23/39[0m [32m━━━━━━━━━━━[0m[37m━━━━━━━━━[0m [1m1s[0m 71ms/step - accuracy: 0.9239 - loss: 0.1998
+[1m24/39[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m1s[0m 70ms/step - accuracy: 0.9245 - loss: 0.1965
+[1m25/39[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m0s[0m 71ms/step - accuracy: 0.9275 - loss: 0.1911
+[1m26/39[0m [32m━━━━━━━━━━━━━[0m[37m━━━━━━━[0m [1m0s[0m 71ms/step - accuracy: 0.9303 - loss: 0.1863
+[1m27/39[0m [32m━━━━━━━━━━━━━[0m[37m━━━━━━━[0m [1m0s[0m 70ms/step - accuracy: 0.9306 - loss: 0.1847
+[1m28/39[0m [32m━━━━━━━━━━━━━━[0m[37m━━━━━━[0m [1m0s[0m 70ms/step - accuracy: 0.9286 - loss: 0.1857
+[1m29/39[0m [32m━━━━━━━━━━━━━━[0m[37m━━━━━━[0m [1m0s[0m 70ms/step - accuracy: 0.9289 - loss: 0.1859
+[1m30/39[0m [32m━━━━━━━━━━━━━━━[0m[37m━━━━━[0m [1m0s[0m 70ms/step - accuracy: 0.9292 - loss: 0.1834
+[1m31/39[0m [32m━━━━━━━━━━━━━━━[0m[37m━━━━━[0m [1m0s[0m 71ms/step - accuracy: 0.9315 - loss: 0.1800
+[1m32/39[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 71ms/step - accuracy: 0.9316 - loss: 0.1824
+[1m33/39[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 71ms/step - accuracy: 0.9318 - loss: 0.1807
+[1m34/39[0m [32m━━━━━━━━━━━━━━━━━[0m[37m━━━[0m [1m0s[0m 71ms/step - accuracy: 0.9338 - loss: 0.1785
+[1m35/39[0m [32m━━━━━━━━━━━━━━━━━[0m[37m━━━[0m [1m0s[0m 71ms/step - accuracy: 0.9339 - loss: 0.1777
+[1m36/39[0m [32m━━━━━━━━━━━━━━━━━━[0m[37m━━[0m [1m0s[0m 70ms/step - accuracy: 0.9323 - loss: 0.1794
+[1m37/39[0m [32m━━━━━━━━━━━━━━━━━━[0m[37m━━[0m [1m0s[0m 70ms/step - accuracy: 0.9307 - loss: 0.1806
+[1m38/39[0m [32m━━━━━━━━━━━━━━━━━━━[0m[37m━[0m [1m0s[0m 70ms/step - accuracy: 0.9293 - loss: 0.1823
+[1m39/39[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m3s[0m 75ms/step - accuracy: 0.9280 - loss: 0.1836 - val_accuracy: 0.3851 - val_loss: 1.0400 - learning_rate: 0.0010
 Epoch 7/30
 
-[1m 1/39[0m [37m━━━━━━━━━━━━━━━━━━━━[0m [1m3s[0m 103ms/step - accuracy: 1.0000 - loss: 0.0774
-[1m 2/39[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m2s[0m 70ms/step - accuracy: 1.0000 - loss: 0.0809 
-[1m 3/39[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m2s[0m 70ms/step - accuracy: 0.9792 - loss: 0.0941
-[1m 4/39[0m [32m━━[0m[37m━━━━━━━━━━━━━━━━━━[0m [1m2s[0m 73ms/step - accuracy: 0.9688 - loss: 0.1061
-[1m 5/39[0m [32m━━[0m[37m━━━━━━━━━━━━━━━━━━[0m [1m2s[0m 71ms/step - accuracy: 0.9625 - loss: 0.1110
-[1m 6/39[0m [32m━━━[0m[37m━━━━━━━━━━━━━━━━━[0m [1m2s[0m 71ms/step - accuracy: 0.9375 - loss: 0.1343
-[1m 7/39[0m [32m━━━[0m[37m━━━━━━━━━━━━━━━━━[0m [1m2s[0m 71ms/step - accuracy: 0.9375 - loss: 0.1417
-[1m 8/39[0m [32m━━━━[0m[37m━━━━━━━━━━━━━━━━[0m [1m2s[0m 73ms/step - accuracy: 0.9453 - loss: 0.1354
-[1m 9/39[0m [32m━━━━[0m[37m━━━━━━━━━━━━━━━━[0m [1m2s[0m 74ms/step - accuracy: 0.9375 - loss: 0.1384
-[1m10/39[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m2s[0m 75ms/step - accuracy: 0.9375 - loss: 0.1386
-[1m11/39[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m2s[0m 75ms/step - accuracy: 0.9375 - loss: 0.1379
-[1m12/39[0m [32m━━━━━━[0m[37m━━━━━━━━━━━━━━[0m [1m2s[0m 75ms/step - accuracy: 0.9427 - loss: 0.1305
-[1m13/39[0m [32m━━━━━━[0m[37m━━━━━━━━━━━━━━[0m [1m1s[0m 76ms/step - accuracy: 0.9375 - loss: 0.1327
-[1m14/39[0m [32m━━━━━━━[0m[37m━━━━━━━━━━━━━[0m [1m1s[0m 76ms/step - accuracy: 0.9420 - loss: 0.1306
-[1m15/39[0m [32m━━━━━━━[0m[37m━━━━━━━━━━━━━[0m [1m1s[0m 76ms/step - accuracy: 0.9417 - loss: 0.1317
-[1m16/39[0m [32m━━━━━━━━[0m[37m━━━━━━━━━━━━[0m [1m1s[0m 77ms/step - accuracy: 0.9453 - loss: 0.1266
-[1m17/39[0m [32m━━━━━━━━[0m[37m━━━━━━━━━━━━[0m [1m1s[0m 78ms/step - accuracy: 0.9449 - loss: 0.1274
-[1m18/39[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m1s[0m 79ms/step - accuracy: 0.9444 - loss: 0.1266
-[1m19/39[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m1s[0m 78ms/step - accuracy: 0.9474 - loss: 0.1251
-[1m20/39[0m [32m━━━━━━━━━━[0m[37m━━━━━━━━━━[0m [1m1s[0m 78ms/step - accuracy: 0.9500 - loss: 0.1227
-[1m21/39[0m [32m━━━━━━━━━━[0m[37m━━━━━━━━━━[0m [1m1s[0m 78ms/step - accuracy: 0.9494 - loss: 0.1230
-[1m22/39[0m [32m━━━━━━━━━━━[0m[37m━━━━━━━━━[0m [1m1s[0m 78ms/step - accuracy: 0.9375 - loss: 0.1602
-[1m23/39[0m [32m━━━━━━━━━━━[0m[37m━━━━━━━━━[0m [1m1s[0m 78ms/step - accuracy: 0.9375 - loss: 0.1623
-[1m24/39[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m1s[0m 78ms/step - accuracy: 0.9375 - loss: 0.1623
-[1m25/39[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m1s[0m 78ms/step - accuracy: 0.9400 - loss: 0.1571
-[1m26/39[0m [32m━━━━━━━━━━━━━[0m[37m━━━━━━━[0m [1m1s[0m 78ms/step - accuracy: 0.9423 - loss: 0.1539
-[1m27/39[0m [32m━━━━━━━━━━━━━[0m[37m━━━━━━━[0m [1m0s[0m 78ms/step - accuracy: 0.9444 - loss: 0.1512
-[1m28/39[0m [32m━━━━━━━━━━━━━━[0m[37m━━━━━━[0m [1m0s[0m 78ms/step - accuracy: 0.9442 - loss: 0.1541
-[1m29/39[0m [32m━━━━━━━━━━━━━━[0m[37m━━━━━━[0m [1m0s[0m 78ms/step - accuracy: 0.9418 - loss: 0.1555
-[1m30/39[0m [32m━━━━━━━━━━━━━━━[0m[37m━━━━━[0m [1m0s[0m 78ms/step - accuracy: 0.9438 - loss: 0.1520
-[1m31/39[0m [32m━━━━━━━━━━━━━━━[0m[37m━━━━━[0m [1m0s[0m 77ms/step - accuracy: 0.9415 - loss: 0.1534
-[1m32/39[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 77ms/step - accuracy: 0.9434 - loss: 0.1510
-[1m33/39[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 77ms/step - accuracy: 0.9413 - loss: 0.1507
-[1m34/39[0m [32m━━━━━━━━━━━━━━━━━[0m[37m━━━[0m [1m0s[0m 77ms/step - accuracy: 0.9412 - loss: 0.1499
-[1m35/39[0m [32m━━━━━━━━━━━━━━━━━[0m[37m━━━[0m [1m0s[0m 77ms/step - accuracy: 0.9411 - loss: 0.1493
-[1m36/39[0m [32m━━━━━━━━━━━━━━━━━━[0m[37m━━[0m [1m0s[0m 77ms/step - accuracy: 0.9410 - loss: 0.1488
-[1m37/39[0m [32m━━━━━━━━━━━━━━━━━━[0m[37m━━[0m [1m0s[0m 77ms/step - accuracy: 0.9392 - loss: 0.1489
-[1m38/39[0m [32m━━━━━━━━━━━━━━━━━━━[0m[37m━[0m [1m0s[0m 77ms/step - accuracy: 0.9408 - loss: 0.1456
-[1m39/39[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m3s[0m 82ms/step - accuracy: 0.9394 - loss: 0.1469 - val_accuracy: 0.7950 - val_loss: 0.4512 - learning_rate: 5.0000e-04
+[1m 1/39[0m [37m━━━━━━━━━━━━━━━━━━━━[0m [1m4s[0m 112ms/step - accuracy: 1.0000 - loss: 0.0530
+[1m 2/39[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m2s[0m 69ms/step - accuracy: 0.9688 - loss: 0.1154 
+[1m 3/39[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m2s[0m 65ms/step - accuracy: 0.9167 - loss: 0.1581
+[1m 4/39[0m [32m━━[0m[37m━━━━━━━━━━━━━━━━━━[0m [1m2s[0m 67ms/step - accuracy: 0.8906 - loss: 0.1885
+[1m 5/39[0m [32m━━[0m[37m━━━━━━━━━━━━━━━━━━[0m [1m2s[0m 67ms/step - accuracy: 0.9125 - loss: 0.1771
+[1m 6/39[0m [32m━━━[0m[37m━━━━━━━━━━━━━━━━━[0m [1m2s[0m 68ms/step - accuracy: 0.8958 - loss: 0.1999
+[1m 7/39[0m [32m━━━[0m[37m━━━━━━━━━━━━━━━━━[0m [1m2s[0m 68ms/step - accuracy: 0.9018 - loss: 0.1916
+[1m 8/39[0m [32m━━━━[0m[37m━━━━━━━━━━━━━━━━[0m [1m2s[0m 67ms/step - accuracy: 0.9141 - loss: 0.1798
+[1m 9/39[0m [32m━━━━[0m[37m━━━━━━━━━━━━━━━━[0m [1m2s[0m 67ms/step - accuracy: 0.9236 - loss: 0.1678
+[1m10/39[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m1s[0m 67ms/step - accuracy: 0.9250 - loss: 0.1814
+[1m11/39[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m1s[0m 68ms/step - accuracy: 0.9205 - loss: 0.1924
+[1m12/39[0m [32m━━━━━━[0m[37m━━━━━━━━━━━━━━[0m [1m1s[0m 68ms/step - accuracy: 0.9219 - loss: 0.1866
+[1m13/39[0m [32m━━━━━━[0m[37m━━━━━━━━━━━━━━[0m [1m1s[0m 68ms/step - accuracy: 0.9231 - loss: 0.1846
+[1m14/39[0m [32m━━━━━━━[0m[37m━━━━━━━━━━━━━[0m [1m1s[0m 68ms/step - accuracy: 0.9241 - loss: 0.1831
+[1m15/39[0m [32m━━━━━━━[0m[37m━━━━━━━━━━━━━[0m [1m1s[0m 68ms/step - accuracy: 0.9250 - loss: 0.1794
+[1m16/39[0m [32m━━━━━━━━[0m[37m━━━━━━━━━━━━[0m [1m1s[0m 68ms/step - accuracy: 0.9258 - loss: 0.1780
+[1m17/39[0m [32m━━━━━━━━[0m[37m━━━━━━━━━━━━[0m [1m1s[0m 68ms/step - accuracy: 0.9265 - loss: 0.1758
+[1m18/39[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m1s[0m 67ms/step - accuracy: 0.9236 - loss: 0.1786
+[1m19/39[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m1s[0m 68ms/step - accuracy: 0.9276 - loss: 0.1725
+[1m20/39[0m [32m━━━━━━━━━━[0m[37m━━━━━━━━━━[0m [1m1s[0m 69ms/step - accuracy: 0.9312 - loss: 0.1703
+[1m21/39[0m [32m━━━━━━━━━━[0m[37m━━━━━━━━━━[0m [1m1s[0m 69ms/step - accuracy: 0.9315 - loss: 0.1694
+[1m22/39[0m [32m━━━━━━━━━━━[0m[37m━━━━━━━━━[0m [1m1s[0m 69ms/step - accuracy: 0.9347 - loss: 0.1649
+[1m23/39[0m [32m━━━━━━━━━━━[0m[37m━━━━━━━━━[0m [1m1s[0m 70ms/step - accuracy: 0.9375 - loss: 0.1637
+[1m24/39[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m1s[0m 70ms/step - accuracy: 0.9401 - loss: 0.1581
+[1m25/39[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m0s[0m 70ms/step - accuracy: 0.9400 - loss: 0.1568
+[1m26/39[0m [32m━━━━━━━━━━━━━[0m[37m━━━━━━━[0m [1m0s[0m 70ms/step - accuracy: 0.9399 - loss: 0.1543
+[1m27/39[0m [32m━━━━━━━━━━━━━[0m[37m━━━━━━━[0m [1m0s[0m 70ms/step - accuracy: 0.9398 - loss: 0.1554
+[1m28/39[0m [32m━━━━━━━━━━━━━━[0m[37m━━━━━━[0m [1m0s[0m 70ms/step - accuracy: 0.9375 - loss: 0.1567
+[1m29/39[0m [32m━━━━━━━━━━━━━━[0m[37m━━━━━━[0m [1m0s[0m 70ms/step - accuracy: 0.9397 - loss: 0.1522
+[1m30/39[0m [32m━━━━━━━━━━━━━━━[0m[37m━━━━━[0m [1m0s[0m 70ms/step - accuracy: 0.9417 - loss: 0.1495
+[1m31/39[0m [32m━━━━━━━━━━━━━━━[0m[37m━━━━━[0m [1m0s[0m 70ms/step - accuracy: 0.9415 - loss: 0.1477
+[1m32/39[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 71ms/step - accuracy: 0.9395 - loss: 0.1504
+[1m33/39[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 71ms/step - accuracy: 0.9413 - loss: 0.1498
+[1m34/39[0m [32m━━━━━━━━━━━━━━━━━[0m[37m━━━[0m [1m0s[0m 71ms/step - accuracy: 0.9430 - loss: 0.1479
+[1m35/39[0m [32m━━━━━━━━━━━━━━━━━[0m[37m━━━[0m [1m0s[0m 71ms/step - accuracy: 0.9446 - loss: 0.1458
+[1m36/39[0m [32m━━━━━━━━━━━━━━━━━━[0m[37m━━[0m [1m0s[0m 71ms/step - accuracy: 0.9462 - loss: 0.1435
+[1m37/39[0m [32m━━━━━━━━━━━━━━━━━━[0m[37m━━[0m [1m0s[0m 71ms/step - accuracy: 0.9476 - loss: 0.1416
+[1m38/39[0m [32m━━━━━━━━━━━━━━━━━━━[0m[37m━[0m [1m0s[0m 71ms/step - accuracy: 0.9490 - loss: 0.1385
+Epoch 7: ReduceLROnPlateau reducing learning rate to 0.0005000000237487257.
+
+[1m39/39[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m3s[0m 77ms/step - accuracy: 0.9476 - loss: 0.1407 - val_accuracy: 0.5155 - val_loss: 1.2015 - learning_rate: 0.0010
 Epoch 8/30
 
-[1m 1/39[0m [37m━━━━━━━━━━━━━━━━━━━━[0m [1m4s[0m 107ms/step - accuracy: 0.9375 - loss: 0.1439
-[1m 2/39[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m2s[0m 74ms/step - accuracy: 0.9375 - loss: 0.1566 
-[1m 3/39[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m2s[0m 73ms/step - accuracy: 0.9583 - loss: 0.1109
-[1m 4/39[0m [32m━━[0m[37m━━━━━━━━━━━━━━━━━━[0m [1m2s[0m 72ms/step - accuracy: 0.9375 - loss: 0.1336
-[1m 5/39[0m [32m━━[0m[37m━━━━━━━━━━━━━━━━━━[0m [1m2s[0m 72ms/step - accuracy: 0.9375 - loss: 0.1355
-[1m 6/39[0m [32m━━━[0m[37m━━━━━━━━━━━━━━━━━[0m [1m2s[0m 72ms/step - accuracy: 0.9479 - loss: 0.1189
-[1m 7/39[0m [32m━━━[0m[37m━━━━━━━━━━━━━━━━━[0m [1m2s[0m 73ms/step - accuracy: 0.9554 - loss: 0.1140
-[1m 8/39[0m [32m━━━━[0m[37m━━━━━━━━━━━━━━━━[0m [1m2s[0m 73ms/step - accuracy: 0.9531 - loss: 0.1206
-[1m 9/39[0m [32m━━━━[0m[37m━━━━━━━━━━━━━━━━[0m [1m2s[0m 73ms/step - accuracy: 0.9583 - loss: 0.1132
-[1m10/39[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m2s[0m 72ms/step - accuracy: 0.9625 - loss: 0.1049
-[1m11/39[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m2s[0m 72ms/step - accuracy: 0.9659 - loss: 0.1037
-[1m12/39[0m [32m━━━━━━[0m[37m━━━━━━━━━━━━━━[0m [1m1s[0m 73ms/step - accuracy: 0.9583 - loss: 0.1205
-[1m13/39[0m [32m━━━━━━[0m[37m━━━━━━━━━━━━━━[0m [1m1s[0m 73ms/step - accuracy: 0.9567 - loss: 0.1170
-[1m14/39[0m [32m━━━━━━━[0m[37m━━━━━━━━━━━━━[0m [1m1s[0m 73ms/step - accuracy: 0.9554 - loss: 0.1159
-[1m15/39[0m [32m━━━━━━━[0m[37m━━━━━━━━━━━━━[0m [1m1s[0m 73ms/step - accuracy: 0.9583 - loss: 0.1156
-[1m16/39[0m [32m━━━━━━━━[0m[37m━━━━━━━━━━━━[0m [1m1s[0m 73ms/step - accuracy: 0.9570 - loss: 0.1143
-[1m17/39[0m [32m━━━━━━━━[0m[37m━━━━━━━━━━━━[0m [1m1s[0m 73ms/step - accuracy: 0.9522 - loss: 0.1166
-[1m18/39[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m1s[0m 73ms/step - accuracy: 0.9514 - loss: 0.1183
-[1m19/39[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m1s[0m 73ms/step - accuracy: 0.9507 - loss: 0.1189
-[1m20/39[0m [32m━━━━━━━━━━[0m[37m━━━━━━━━━━[0m [1m1s[0m 73ms/step - accuracy: 0.9469 - loss: 0.1262
-[1m21/39[0m [32m━━━━━━━━━━[0m[37m━━━━━━━━━━[0m [1m1s[0m 73ms/step - accuracy: 0.9494 - loss: 0.1228
-[1m22/39[0m [32m━━━━━━━━━━━[0m[37m━━━━━━━━━[0m [1m1s[0m 74ms/step - accuracy: 0.9460 - loss: 0.1276
-[1m23/39[0m [32m━━━━━━━━━━━[0m[37m━━━━━━━━━[0m [1m1s[0m 74ms/step - accuracy: 0.9484 - loss: 0.1295
-[1m24/39[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m1s[0m 74ms/step - accuracy: 0.9479 - loss: 0.1283
-[1m25/39[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m1s[0m 74ms/step - accuracy: 0.9500 - loss: 0.1250
-[1m26/39[0m [32m━━━━━━━━━━━━━[0m[37m━━━━━━━[0m [1m0s[0m 74ms/step - accuracy: 0.9471 - loss: 0.1284
-[1m27/39[0m [32m━━━━━━━━━━━━━[0m[37m━━━━━━━[0m [1m0s[0m 74ms/step - accuracy: 0.9468 - loss: 0.1301
-[1m28/39[0m [32m━━━━━━━━━━━━━━[0m[37m━━━━━━[0m [1m0s[0m 74ms/step - accuracy: 0.9420 - loss: 0.1353
-[1m29/39[0m [32m━━━━━━━━━━━━━━[0m[37m━━━━━━[0m [1m0s[0m 74ms/step - accuracy: 0.9418 - loss: 0.1346
-[1m30/39[0m [32m━━━━━━━━━━━━━━━[0m[37m━━━━━[0m [1m0s[0m 74ms/step - accuracy: 0.9438 - loss: 0.1341
-[1m31/39[0m [32m━━━━━━━━━━━━━━━[0m[37m━━━━━[0m [1m0s[0m 74ms/step - accuracy: 0.9456 - loss: 0.1307
-[1m32/39[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 74ms/step - accuracy: 0.9453 - loss: 0.1296
-[1m33/39[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 74ms/step - accuracy: 0.9451 - loss: 0.1289
-[1m34/39[0m [32m━━━━━━━━━━━━━━━━━[0m[37m━━━[0m [1m0s[0m 75ms/step - accuracy: 0.9467 - loss: 0.1270
-[1m35/39[0m [32m━━━━━━━━━━━━━━━━━[0m[37m━━━[0m [1m0s[0m 75ms/step - accuracy: 0.9464 - loss: 0.1258
-[1m36/39[0m [32m━━━━━━━━━━━━━━━━━━[0m[37m━━[0m [1m0s[0m 75ms/step - accuracy: 0.9479 - loss: 0.1235
-[1m37/39[0m [32m━━━━━━━━━━━━━━━━━━[0m[37m━━[0m [1m0s[0m 75ms/step - accuracy: 0.9493 - loss: 0.1231
-[1m38/39[0m [32m━━━━━━━━━━━━━━━━━━━[0m[37m━[0m [1m0s[0m 75ms/step - accuracy: 0.9490 - loss: 0.1256
-[1m39/39[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m3s[0m 80ms/step - accuracy: 0.9493 - loss: 0.1251 - val_accuracy: 0.7702 - val_loss: 0.5088 - learning_rate: 5.0000e-04
+[1m 1/39[0m [37m━━━━━━━━━━━━━━━━━━━━[0m [1m4s[0m 110ms/step - accuracy: 0.8750 - loss: 0.1602
+[1m 2/39[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m2s[0m 70ms/step - accuracy: 0.9375 - loss: 0.1196 
+[1m 3/39[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m2s[0m 72ms/step - accuracy: 0.9583 - loss: 0.0979
+[1m 4/39[0m [32m━━[0m[37m━━━━━━━━━━━━━━━━━━[0m [1m2s[0m 71ms/step - accuracy: 0.9531 - loss: 0.1031
+[1m 5/39[0m [32m━━[0m[37m━━━━━━━━━━━━━━━━━━[0m [1m2s[0m 68ms/step - accuracy: 0.9625 - loss: 0.1022
+[1m 6/39[0m [32m━━━[0m[37m━━━━━━━━━━━━━━━━━[0m [1m2s[0m 69ms/step - accuracy: 0.9688 - loss: 0.0906
+[1m 7/39[0m [32m━━━[0m[37m━━━━━━━━━━━━━━━━━[0m [1m2s[0m 69ms/step - accuracy: 0.9732 - loss: 0.0847
+[1m 8/39[0m [32m━━━━[0m[37m━━━━━━━━━━━━━━━━[0m [1m2s[0m 69ms/step - accuracy: 0.9688 - loss: 0.0862
+[1m 9/39[0m [32m━━━━[0m[37m━━━━━━━━━━━━━━━━[0m [1m2s[0m 68ms/step - accuracy: 0.9722 - loss: 0.0804
+[1m10/39[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m1s[0m 68ms/step - accuracy: 0.9688 - loss: 0.0851
+[1m11/39[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m1s[0m 68ms/step - accuracy: 0.9659 - loss: 0.0924
+[1m12/39[0m [32m━━━━━━[0m[37m━━━━━━━━━━━━━━[0m [1m1s[0m 69ms/step - accuracy: 0.9635 - loss: 0.0928
+[1m13/39[0m [32m━━━━━━[0m[37m━━━━━━━━━━━━━━[0m [1m1s[0m 69ms/step - accuracy: 0.9663 - loss: 0.0926
+[1m14/39[0m [32m━━━━━━━[0m[37m━━━━━━━━━━━━━[0m [1m1s[0m 68ms/step - accuracy: 0.9688 - loss: 0.0889
+[1m15/39[0m [32m━━━━━━━[0m[37m━━━━━━━━━━━━━[0m [1m1s[0m 69ms/step - accuracy: 0.9708 - loss: 0.0866
+[1m16/39[0m [32m━━━━━━━━[0m[37m━━━━━━━━━━━━[0m [1m1s[0m 69ms/step - accuracy: 0.9688 - loss: 0.0860
+[1m17/39[0m [32m━━━━━━━━[0m[37m━━━━━━━━━━━━[0m [1m1s[0m 69ms/step - accuracy: 0.9706 - loss: 0.0855
+[1m18/39[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m1s[0m 69ms/step - accuracy: 0.9722 - loss: 0.0853
+[1m19/39[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m1s[0m 69ms/step - accuracy: 0.9737 - loss: 0.0823
+[1m20/39[0m [32m━━━━━━━━━━[0m[37m━━━━━━━━━━[0m [1m1s[0m 69ms/step - accuracy: 0.9750 - loss: 0.0802
+[1m21/39[0m [32m━━━━━━━━━━[0m[37m━━━━━━━━━━[0m [1m1s[0m 69ms/step - accuracy: 0.9762 - loss: 0.0772
+[1m22/39[0m [32m━━━━━━━━━━━[0m[37m━━━━━━━━━[0m [1m1s[0m 69ms/step - accuracy: 0.9744 - loss: 0.0828
+[1m23/39[0m [32m━━━━━━━━━━━[0m[37m━━━━━━━━━[0m [1m1s[0m 68ms/step - accuracy: 0.9755 - loss: 0.0814
+[1m24/39[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m1s[0m 70ms/step - accuracy: 0.9766 - loss: 0.0789
+[1m25/39[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m0s[0m 70ms/step - accuracy: 0.9775 - loss: 0.0779
+[1m26/39[0m [32m━━━━━━━━━━━━━[0m[37m━━━━━━━[0m [1m0s[0m 70ms/step - accuracy: 0.9784 - loss: 0.0775
+[1m27/39[0m [32m━━━━━━━━━━━━━[0m[37m━━━━━━━[0m [1m0s[0m 70ms/step - accuracy: 0.9769 - loss: 0.0783
+[1m28/39[0m [32m━━━━━━━━━━━━━━[0m[37m━━━━━━[0m [1m0s[0m 70ms/step - accuracy: 0.9710 - loss: 0.0884
+[1m29/39[0m [32m━━━━━━━━━━━━━━[0m[37m━━━━━━[0m [1m0s[0m 70ms/step - accuracy: 0.9698 - loss: 0.0884
+[1m30/39[0m [32m━━━━━━━━━━━━━━━[0m[37m━━━━━[0m [1m0s[0m 70ms/step - accuracy: 0.9708 - loss: 0.0862
+[1m31/39[0m [32m━━━━━━━━━━━━━━━[0m[37m━━━━━[0m [1m0s[0m 70ms/step - accuracy: 0.9698 - loss: 0.0864
+[1m32/39[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 70ms/step - accuracy: 0.9707 - loss: 0.0843
+[1m33/39[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 70ms/step - accuracy: 0.9697 - loss: 0.0848
+[1m34/39[0m [32m━━━━━━━━━━━━━━━━━[0m[37m━━━[0m [1m0s[0m 70ms/step - accuracy: 0.9706 - loss: 0.0844
+[1m35/39[0m [32m━━━━━━━━━━━━━━━━━[0m[37m━━━[0m [1m0s[0m 70ms/step - accuracy: 0.9696 - loss: 0.0842
+[1m36/39[0m [32m━━━━━━━━━━━━━━━━━━[0m[37m━━[0m [1m0s[0m 70ms/step - accuracy: 0.9705 - loss: 0.0824
+[1m37/39[0m [32m━━━━━━━━━━━━━━━━━━[0m[37m━━[0m [1m0s[0m 70ms/step - accuracy: 0.9662 - loss: 0.0891
+[1m38/39[0m [32m━━━━━━━━━━━━━━━━━━━[0m[37m━[0m [1m0s[0m 70ms/step - accuracy: 0.9655 - loss: 0.0892
+[1m39/39[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m3s[0m 75ms/step - accuracy: 0.9656 - loss: 0.0892 - val_accuracy: 0.5342 - val_loss: 1.0856 - learning_rate: 5.0000e-04
 Epoch 9/30
 
-[1m 1/39[0m [37m━━━━━━━━━━━━━━━━━━━━[0m [1m4s[0m 119ms/step - accuracy: 1.0000 - loss: 0.0451
-[1m 2/39[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m2s[0m 80ms/step - accuracy: 1.0000 - loss: 0.0486 
-[1m 3/39[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m3s[0m 85ms/step - accuracy: 1.0000 - loss: 0.0411
-[1m 4/39[0m [32m━━[0m[37m━━━━━━━━━━━━━━━━━━[0m [1m2s[0m 83ms/step - accuracy: 1.0000 - loss: 0.0469
-[1m 5/39[0m [32m━━[0m[37m━━━━━━━━━━━━━━━━━━[0m [1m2s[0m 83ms/step - accuracy: 1.0000 - loss: 0.0499
-[1m 6/39[0m [32m━━━[0m[37m━━━━━━━━━━━━━━━━━[0m [1m2s[0m 82ms/step - accuracy: 1.0000 - loss: 0.0514
-[1m 7/39[0m [32m━━━[0m[37m━━━━━━━━━━━━━━━━━[0m [1m2s[0m 81ms/step - accuracy: 1.0000 - loss: 0.0630
-[1m 8/39[0m [32m━━━━[0m[37m━━━━━━━━━━━━━━━━[0m [1m2s[0m 82ms/step - accuracy: 1.0000 - loss: 0.0579
-[1m 9/39[0m [32m━━━━[0m[37m━━━━━━━━━━━━━━━━[0m [1m2s[0m 82ms/step - accuracy: 0.9861 - loss: 0.0732
-[1m10/39[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m2s[0m 82ms/step - accuracy: 0.9875 - loss: 0.0797
-[1m11/39[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m2s[0m 82ms/step - accuracy: 0.9886 - loss: 0.0786
-[1m12/39[0m [32m━━━━━━[0m[37m━━━━━━━━━━━━━━[0m [1m2s[0m 82ms/step - accuracy: 0.9844 - loss: 0.0937
-[1m13/39[0m [32m━━━━━━[0m[37m━━━━━━━━━━━━━━[0m [1m2s[0m 82ms/step - accuracy: 0.9856 - loss: 0.0908
-[1m14/39[0m [32m━━━━━━━[0m[37m━━━━━━━━━━━━━[0m [1m2s[0m 81ms/step - accuracy: 0.9866 - loss: 0.0853
-[1m15/39[0m [32m━━━━━━━[0m[37m━━━━━━━━━━━━━[0m [1m1s[0m 80ms/step - accuracy: 0.9875 - loss: 0.0823
-[1m16/39[0m [32m━━━━━━━━[0m[37m━━━━━━━━━━━━[0m [1m1s[0m 79ms/step - accuracy: 0.9883 - loss: 0.0791
-[1m17/39[0m [32m━━━━━━━━[0m[37m━━━━━━━━━━━━[0m [1m1s[0m 79ms/step - accuracy: 0.9890 - loss: 0.0805
-[1m18/39[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m1s[0m 79ms/step - accuracy: 0.9861 - loss: 0.0837
-[1m19/39[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m1s[0m 78ms/step - accuracy: 0.9868 - loss: 0.0831
-[1m20/39[0m [32m━━━━━━━━━━[0m[37m━━━━━━━━━━[0m [1m1s[0m 78ms/step - accuracy: 0.9875 - loss: 0.0814
-[1m21/39[0m [32m━━━━━━━━━━[0m[37m━━━━━━━━━━[0m [1m1s[0m 78ms/step - accuracy: 0.9881 - loss: 0.0786
-[1m22/39[0m [32m━━━━━━━━━━━[0m[37m━━━━━━━━━[0m [1m1s[0m 78ms/step - accuracy: 0.9886 - loss: 0.0789
-[1m23/39[0m [32m━━━━━━━━━━━[0m[37m━━━━━━━━━[0m [1m1s[0m 77ms/step - accuracy: 0.9810 - loss: 0.0854
-[1m24/39[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m1s[0m 77ms/step - accuracy: 0.9818 - loss: 0.0848
-[1m25/39[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m1s[0m 77ms/step - accuracy: 0.9825 - loss: 0.0826
-[1m26/39[0m [32m━━━━━━━━━━━━━[0m[37m━━━━━━━[0m [1m0s[0m 77ms/step - accuracy: 0.9832 - loss: 0.0810
-[1m27/39[0m [32m━━━━━━━━━━━━━[0m[37m━━━━━━━[0m [1m0s[0m 76ms/step - accuracy: 0.9838 - loss: 0.0796
-[1m28/39[0m [32m━━━━━━━━━━━━━━[0m[37m━━━━━━[0m [1m0s[0m 77ms/step - accuracy: 0.9844 - loss: 0.0774
-[1m29/39[0m [32m━━━━━━━━━━━━━━[0m[37m━━━━━━[0m [1m0s[0m 76ms/step - accuracy: 0.9828 - loss: 0.0794
-[1m30/39[0m [32m━━━━━━━━━━━━━━━[0m[37m━━━━━[0m [1m0s[0m 76ms/step - accuracy: 0.9812 - loss: 0.0812
-[1m31/39[0m [32m━━━━━━━━━━━━━━━[0m[37m━━━━━[0m [1m0s[0m 76ms/step - accuracy: 0.9798 - loss: 0.0815
-[1m32/39[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 75ms/step - accuracy: 0.9785 - loss: 0.0830
-[1m33/39[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 75ms/step - accuracy: 0.9792 - loss: 0.0807
-[1m34/39[0m [32m━━━━━━━━━━━━━━━━━[0m[37m━━━[0m [1m0s[0m 75ms/step - accuracy: 0.9798 - loss: 0.0796
-[1m35/39[0m [32m━━━━━━━━━━━━━━━━━[0m[37m━━━[0m [1m0s[0m 75ms/step - accuracy: 0.9768 - loss: 0.0840
-[1m36/39[0m [32m━━━━━━━━━━━━━━━━━━[0m[37m━━[0m [1m0s[0m 75ms/step - accuracy: 0.9774 - loss: 0.0827
-[1m37/39[0m [32m━━━━━━━━━━━━━━━━━━[0m[37m━━[0m [1m0s[0m 75ms/step - accuracy: 0.9747 - loss: 0.0871
-[1m38/39[0m [32m━━━━━━━━━━━━━━━━━━━[0m[37m━[0m [1m0s[0m 75ms/step - accuracy: 0.9753 - loss: 0.0868
-[1m39/39[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m3s[0m 80ms/step - accuracy: 0.9755 - loss: 0.0874 - val_accuracy: 0.7019 - val_loss: 0.6561 - learning_rate: 5.0000e-04
-Epoch 10/30
-
-[1m 1/39[0m [37m━━━━━━━━━━━━━━━━━━━━[0m [1m4s[0m 107ms/step - accuracy: 0.9375 - loss: 0.0792
-[1m 2/39[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m2s[0m 68ms/step - accuracy: 0.9688 - loss: 0.0681 
-[1m 3/39[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m2s[0m 70ms/step - accuracy: 0.9792 - loss: 0.0782
-[1m 4/39[0m [32m━━[0m[37m━━━━━━━━━━━━━━━━━━[0m [1m2s[0m 71ms/step - accuracy: 0.9844 - loss: 0.0758
-[1m 5/39[0m [32m━━[0m[37m━━━━━━━━━━━━━━━━━━[0m [1m2s[0m 71ms/step - accuracy: 0.9750 - loss: 0.0842
-[1m 6/39[0m [32m━━━[0m[37m━━━━━━━━━━━━━━━━━[0m [1m2s[0m 70ms/step - accuracy: 0.9583 - loss: 0.1097
-[1m 7/39[0m [32m━━━[0m[37m━━━━━━━━━━━━━━━━━[0m [1m2s[0m 70ms/step - accuracy: 0.9375 - loss: 0.1338
-[1m 8/39[0m [32m━━━━[0m[37m━━━━━━━━━━━━━━━━[0m [1m2s[0m 70ms/step - accuracy: 0.9375 - loss: 0.1309
-[1m 9/39[0m [32m━━━━[0m[37m━━━━━━━━━━━━━━━━[0m [1m2s[0m 71ms/step - accuracy: 0.9444 - loss: 0.1259
-[1m10/39[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m2s[0m 72ms/step - accuracy: 0.9375 - loss: 0.1330
-[1m11/39[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m2s[0m 72ms/step - accuracy: 0.9318 - loss: 0.1360
-[1m12/39[0m [32m━━━━━━[0m[37m━━━━━━━━━━━━━━[0m [1m1s[0m 71ms/step - accuracy: 0.9323 - loss: 0.1363
-[1m13/39[0m [32m━━━━━━[0m[37m━━━━━━━━━━━━━━[0m [1m1s[0m 72ms/step - accuracy: 0.9375 - loss: 0.1313
-[1m14/39[0m [32m━━━━━━━[0m[37m━━━━━━━━━━━━━[0m [1m1s[0m 72ms/step - accuracy: 0.9420 - loss: 0.1264
-[1m15/39[0m [32m━━━━━━━[0m[37m━━━━━━━━━━━━━[0m [1m1s[0m 71ms/step - accuracy: 0.9417 - loss: 0.1383
-[1m16/39[0m [32m━━━━━━━━[0m[37m━━━━━━━━━━━━[0m [1m1s[0m 71ms/step - accuracy: 0.9453 - loss: 0.1318
-[1m17/39[0m [32m━━━━━━━━[0m[37m━━━━━━━━━━━━[0m [1m1s[0m 71ms/step - accuracy: 0.9485 - loss: 0.1280
-[1m18/39[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m1s[0m 71ms/step - accuracy: 0.9479 - loss: 0.1296
-[1m19/39[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m1s[0m 71ms/step - accuracy: 0.9507 - loss: 0.1250
-[1m20/39[0m [32m━━━━━━━━━━[0m[37m━━━━━━━━━━[0m [1m1s[0m 71ms/step - accuracy: 0.9531 - loss: 0.1198
-[1m21/39[0m [32m━━━━━━━━━━[0m[37m━━━━━━━━━━[0m [1m1s[0m 71ms/step - accuracy: 0.9524 - loss: 0.1224
-[1m22/39[0m [32m━━━━━━━━━━━[0m[37m━━━━━━━━━[0m [1m1s[0m 71ms/step - accuracy: 0.9545 - loss: 0.1180
-[1m23/39[0m [32m━━━━━━━━━━━[0m[37m━━━━━━━━━[0m [1m1s[0m 72ms/step - accuracy: 0.9511 - loss: 0.1217
-[1m24/39[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m1s[0m 72ms/step - accuracy: 0.9505 - loss: 0.1203
-[1m25/39[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m1s[0m 72ms/step - accuracy: 0.9500 - loss: 0.1191
-[1m26/39[0m [32m━━━━━━━━━━━━━[0m[37m━━━━━━━[0m [1m0s[0m 72ms/step - accuracy: 0.9495 - loss: 0.1182
-[1m27/39[0m [32m━━━━━━━━━━━━━[0m[37m━━━━━━━[0m [1m0s[0m 73ms/step - accuracy: 0.9514 - loss: 0.1176
-[1m28/39[0m [32m━━━━━━━━━━━━━━[0m[37m━━━━━━[0m [1m0s[0m 74ms/step - accuracy: 0.9509 - loss: 0.1172
-[1m29/39[0m [32m━━━━━━━━━━━━━━[0m[37m━━━━━━[0m [1m0s[0m 76ms/step - accuracy: 0.9504 - loss: 0.1196
-[1m30/39[0m [32m━━━━━━━━━━━━━━━[0m[37m━━━━━[0m [1m0s[0m 76ms/step - accuracy: 0.9500 - loss: 0.1197
-[1m31/39[0m [32m━━━━━━━━━━━━━━━[0m[37m━━━━━[0m [1m0s[0m 76ms/step - accuracy: 0.9516 - loss: 0.1186
-[1m32/39[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 76ms/step - accuracy: 0.9531 - loss: 0.1163
-[1m33/39[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 76ms/step - accuracy: 0.9545 - loss: 0.1145
-[1m34/39[0m [32m━━━━━━━━━━━━━━━━━[0m[37m━━━[0m [1m0s[0m 76ms/step - accuracy: 0.9522 - loss: 0.1183
-[1m35/39[0m [32m━━━━━━━━━━━━━━━━━[0m[37m━━━[0m [1m0s[0m 76ms/step - accuracy: 0.9536 - loss: 0.1159
-[1m36/39[0m [32m━━━━━━━━━━━━━━━━━━[0m[37m━━[0m [1m0s[0m 76ms/step - accuracy: 0.9531 - loss: 0.1176
-[1m37/39[0m [32m━━━━━━━━━━━━━━━━━━[0m[37m━━[0m [1m0s[0m 76ms/step - accuracy: 0.9544 - loss: 0.1161
-[1m38/39[0m [32m━━━━━━━━━━━━━━━━━━━[0m[37m━[0m [1m0s[0m 76ms/step - accuracy: 0.9556 - loss: 0.1145
-Epoch 10: ReduceLROnPlateau reducing learning rate to 0.0002500000118743628.
-
-[1m39/39[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m3s[0m 80ms/step - accuracy: 0.9525 - loss: 0.1189 - val_accuracy: 0.6708 - val_loss: 0.8156 - learning_rate: 5.0000e-04
-Epoch 11/30
-
-[1m 1/39[0m [37m━━━━━━━━━━━━━━━━━━━━[0m [1m3s[0m 95ms/step - accuracy: 1.0000 - loss: 0.0530
-[1m 2/39[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m2s[0m 75ms/step - accuracy: 1.0000 - loss: 0.0542
-[1m 3/39[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m2s[0m 73ms/step - accuracy: 1.0000 - loss: 0.0568
-[1m 4/39[0m [32m━━[0m[37m━━━━━━━━━━━━━━━━━━[0m [1m2s[0m 72ms/step - accuracy: 1.0000 - loss: 0.0495
-[1m 5/39[0m [32m━━[0m[37m━━━━━━━━━━━━━━━━━━[0m [1m2s[0m 71ms/step - accuracy: 0.9750 - loss: 0.0682
-[1m 6/39[0m [32m━━━[0m[37m━━━━━━━━━━━━━━━━━[0m [1m2s[0m 70ms/step - accuracy: 0.9792 - loss: 0.0650
-[1m 7/39[0m [32m━━━[0m[37m━━━━━━━━━━━━━━━━━[0m [1m2s[0m 70ms/step - accuracy: 0.9821 - loss: 0.0696
-[1m 8/39[0m [32m━━━━[0m[37m━━━━━━━━━━━━━━━━[0m [1m2s[0m 68ms/step - accuracy: 0.9766 - loss: 0.0769
-[1m 9/39[0m [32m━━━━[0m[37m━━━━━━━━━━━━━━━━[0m [1m2s[0m 67ms/step - accuracy: 0.9792 - loss: 0.0707
-[1m10/39[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m1s[0m 66ms/step - accuracy: 0.9812 - loss: 0.0679
-[1m11/39[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m1s[0m 66ms/step - accuracy: 0.9830 - loss: 0.0679
-[1m12/39[0m [32m━━━━━━[0m[37m━━━━━━━━━━━━━━[0m [1m1s[0m 65ms/step - accuracy: 0.9844 - loss: 0.0651
-[1m13/39[0m [32m━━━━━━[0m[37m━━━━━━━━━━━━━━[0m [1m1s[0m 65ms/step - accuracy: 0.9856 - loss: 0.0638
-[1m14/39[0m [32m━━━━━━━[0m[37m━━━━━━━━━━━━━[0m [1m1s[0m 65ms/step - accuracy: 0.9866 - loss: 0.0633
-[1m15/39[0m [32m━━━━━━━[0m[37m━━━━━━━━━━━━━[0m [1m1s[0m 66ms/step - accuracy: 0.9833 - loss: 0.0687
-[1m16/39[0m [32m━━━━━━━━[0m[37m━━━━━━━━━━━━[0m [1m1s[0m 66ms/step - accuracy: 0.9727 - loss: 0.0926
-[1m17/39[0m [32m━━━━━━━━[0m[37m━━━━━━━━━━━━[0m [1m1s[0m 66ms/step - accuracy: 0.9743 - loss: 0.0915
-[1m18/39[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m1s[0m 66ms/step - accuracy: 0.9688 - loss: 0.0968
-[1m19/39[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m1s[0m 67ms/step - accuracy: 0.9704 - loss: 0.0924
-[1m20/39[0m [32m━━━━━━━━━━[0m[37m━━━━━━━━━━[0m [1m1s[0m 67ms/step - accuracy: 0.9719 - loss: 0.0924
-[1m21/39[0m [32m━━━━━━━━━━[0m[37m━━━━━━━━━━[0m [1m1s[0m 67ms/step - accuracy: 0.9732 - loss: 0.0900
-[1m22/39[0m [32m━━━━━━━━━━━[0m[37m━━━━━━━━━[0m [1m1s[0m 68ms/step - accuracy: 0.9744 - loss: 0.0867
-[1m23/39[0m [32m━━━━━━━━━━━[0m[37m━━━━━━━━━[0m [1m1s[0m 68ms/step - accuracy: 0.9701 - loss: 0.0894
-[1m24/39[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m1s[0m 68ms/step - accuracy: 0.9714 - loss: 0.0873
-[1m25/39[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m0s[0m 68ms/step - accuracy: 0.9725 - loss: 0.0864
-[1m26/39[0m [32m━━━━━━━━━━━━━[0m[37m━━━━━━━[0m [1m0s[0m 68ms/step - accuracy: 0.9712 - loss: 0.0863
-[1m27/39[0m [32m━━━━━━━━━━━━━[0m[37m━━━━━━━[0m [1m0s[0m 68ms/step - accuracy: 0.9722 - loss: 0.0850
-[1m28/39[0m [32m━━━━━━━━━━━━━━[0m[37m━━━━━━[0m [1m0s[0m 68ms/step - accuracy: 0.9732 - loss: 0.0825
-[1m29/39[0m [32m━━━━━━━━━━━━━━[0m[37m━━━━━━[0m [1m0s[0m 68ms/step - accuracy: 0.9720 - loss: 0.0856
-[1m30/39[0m [32m━━━━━━━━━━━━━━━[0m[37m━━━━━[0m [1m0s[0m 68ms/step - accuracy: 0.9708 - loss: 0.0864
-[1m31/39[0m [32m━━━━━━━━━━━━━━━[0m[37m━━━━━[0m [1m0s[0m 68ms/step - accuracy: 0.9698 - loss: 0.0905
-[1m32/39[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 68ms/step - accuracy: 0.9707 - loss: 0.0885
-[1m33/39[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 68ms/step - accuracy: 0.9716 - loss: 0.0875
-[1m34/39[0m [32m━━━━━━━━━━━━━━━━━[0m[37m━━━[0m [1m0s[0m 68ms/step - accuracy: 0.9724 - loss: 0.0855
-[1m35/39[0m [32m━━━━━━━━━━━━━━━━━[0m[37m━━━[0m [1m0s[0m 68ms/step - accuracy: 0.9732 - loss: 0.0840
-[1m36/39[0m [32m━━━━━━━━━━━━━━━━━━[0m[37m━━[0m [1m0s[0m 68ms/step - accuracy: 0.9722 - loss: 0.0879
-[1m37/39[0m [32m━━━━━━━━━━━━━━━━━━[0m[37m━━[0m [1m0s[0m 68ms/step - accuracy: 0.9730 - loss: 0.0873
-[1m38/39[0m [32m━━━━━━━━━━━━━━━━━━━[0m[37m━[0m [1m0s[0m 68ms/step - accuracy: 0.9737 - loss: 0.0865
-[1m39/39[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m3s[0m 72ms/step - accuracy: 0.9738 - loss: 0.0872 - val_accuracy: 0.7578 - val_loss: 0.4750 - learning_rate: 2.5000e-04
-Epoch 12/30
-
-[1m 1/39[0m [37m━━━━━━━━━━━━━━━━━━━━[0m [1m4s[0m 106ms/step - accuracy: 0.8750 - loss: 0.1487
-[1m 2/39[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m2s[0m 62ms/step - accuracy: 0.9062 - loss: 0.1921 
-[1m 3/39[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m2s[0m 69ms/step - accuracy: 0.9375 - loss: 0.1402
-[1m 4/39[0m [32m━━[0m[37m━━━━━━━━━━━━━━━━━━[0m [1m2s[0m 69ms/step - accuracy: 0.9531 - loss: 0.1276
-[1m 5/39[0m [32m━━[0m[37m━━━━━━━━━━━━━━━━━━[0m [1m2s[0m 69ms/step - accuracy: 0.9375 - loss: 0.1342
-[1m 6/39[0m [32m━━━[0m[37m━━━━━━━━━━━━━━━━━[0m [1m2s[0m 70ms/step - accuracy: 0.9479 - loss: 0.1167
-[1m 7/39[0m [32m━━━[0m[37m━━━━━━━━━━━━━━━━━[0m [1m2s[0m 70ms/step - accuracy: 0.9554 - loss: 0.1086
-[1m 8/39[0m [32m━━━━[0m[37m━━━━━━━━━━━━━━━━[0m [1m2s[0m 69ms/step - accuracy: 0.9609 - loss: 0.1032
-[1m 9/39[0m [32m━━━━[0m[37m━━━━━━━━━━━━━━━━[0m [1m2s[0m 70ms/step - accuracy: 0.9583 - loss: 0.1125
-[1m10/39[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m2s[0m 72ms/step - accuracy: 0.9625 - loss: 0.1026
-[1m11/39[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m2s[0m 72ms/step - accuracy: 0.9602 - loss: 0.1101
-[1m12/39[0m [32m━━━━━━[0m[37m━━━━━━━━━━━━━━[0m [1m1s[0m 72ms/step - accuracy: 0.9635 - loss: 0.1037
-[1m13/39[0m [32m━━━━━━[0m[37m━━━━━━━━━━━━━━[0m [1m1s[0m 72ms/step - accuracy: 0.9663 - loss: 0.1053
-[1m14/39[0m [32m━━━━━━━[0m[37m━━━━━━━━━━━━━[0m [1m1s[0m 72ms/step - accuracy: 0.9688 - loss: 0.1056
-[1m15/39[0m [32m━━━━━━━[0m[37m━━━━━━━━━━━━━[0m [1m1s[0m 73ms/step - accuracy: 0.9708 - loss: 0.1027
-[1m16/39[0m [32m━━━━━━━━[0m[37m━━━━━━━━━━━━[0m [1m1s[0m 73ms/step - accuracy: 0.9727 - loss: 0.0992
-[1m17/39[0m [32m━━━━━━━━[0m[37m━━━━━━━━━━━━[0m [1m1s[0m 74ms/step - accuracy: 0.9743 - loss: 0.0982
-[1m18/39[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m1s[0m 74ms/step - accuracy: 0.9757 - loss: 0.0954
-[1m19/39[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m1s[0m 74ms/step - accuracy: 0.9737 - loss: 0.0972
-[1m20/39[0m [32m━━━━━━━━━━[0m[37m━━━━━━━━━━[0m [1m1s[0m 74ms/step - accuracy: 0.9750 - loss: 0.0936
-[1m21/39[0m [32m━━━━━━━━━━[0m[37m━━━━━━━━━━[0m [1m1s[0m 74ms/step - accuracy: 0.9762 - loss: 0.0911
-[1m22/39[0m [32m━━━━━━━━━━━[0m[37m━━━━━━━━━[0m [1m1s[0m 75ms/step - accuracy: 0.9744 - loss: 0.0902
-[1m23/39[0m [32m━━━━━━━━━━━[0m[37m━━━━━━━━━[0m [1m1s[0m 75ms/step - accuracy: 0.9755 - loss: 0.0883
-[1m24/39[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m1s[0m 74ms/step - accuracy: 0.9766 - loss: 0.0854
-[1m25/39[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m1s[0m 74ms/step - accuracy: 0.9775 - loss: 0.0861
-[1m26/39[0m [32m━━━━━━━━━━━━━[0m[37m━━━━━━━[0m [1m0s[0m 74ms/step - accuracy: 0.9784 - loss: 0.0839
-[1m27/39[0m [32m━━━━━━━━━━━━━[0m[37m━━━━━━━[0m [1m0s[0m 74ms/step - accuracy: 0.9769 - loss: 0.0879
-[1m28/39[0m [32m━━━━━━━━━━━━━━[0m[37m━━━━━━[0m [1m0s[0m 74ms/step - accuracy: 0.9777 - loss: 0.0853
-[1m29/39[0m [32m━━━━━━━━━━━━━━[0m[37m━━━━━━[0m [1m0s[0m 74ms/step - accuracy: 0.9784 - loss: 0.0848
-[1m30/39[0m [32m━━━━━━━━━━━━━━━[0m[37m━━━━━[0m [1m0s[0m 75ms/step - accuracy: 0.9771 - loss: 0.0842
-[1m31/39[0m [32m━━━━━━━━━━━━━━━[0m[37m━━━━━[0m [1m0s[0m 75ms/step - accuracy: 0.9758 - loss: 0.0839
-[1m32/39[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 75ms/step - accuracy: 0.9766 - loss: 0.0826
-[1m33/39[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 74ms/step - accuracy: 0.9773 - loss: 0.0814
-[1m34/39[0m [32m━━━━━━━━━━━━━━━━━[0m[37m━━━[0m [1m0s[0m 74ms/step - accuracy: 0.9779 - loss: 0.0797
-[1m35/39[0m [32m━━━━━━━━━━━━━━━━━[0m[37m━━━[0m [1m0s[0m 74ms/step - accuracy: 0.9786 - loss: 0.0792
-[1m36/39[0m [32m━━━━━━━━━━━━━━━━━━[0m[37m━━[0m [1m0s[0m 74ms/step - accuracy: 0.9792 - loss: 0.0778
-[1m37/39[0m [32m━━━━━━━━━━━━━━━━━━[0m[37m━━[0m [1m0s[0m 74ms/step - accuracy: 0.9780 - loss: 0.0817
-[1m38/39[0m [32m━━━━━━━━━━━━━━━━━━━[0m[37m━[0m [1m0s[0m 74ms/step - accuracy: 0.9786 - loss: 0.0812
-[1m39/39[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m3s[0m 79ms/step - accuracy: 0.9787 - loss: 0.0813 - val_accuracy: 0.7205 - val_loss: 0.5749 - learning_rate: 2.5000e-04
-Epoch 12: early stopping
-Restoring model weights from the end of the best epoch: 7.
+[1m 1/39[0m [37m━━━━━━━━━━━━━━━━━━━━[0m [1m4s[0m 109ms/step - accuracy: 1.0000 - loss: 0.0298
+[1m 2/39[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m2s[0m 62ms/step - accuracy: 1.0000 - loss: 0.0356 
+[1m 3/39[0m [32m━[0m[37m━━━━━━━━━━━━━━━━━━━[0m [1m2s[0m 65ms/step - accuracy: 1.0000 - loss: 0.0372
+[1m 4/39[0m [32m━━[0m[37m━━━━━━━━━━━━━━━━━━[0m [1m2s[0m 67ms/step - accuracy: 1.0000 - loss: 0.0314
+[1m 5/39[0m [32m━━[0m[37m━━━━━━━━━━━━━━━━━━[0m [1m2s[0m 68ms/step - accuracy: 0.9875 - loss: 0.0622
+[1m 6/39[0m [32m━━━[0m[37m━━━━━━━━━━━━━━━━━[0m [1m2s[0m 68ms/step - accuracy: 0.9896 - loss: 0.0561
+[1m 7/39[0m [32m━━━[0m[37m━━━━━━━━━━━━━━━━━[0m [1m2s[0m 68ms/step - accuracy: 0.9911 - loss: 0.0537
+[1m 8/39[0m [32m━━━━[0m[37m━━━━━━━━━━━━━━━━[0m [1m2s[0m 68ms/step - accuracy: 0.9844 - loss: 0.0628
+[1m 9/39[0m [32m━━━━[0m[37m━━━━━━━━━━━━━━━━[0m [1m2s[0m 69ms/step - accuracy: 0.9861 - loss: 0.0694
+[1m10/39[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m1s[0m 69ms/step - accuracy: 0.9875 - loss: 0.0677
+[1m11/39[0m [32m━━━━━[0m[37m━━━━━━━━━━━━━━━[0m [1m1s[0m 68ms/step - accuracy: 0.9886 - loss: 0.0641
+[1m12/39[0m [32m━━━━━━[0m[37m━━━━━━━━━━━━━━[0m [1m1s[0m 68ms/step - accuracy: 0.9896 - loss: 0.0652
+[1m13/39[0m [32m━━━━━━[0m[37m━━━━━━━━━━━━━━[0m [1m1s[0m 68ms/step - accuracy: 0.9856 - loss: 0.0706
+[1m14/39[0m [32m━━━━━━━[0m[37m━━━━━━━━━━━━━[0m [1m1s[0m 69ms/step - accuracy: 0.9866 - loss: 0.0667
+[1m15/39[0m [32m━━━━━━━[0m[37m━━━━━━━━━━━━━[0m [1m1s[0m 68ms/step - accuracy: 0.9875 - loss: 0.0652
+[1m16/39[0m [32m━━━━━━━━[0m[37m━━━━━━━━━━━━[0m [1m1s[0m 68ms/step - accuracy: 0.9883 - loss: 0.0630
+[1m17/39[0m [32m━━━━━━━━[0m[37m━━━━━━━━━━━━[0m [1m1s[0m 68ms/step - accuracy: 0.9890 - loss: 0.0619
+[1m18/39[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m1s[0m 68ms/step - accuracy: 0.9896 - loss: 0.0600
+[1m19/39[0m [32m━━━━━━━━━[0m[37m━━━━━━━━━━━[0m [1m1s[0m 68ms/step - accuracy: 0.9836 - loss: 0.0668
+[1m20/39[0m [32m━━━━━━━━━━[0m[37m━━━━━━━━━━[0m [1m1s[0m 68ms/step - accuracy: 0.9844 - loss: 0.0645
+[1m21/39[0m [32m━━━━━━━━━━[0m[37m━━━━━━━━━━[0m [1m1s[0m 68ms/step - accuracy: 0.9851 - loss: 0.0643
+[1m22/39[0m [32m━━━━━━━━━━━[0m[37m━━━━━━━━━[0m [1m1s[0m 68ms/step - accuracy: 0.9858 - loss: 0.0633
+[1m23/39[0m [32m━━━━━━━━━━━[0m[37m━━━━━━━━━[0m [1m1s[0m 68ms/step - accuracy: 0.9837 - loss: 0.0651
+[1m24/39[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m1s[0m 68ms/step - accuracy: 0.9844 - loss: 0.0655
+[1m25/39[0m [32m━━━━━━━━━━━━[0m[37m━━━━━━━━[0m [1m0s[0m 68ms/step - accuracy: 0.9850 - loss: 0.0656
+[1m26/39[0m [32m━━━━━━━━━━━━━[0m[37m━━━━━━━[0m [1m0s[0m 68ms/step - accuracy: 0.9856 - loss: 0.0647
+[1m27/39[0m [32m━━━━━━━━━━━━━[0m[37m━━━━━━━[0m [1m0s[0m 68ms/step - accuracy: 0.9861 - loss: 0.0627
+[1m28/39[0m [32m━━━━━━━━━━━━━━[0m[37m━━━━━━[0m [1m0s[0m 68ms/step - accuracy: 0.9866 - loss: 0.0642
+[1m29/39[0m [32m━━━━━━━━━━━━━━[0m[37m━━━━━━[0m [1m0s[0m 68ms/step - accuracy: 0.9871 - loss: 0.0638
+[1m30/39[0m [32m━━━━━━━━━━━━━━━[0m[37m━━━━━[0m [1m0s[0m 68ms/step - accuracy: 0.9875 - loss: 0.0636
+[1m31/39[0m [32m━━━━━━━━━━━━━━━[0m[37m━━━━━[0m [1m0s[0m 68ms/step - accuracy: 0.9879 - loss: 0.0623
+[1m32/39[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 68ms/step - accuracy: 0.9883 - loss: 0.0622
+[1m33/39[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 68ms/step - accuracy: 0.9867 - loss: 0.0635
+[1m34/39[0m [32m━━━━━━━━━━━━━━━━━[0m[37m━━━[0m [1m0s[0m 68ms/step - accuracy: 0.9853 - loss: 0.0686
+[1m35/39[0m [32m━━━━━━━━━━━━━━━━━[0m[37m━━━[0m [1m0s[0m 68ms/step - accuracy: 0.9857 - loss: 0.0679
+[1m36/39[0m [32m━━━━━━━━━━━━━━━━━━[0m[37m━━[0m [1m0s[0m 68ms/step - accuracy: 0.9844 - loss: 0.0696
+[1m37/39[0m [32m━━━━━━━━━━━━━━━━━━[0m[37m━━[0m [1m0s[0m 68ms/step - accuracy: 0.9814 - loss: 0.0716
+[1m38/39[0m [32m━━━━━━━━━━━━━━━━━━━[0m[37m━[0m [1m0s[0m 68ms/step - accuracy: 0.9819 - loss: 0.0702
+[1m39/39[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m3s[0m 73ms/step - accuracy: 0.9820 - loss: 0.0700 - val_accuracy: 0.5031 - val_loss: 1.1549 - learning_rate: 5.0000e-04
+Epoch 9: early stopping
+Restoring model weights from the end of the best epoch: 4.
 [Model] Saved -> C:\xampp\htdocs\beemonitoring\ml\models\beeguard_cnn.keras
 [Eval] Confusion matrix saved
-[Eval] metrics.json saved  (val_accuracy=79.5%)
+[Eval] metrics.json saved  (val_accuracy=55.9%)
 [Eval] classification_report.txt saved
 
 [Results]
               precision    recall  f1-score   support
 
-      normal       0.92      0.76      0.83       107
-   queenless       0.64      0.90      0.75        52
+      normal       0.76      0.50      0.60       107
+   queenless       0.41      0.71      0.52        52
     swarming       0.00      0.00      0.00         2
 
-    accuracy                           0.80       161
-   macro avg       0.52      0.55      0.53       161
-weighted avg       0.82      0.80      0.80       161
+    accuracy                           0.56       161
+   macro avg       0.39      0.40      0.37       161
+weighted avg       0.63      0.56      0.57       161
 
 [Eval] Training history plot saved
 

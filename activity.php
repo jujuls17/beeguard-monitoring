@@ -14,8 +14,8 @@ if (isAdmin()) {
 }
 
 // Count badges for tabs
-$hiveCount = (int)$conn->query("SELECT COUNT(*) c FROM activity_log WHERE hive_id IS NOT NULL")->fetch_assoc()['c'];
-$userCount  = (int)$conn->query("SELECT COUNT(*) c FROM activity_log")->fetch_assoc()['c'];
+$hiveCount = (int)$conn->query("SELECT COUNT(*) c FROM activity_log WHERE hive_id IS NOT NULL AND timestamp >= NOW() - INTERVAL 1 HOUR")->fetch_assoc()['c'];
+$userCount  = (int)$conn->query("SELECT COUNT(*) c FROM activity_log WHERE event_type NOT IN ('Data Collection','camera_insect_detected') AND timestamp >= NOW() - INTERVAL 1 HOUR")->fetch_assoc()['c'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -50,7 +50,7 @@ $userCount  = (int)$conn->query("SELECT COUNT(*) c FROM activity_log")->fetch_as
     <?php include 'sidebar.php'; ?>
     <?php include 'header.php'; ?>
     <main class="min-h-screen">
-        <div class="page-header px-8 py-5 pl-10">
+        <div class="page-header px-4 sm:px-8 py-4 sm:py-5">
             <h1 class="text-2xl font-bold text-gray-900 flex items-center gap-3">
                 <span class="w-9 h-9 rounded-xl flex items-center justify-center"
                       style="background:linear-gradient(135deg,#10B981,#059669);box-shadow:0 4px 14px rgba(16,185,129,0.4);">
@@ -61,7 +61,7 @@ $userCount  = (int)$conn->query("SELECT COUNT(*) c FROM activity_log")->fetch_as
             <p class="text-gray-500 text-sm mt-0.5">Complete history of all system, hive, and user activities</p>
         </div>
 
-        <div class="p-8">
+        <div class="p-4 sm:p-6">
 
             <!-- Tabs -->
             <div class="flex gap-2 mb-6">
@@ -90,9 +90,8 @@ $userCount  = (int)$conn->query("SELECT COUNT(*) c FROM activity_log")->fetch_as
                     </div>
 
                     <!-- Filters -->
-                    <div class="px-6 py-4 border-b border-gray-100 flex flex-wrap items-center gap-3"
+                    <div class="px-4 sm:px-6 py-3 border-b border-gray-100 flex flex-wrap items-center gap-2"
                          style="background:#FFFBEB;">
-                        <!-- Hive selector -->
                         <div class="flex items-center gap-2">
                             <label class="text-xs font-semibold text-gray-500 whitespace-nowrap">Hive</label>
                             <select id="hiveHiveFilter" onchange="loadHiveLog()" class="input-sm">
@@ -102,18 +101,14 @@ $userCount  = (int)$conn->query("SELECT COUNT(*) c FROM activity_log")->fetch_as
                                 <?php endforeach; ?>
                             </select>
                         </div>
-
-                        <!-- Time presets -->
                         <select id="hiveRangeSelect" class="input-sm" onchange="setHiveRange(this.value)">
-                            <option value="1h">1 Hour</option>
+                            <option value="1h" selected>1 Hour</option>
                             <option value="6h">6 Hours</option>
                             <option value="24h">24 Hours</option>
-                            <option value="7d" selected>7 Days</option>
+                            <option value="7d">7 Days</option>
                             <option value="30d">30 Days</option>
                         </select>
-
-                        <!-- Custom date range -->
-                        <div class="flex items-center gap-2 ml-auto">
+                        <div class="flex flex-wrap items-center gap-2 ml-auto">
                             <input type="date" id="hiveFrom" class="input-sm">
                             <span class="text-gray-400 text-xs font-semibold">to</span>
                             <input type="date" id="hiveTo" class="input-sm">
@@ -161,10 +156,8 @@ $userCount  = (int)$conn->query("SELECT COUNT(*) c FROM activity_log")->fetch_as
                     </div>
 
                     <!-- Filters -->
-                    <div class="px-6 py-4 border-b border-gray-100 flex flex-wrap items-center gap-3"
+                    <div class="px-4 sm:px-6 py-3 border-b border-gray-100 flex flex-wrap items-center gap-2"
                          style="background:#EEF2FF;">
-
-                        <!-- User selector (admin only) -->
                         <?php if (isAdmin()): ?>
                         <div class="flex items-center gap-2">
                             <label class="text-xs font-semibold text-gray-500 whitespace-nowrap">User</label>
@@ -179,18 +172,14 @@ $userCount  = (int)$conn->query("SELECT COUNT(*) c FROM activity_log")->fetch_as
                             </select>
                         </div>
                         <?php endif; ?>
-
-                        <!-- Time presets -->
                         <select id="userRangeSelect" class="input-sm" onchange="setUserRange(this.value)">
-                            <option value="1h">1 Hour</option>
+                            <option value="1h" selected>1 Hour</option>
                             <option value="6h">6 Hours</option>
                             <option value="24h">24 Hours</option>
-                            <option value="7d" selected>7 Days</option>
+                            <option value="7d">7 Days</option>
                             <option value="30d">30 Days</option>
                         </select>
-
-                        <!-- Custom date range -->
-                        <div class="flex items-center gap-2 ml-auto">
+                        <div class="flex flex-wrap items-center gap-2 ml-auto">
                             <input type="date" id="userFrom" class="input-sm">
                             <span class="text-gray-400 text-xs font-semibold">to</span>
                             <input type="date" id="userTo" class="input-sm">
@@ -231,8 +220,8 @@ $userCount  = (int)$conn->query("SELECT COUNT(*) c FROM activity_log")->fetch_as
 
     <script>
     // ── State ────────────────────────────────────────────────────
-    const hiveState = { range: '7d', hive_id: 'all', page: 1, customFrom: '', customTo: '' };
-    const userState = { range: '7d', user_id: 'all', page: 1, customFrom: '', customTo: '' };
+    const hiveState = { range: '1h', hive_id: 'all', page: 1, customFrom: '', customTo: '' };
+    const userState = { range: '1h', user_id: 'all', page: 1, customFrom: '', customTo: '' };
     let currentTab  = 'hive';
 
     // ── Tab switch ────────────────────────────────────────────────
@@ -255,15 +244,21 @@ $userCount  = (int)$conn->query("SELECT COUNT(*) c FROM activity_log")->fetch_as
     }
 
     // ── Severity helpers ──────────────────────────────────────────
-    const sevIcon  = { critical:'fa-exclamation-circle', warning:'fa-exclamation-triangle', success:'fa-check-circle', info:'fa-info-circle' };
-    const sevColor = { critical:'red', warning:'yellow', success:'green', info:'blue' };
+    const sevIcon = { critical:'fa-exclamation-circle', warning:'fa-exclamation-triangle', success:'fa-check-circle', info:'fa-info-circle' };
+    const sevStyle = {
+        critical: { bg:'#FEE2E2', text:'#991B1B', icon:'#EF4444' },
+        warning:  { bg:'#FEF3C7', text:'#92400E', icon:'#F59E0B' },
+        success:  { bg:'#D1FAE5', text:'#065F46', icon:'#10B981' },
+        info:     { bg:'#DBEAFE', text:'#1E40AF', icon:'#3B82F6' },
+    };
     function sevBadge(s) {
-        const c = sevColor[s] || 'blue';
-        return `<span class="px-2 py-0.5 rounded-full text-xs font-bold bg-${c}-100 text-${c}-700">${s.toUpperCase()}</span>`;
+        const st = sevStyle[s] || sevStyle.info;
+        return `<span style="background:${st.bg};color:${st.text};padding:2px 8px;border-radius:999px;font-size:11px;font-weight:700;">${(s||'info').toUpperCase()}</span>`;
     }
     function sevIconEl(s) {
-        const c = sevColor[s] || 'blue'; const i = sevIcon[s] || 'fa-info-circle';
-        return `<i class="fas ${i} text-${c}-500 mr-1.5"></i>`;
+        const st = sevStyle[s] || sevStyle.info;
+        const ic = sevIcon[s] || 'fa-info-circle';
+        return `<i class="fas ${ic} mr-1.5" style="color:${st.icon}"></i>`;
     }
 
     // ── Pagination renderer ────────────────────────────────────────
@@ -340,7 +335,7 @@ $userCount  = (int)$conn->query("SELECT COUNT(*) c FROM activity_log")->fetch_as
         const t = document.getElementById('hiveTo').value;
         if (!f || !t) { alert('Please select both From and To dates.'); return; }
         if (f > t)    { alert('"From" must be before "To".'); return; }
-        document.querySelectorAll('#hivePresets .filter-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById('hiveRangeSelect').value = '';
         hiveState.range = 'custom'; hiveState.customFrom = f; hiveState.customTo = t; hiveState.page = 1;
         loadHiveLog();
     }
@@ -407,7 +402,7 @@ $userCount  = (int)$conn->query("SELECT COUNT(*) c FROM activity_log")->fetch_as
         const t = document.getElementById('userTo').value;
         if (!f || !t) { alert('Please select both From and To dates.'); return; }
         if (f > t)    { alert('"From" must be before "To".'); return; }
-        document.querySelectorAll('#userPresets .filter-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById('userRangeSelect').value = '';
         userState.range = 'custom'; userState.customFrom = f; userState.customTo = t; userState.page = 1;
         loadUserLog();
     }

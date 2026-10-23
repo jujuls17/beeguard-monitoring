@@ -46,7 +46,7 @@ if (($data['api_key'] ?? '') !== API_KEY) {
 }
 
 // Required fields (hive_id is optional — server can resolve it from device_id)
-$required = ['device_id', 'temperature', 'humidity', 'co2', 'sound_level'];
+$required = ['device_id']; // sensors may be null if physically disconnected
 foreach ($required as $field) {
     if (!isset($data[$field])) {
         http_response_code(400);
@@ -57,14 +57,14 @@ foreach ($required as $field) {
 
 $deviceId     = $conn->real_escape_string($data['device_id']);
 $hiveId       = (int)($data['hive_id'] ?? 0);
-$temp         = round((float)$data['temperature'], 2);
-$humidity     = round((float)$data['humidity'], 2);
-$co2          = (int)$data['co2'];
-$soundLevel   = round((float)$data['sound_level'], 2);
+$temp         = isset($data['temperature']) && $data['temperature'] !== null ? round((float)$data['temperature'], 2) : null;
+$humidity     = isset($data['humidity'])    && $data['humidity']    !== null ? round((float)$data['humidity'],    2) : null;
+$co2          = isset($data['co2'])         && $data['co2']         !== null ? (int)$data['co2']                        : null;
+$soundLevel   = isset($data['sound_level']) && $data['sound_level'] !== null ? round((float)$data['sound_level'], 2) : null;
 $dominantFreq = round((float)($data['dominant_freq'] ?? 0), 2);
 
 // Sanity range checks
-if ($temp < 0 || $temp > 60 || $humidity < 0 || $humidity > 100 || $co2 < 0 || $co2 > 10000 || $soundLevel < 0 || $dominantFreq < 0) {
+if (($temp !== null && ($temp < 0 || $temp > 60)) || ($humidity !== null && ($humidity < 0 || $humidity > 100)) || ($co2 !== null && ($co2 < 0 || $co2 > 10000)) || ($soundLevel !== null && $soundLevel < 0) || $dominantFreq < 0) {
     http_response_code(422);
     echo json_encode(['success' => false, 'message' => 'Sensor values out of range']);
     exit;
@@ -158,7 +158,7 @@ $hiveName = $hiveRow ? htmlspecialchars($hiveRow['name']) : "Hive #{$hiveId}";
 
 // ── Temperature alerts ────────────────────────────────────────────────────
 // Paper spec: Optimal 33–36°C. Warning <33 or >36. Critical <18 or >38.
-if ($temp >= 33 && $temp <= 36) {
+if ($temp === null) { /* DHT22 disconnected — skip */ } elseif ($temp >= 33 && $temp <= 36) {
     dismissAlertType($conn, $hiveId, 'temperature');
 } else {
     if ($temp > 38) {
@@ -186,7 +186,7 @@ if ($temp >= 33 && $temp <= 36) {
 
 // ── Humidity alerts ───────────────────────────────────────────────────────
 // Paper spec: Optimal 40–95%. Warning <40 or >95. Critical <30 or >98.
-if ($humidity >= 40 && $humidity <= 95) {
+if ($humidity === null) { /* DHT22 disconnected — skip */ } elseif ($humidity >= 40 && $humidity <= 95) {
     dismissAlertType($conn, $hiveId, 'humidity');
 } else {
     if ($humidity > 98) {

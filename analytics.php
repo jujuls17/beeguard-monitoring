@@ -284,6 +284,56 @@ $scoreColor = $healthScore['score'] >= 80 ? 'text-green-600' : ($healthScore['sc
                 </div>
             </div>
 
+            <!-- All Sensors Line Graph -->
+            <div class="bg-white rounded-xl p-5 shadow-sm mb-5" id="sensorChartCard">
+                <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+                    <div>
+                        <h3 class="font-bold flex items-center gap-2">
+                            <i class="fas fa-chart-line text-blue-500"></i>
+                            All Sensors — Trend
+                        </h3>
+                        <p class="text-xs text-gray-500 mt-0.5" id="sensorChartSubtitle">Temperature, Humidity, CO₂ &amp; Sound over time</p>
+                    </div>
+                    <div class="flex items-center gap-2 flex-wrap">
+                        <select id="sensorChartHive"
+                            class="text-xs border border-gray-200 rounded-lg px-3 py-1.5 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-300 cursor-pointer">
+                            <option value="all">All Hives</option>
+                            <?php foreach (getAllHives($conn) as $h): ?>
+                            <option value="<?php echo $h['id']; ?>"><?php echo htmlspecialchars($h['name']); ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                        <select id="sensorChartRange"
+                            class="text-xs border border-gray-200 rounded-lg px-3 py-1.5 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-300 cursor-pointer">
+                            <option value="1h" selected>1 Hour</option>
+                            <option value="6h">6 Hours</option>
+                            <option value="24h">24 Hours</option>
+                            <option value="7d">7 Days</option>
+                            <option value="30d">30 Days</option>
+                        </select>
+                        <button id="sensorChartRefreshBtn" onclick="loadSensorChart()"
+                            class="flex items-center gap-1.5 px-3 py-1.5 bg-blue-500 hover:bg-blue-600 text-white text-xs font-bold rounded-lg transition">
+                            <i class="fas fa-sync-alt text-xs" id="sensorChartRefreshIcon"></i> Refresh
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Legend -->
+                <div class="flex flex-wrap gap-4 mb-3 text-xs text-gray-500" id="sensorChartLegend">
+                    <span><span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#F97316;margin-right:4px;vertical-align:middle;"></span>Temp (°C)</span>
+                    <span><span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#3B82F6;margin-right:4px;vertical-align:middle;"></span>Humidity (%)</span>
+                    <span><span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#8B5CF6;margin-right:4px;vertical-align:middle;"></span>CO₂ (ppm ÷ 100)</span>
+                    <span><span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#F59E0B;margin-right:4px;vertical-align:middle;"></span>Sound (%)</span>
+                </div>
+
+                <div id="sensorChartWrap" style="height:260px; position:relative;">
+                    <canvas id="sensorChart"></canvas>
+                    <div id="sensorChartEmpty" class="flex flex-col items-center justify-center h-full text-gray-400" style="display:none!important;">
+                        <i class="fas fa-chart-area text-4xl mb-3"></i>
+                        <p class="text-sm">No sensor data for this range</p>
+                    </div>
+                </div>
+            </div>
+
             <!-- Sound Activity Line Graph -->
             <div class="bg-white rounded-xl p-5 shadow-sm mb-5">
                 <div class="flex justify-between items-center mb-1">
@@ -328,7 +378,7 @@ $scoreColor = $healthScore['score'] >= 80 ? 'text-green-600' : ($healthScore['sc
                         </button>
                     </div>
                 </div>
-                <p class="text-xs text-gray-500 mb-4">Most recent sensor data per hive from ESP32 — auto-refreshes every 30s</p>
+                <p class="text-xs text-gray-500 mb-4">Most recent sensor data per hive from ESP32 — auto-refreshes every 15s</p>
                 <div class="overflow-x-auto">
                     <table class="w-full text-sm">
                         <thead>
@@ -508,6 +558,119 @@ $scoreColor = $healthScore['score'] >= 80 ? 'text-green-600' : ($healthScore['sc
         });
         <?php endif; ?>
 
+        // ── All-Sensors Chart ──────────────────────────────────────
+        let sensorChartInstance = null;
+
+        function loadSensorChart() {
+            const range  = document.getElementById('sensorChartRange').value;
+            const hiveId = document.getElementById('sensorChartHive').value;
+            const icon   = document.getElementById('sensorChartRefreshIcon');
+            icon.classList.add('fa-spin');
+
+            fetch(`api/sensor_chart_data.php?range=${range}&hive_id=${hiveId}`)
+                .then(r => r.json())
+                .then(d => {
+                    icon.classList.remove('fa-spin');
+                    if (!d.success || !d.labels.length) {
+                        document.getElementById('sensorChartWrap').style.opacity = '0.4';
+                        return;
+                    }
+                    document.getElementById('sensorChartWrap').style.opacity = '1';
+
+                    const isAllHives = hiveId === 'all';
+                    const pre = isAllHives ? 'Avg ' : '';
+                    const sub = document.getElementById('sensorChartSubtitle');
+                    if (sub) sub.textContent = isAllHives
+                        ? 'Average across all hives — Temperature, Humidity, CO₂ & Sound'
+                        : 'Temperature, Humidity, CO₂ & Sound over time';
+
+                    const mkDs = (label, data, color) => ({
+                        label, data,
+                        borderColor: color,
+                        backgroundColor: 'transparent',
+                        pointRadius: 0,
+                        pointHoverRadius: 4,
+                        pointHoverBackgroundColor: color,
+                        pointHoverBorderColor: '#fff',
+                        pointHoverBorderWidth: 2,
+                        borderWidth: 1.5,
+                        fill: false,
+                        tension: 0.4,
+                        yAxisID: 'yLeft',
+                        spanGaps: true,
+                    });
+
+                    const datasets = [
+                        mkDs(`${pre}Temp (°C)`,    d.temp,    '#F97316'),
+                        mkDs(`${pre}Humidity (%)`, d.humidity,'#3B82F6'),
+                        mkDs(`${pre}CO₂ ÷100`,    d.co2 ? d.co2.map(v => v !== null ? +(v/100).toFixed(1) : null) : [], '#8B5CF6'),
+                        mkDs(`${pre}Sound (%)`,    d.sound,   '#F59E0B'),
+                    ];
+
+                    if (sensorChartInstance) {
+                        sensorChartInstance.data.labels   = d.labels;
+                        sensorChartInstance.data.datasets = datasets;
+                        sensorChartInstance.update('none');
+                    } else {
+                        sensorChartInstance = new Chart(document.getElementById('sensorChart'), {
+                            type: 'line',
+                            data: { labels: d.labels, datasets },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                interaction: { mode: 'index', intersect: false },
+                                plugins: {
+                                    legend: { display: false },
+                                    tooltip: {
+                                        backgroundColor: 'rgba(17,24,39,0.85)',
+                                        titleColor: '#f9fafb',
+                                        bodyColor: '#d1d5db',
+                                        padding: 10,
+                                        cornerRadius: 8,
+                                        displayColors: true,
+                                        boxWidth: 8, boxHeight: 8,
+                                        callbacks: {
+                                            label: ctx => {
+                                                const ds = ctx.dataset.label;
+                                                const v  = ctx.parsed.y;
+                                                if (v === null) return null;
+                                                if (ds === 'CO₂ ÷100') return `  CO₂: ${(v*100).toFixed(0)} ppm`;
+                                                if (ds === 'Temp (°C)')    return `  Temp: ${v}°C`;
+                                                if (ds === 'Humidity (%)') return `  Humidity: ${v}%`;
+                                                if (ds === 'Sound (%)')    return `  Sound: ${v}%`;
+                                                return `  ${ds}: ${v}`;
+                                            }
+                                        }
+                                    }
+                                },
+                                scales: {
+                                    x: {
+                                        border: { display: false },
+                                        grid: { color: 'rgba(0,0,0,0.04)', drawTicks: false },
+                                        ticks: { font: { size: 10 }, color: '#9ca3af', maxTicksLimit: 8, padding: 6 }
+                                    },
+                                    yLeft: {
+                                        type: 'linear',
+                                        position: 'left',
+                                        border: { display: false },
+                                        grid: { color: 'rgba(0,0,0,0.04)', drawTicks: false },
+                                        ticks: { font: { size: 10 }, color: '#9ca3af', maxTicksLimit: 6, padding: 6 }
+                                    }
+                                }
+                            }
+                        });
+                    }
+                })
+                .catch(() => icon.classList.remove('fa-spin'));
+        }
+
+        // Auto-reload when dropdowns change
+        document.getElementById('sensorChartRange').addEventListener('change', loadSensorChart);
+        document.getElementById('sensorChartHive').addEventListener('change', loadSensorChart);
+
+        // Initial load
+        loadSensorChart();
+
         function refreshReadings() {
             const btn  = document.getElementById('refreshBtn');
             const icon = document.getElementById('refreshIcon');
@@ -589,7 +752,7 @@ $scoreColor = $healthScore['score'] >= 80 ? 'text-green-600' : ($healthScore['sc
 
         // Initial load + auto-refresh every 30 seconds
         refreshReadings();
-        setInterval(refreshReadings, 30000);
+        setInterval(refreshReadings, 15000);
 
         // ── Auto-refresh top stat cards every 60 s ──────────────────
         function refreshStats() {

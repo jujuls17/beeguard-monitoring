@@ -19,15 +19,17 @@ $alertTypeLabels = [
     'temperature'    => 'Temperature',
     'humidity'       => 'Humidity',
     'co2'            => 'CO₂ Level',
-    'colony_status'  => 'Colony Status',
     'swarming'       => 'Swarming',
     'queenless'      => 'Queenless',
+    'camera_insect'  => 'Camera Insect',
 ];
+$hiddenTypes = ['colony_status', 'device_offline', 'camera_insect_detected'];
 // Merge with any extra types that exist in DB but aren't predefined
 $typesRes = $conn->query("SELECT DISTINCT alert_type FROM alerts WHERE alert_type IS NOT NULL ORDER BY alert_type");
 while ($tr = $typesRes->fetch_assoc()) {
-    if (!isset($alertTypeLabels[$tr['alert_type']])) {
-        $alertTypeLabels[$tr['alert_type']] = ucwords(str_replace('_', ' ', $tr['alert_type']));
+    $t = $tr['alert_type'];
+    if (!isset($alertTypeLabels[$t]) && !in_array($t, $hiddenTypes)) {
+        $alertTypeLabels[$t] = ucwords(str_replace('_', ' ', $t));
     }
 }
 ?>

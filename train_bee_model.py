@@ -26,9 +26,9 @@ from pathlib import Path
 
 # ── Config — EDIT THESE ───────────────────────────────────────
 DATASET_YAML = "dataset/combined/data.yaml"   # ← merged bee + insect dataset
-BASE_MODEL   = "yolov8n.pt"                   # start from YOLOv8 nano pretrained
+BASE_MODEL   = "yolov8s.pt"                   # YOLOv8 small — more accurate than nano
                                                # change to "models/bee_insect.pt" to fine-tune existing
-EPOCHS       = 50
+EPOCHS       = 100
 IMG_SIZE     = 640
 BATCH        = 8        # lower to 4 if GPU runs out of memory
 DEVICE       = "0"      # "0" = first GPU | "cpu" = CPU only

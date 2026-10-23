@@ -44,6 +44,9 @@ int   g_co2          = 0;
 float g_soundLevel   = 0;
 float g_dominantFreq = 0;
 bool  g_wifiOk       = false;
+bool  g_dhtOk        = false;  // true only when DHT22 gives a valid reading
+bool  g_co2Ok        = false;  // true only when MQ-135 raw ADC > 10
+bool  g_soundOk      = false;  // true only when MAX4466 raw ADC > 0
 
 // =============================================================
 //  SETUP
@@ -197,7 +200,8 @@ void updateOLED() {
 void readSensorsOnly() {
     float t = dht.readTemperature();
     float h = dht.readHumidity();
-    if (!isnan(t) && !isnan(h)) {
+    g_dhtOk = !isnan(t) && !isnan(h);
+    if (g_dhtOk) {
         g_temperature = t;
         g_humidity    = h;
     }
@@ -326,6 +330,7 @@ int readCO2() {
         delay(10);
     }
     int raw = sum / 10;
+    g_co2Ok = raw > 10;  // raw <= 10 → sensor disconnected or floating
     int co2 = (int)(CO2_R0 + (raw - 400) * CO2_SCALE);
     return constrain(co2, 400, 8000);
 }
@@ -342,7 +347,9 @@ void readMicrophone(float &soundLevel, float &dominantFreq) {
         delayMicroseconds(100);
     }
     float rms = sqrt((float)sumSq / MIC_SAMPLES);
+    g_soundOk = rms > 0;  // rms == 0 → mic pin reads nothing (disconnected)
     soundLevel = constrain(map((long)rms, 0, MIC_RMS_MAX, 0, 100), 0, 100);
+    Serial.printf("[MIC] Raw RMS: %.1f → Sound: %.1f%% (MIC_RMS_MAX=%d)\n", rms, soundLevel, MIC_RMS_MAX);
 
     // Dominant frequency via zero-crossing
     int crossings  = 0;
@@ -375,10 +382,17 @@ void sendToServer(float temp, float hum, int co2, float sound, float freq) {
     doc["api_key"]       = API_KEY;
     doc["device_id"]     = DEVICE_ID;
     doc["hive_id"]       = HIVE_ID;
-    doc["temperature"]   = round(temp  * 10.0f) / 10.0f;
-    doc["humidity"]      = round(hum   * 10.0f) / 10.0f;
-    doc["co2"]           = co2;
-    doc["sound_level"]   = round(sound * 10.0f) / 10.0f;
+    if (g_dhtOk) {
+        doc["temperature"] = round(temp * 10.0f) / 10.0f;
+        doc["humidity"]    = round(hum  * 10.0f) / 10.0f;
+    } else {
+        doc["temperature"] = nullptr;
+        doc["humidity"]    = nullptr;
+    }
+    if (g_co2Ok)   { doc["co2"]         = co2; }
+    else           { doc["co2"]         = nullptr; }
+    if (g_soundOk) { doc["sound_level"] = round(sound * 10.0f) / 10.0f; }
+    else           { doc["sound_level"] = nullptr; }
     doc["dominant_freq"] = round(freq);
 
     String payload;

@@ -303,17 +303,17 @@ $avgCO2         = getAvgCO2($conn);
                             </div>
                         </div>
 
-                        <?php if ($audio): ?>
+                        <?php if ($sensor): ?>
                         <div class="mb-3">
                             <div class="flex justify-between items-center mb-1.5">
                                 <span class="text-xs font-semibold text-gray-500 flex items-center gap-1">
                                     <i class="fas fa-volume-up text-yellow-500"></i> Sound Activity
                                 </span>
-                                <span class="text-xs font-bold text-gray-700"><?php echo round($audio['sound_level']); ?>%</span>
+                                <span class="text-xs font-bold text-gray-700"><?php echo $sensor ? round($sensor['sound_level']) : 0; ?>%</span>
                             </div>
                             <div class="progress-bar h-2">
                                 <div class="progress-fill h-full"
-                                     style="width:<?php echo round($audio['sound_level']); ?>%;background:linear-gradient(90deg,#F59E0B,#F97316);"></div>
+                                     style="width:<?php echo $sensor ? round($sensor['sound_level']) : 0; ?>%;background:linear-gradient(90deg,#F59E0B,#F97316);"></div>
                             </div>
                         </div>
                         <?php endif; ?>
@@ -411,7 +411,7 @@ $avgCO2         = getAvgCO2($conn);
 
     // Run immediately + every 30s
     refreshStats();
-    setInterval(refreshStats, 30000);
+    setInterval(refreshStats, 15000);
 
     // Live "last updated Xs ago" in the header indicator
     setInterval(() => {

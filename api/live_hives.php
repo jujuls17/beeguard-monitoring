@@ -3,6 +3,7 @@ session_start();
 require_once '../config.php';
 require_once '../functions.php';
 checkAuth();
+session_write_close();
 
 header('Content-Type: application/json');
 
@@ -34,7 +35,7 @@ foreach ($hives as $hive) {
             'co2'         => (int)$sensor['co2'],
             'elapsed'     => time_elapsed_string($sensor['timestamp']),
         ] : null,
-        'sound'       => $audio ? round((float)$audio['sound_level']) : null,
+        'sound'       => $sensor ? round((float)$sensor['sound_level']) : null,
         'badge'       => $badge ? [
             'bg'         => $badge['bg'],
             'color'      => $badge['color'],
