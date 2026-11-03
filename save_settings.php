@@ -1,8 +1,11 @@
 <?php
+ob_start();
 session_start();
 require_once 'config.php';
 require_once 'functions.php';
 checkAuth();
+session_write_close();
+ob_clean();
 
 header('Content-Type: application/json');
 
@@ -11,14 +14,15 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
-$emailNotif   = isset($_POST['email_notifications'])  ? (int)$_POST['email_notifications']  : 0;
-$pushNotif    = isset($_POST['push_notifications'])   ? (int)$_POST['push_notifications']   : 0;
-$alertCrit    = isset($_POST['alert_critical'])       ? (int)$_POST['alert_critical']       : 0;
-$alertWarn    = isset($_POST['alert_warnings'])       ? (int)$_POST['alert_warnings']       : 0;
-$alertInfo    = isset($_POST['alert_informational'])  ? (int)$_POST['alert_informational']  : 0;
-$retention    = in_array($_POST['data_retention'] ?? '', ['90','180','365','unlimited']) ? $_POST['data_retention'] : '90';
-$syncInterval = in_array((int)($_POST['sync_interval'] ?? 300), [30,60,300,600,900,1800]) ? (int)$_POST['sync_interval'] : 300;
-$mlConf       = max(50, min(99, (int)($_POST['ml_confidence'] ?? 85)));
+$emailNotif      = isset($_POST['email_notifications'])  ? (int)$_POST['email_notifications']  : 0;
+$pushNotif       = isset($_POST['push_notifications'])   ? (int)$_POST['push_notifications']   : 0;
+$alertCrit       = isset($_POST['alert_critical'])       ? (int)$_POST['alert_critical']       : 0;
+$alertWarn       = isset($_POST['alert_warnings'])       ? (int)$_POST['alert_warnings']       : 0;
+$alertInfo       = isset($_POST['alert_informational'])  ? (int)$_POST['alert_informational']  : 0;
+$retention       = in_array($_POST['data_retention'] ?? '', ['90','180','365','unlimited']) ? ($_POST['data_retention'] ?? '90') : '90';
+$syncIntervalRaw = (int)($_POST['sync_interval'] ?? 15);
+$syncInterval    = in_array($syncIntervalRaw, [15,30,60,300,600,900,1800]) ? $syncIntervalRaw : 15;
+$mlConf          = max(50, min(99, (int)($_POST['ml_confidence'] ?? 85)));
 
 $userId = $_SESSION['user_id'];
 

@@ -5,6 +5,18 @@ require_once 'functions.php';
 checkAuth();
 
 $currentUserId = (int)$_SESSION['user_id'];
+
+// Mark all messages read immediately so sidebar badge clears on first load
+$_maxRes = $conn->query("SELECT MAX(id) AS max_id FROM group_messages");
+if ($_maxRes) {
+    $_maxId = (int)($_maxRes->fetch_assoc()['max_id'] ?? 0);
+    if ($_maxId > 0) {
+        $_stmt = $conn->prepare("INSERT INTO chat_reads (user_id, last_read_id) VALUES (?, ?) ON DUPLICATE KEY UPDATE last_read_id = GREATEST(last_read_id, ?)");
+        $_stmt->bind_param('iii', $currentUserId, $_maxId, $_maxId);
+        $_stmt->execute();
+        $_stmt->close();
+    }
+}
 $isAdmin       = isAdmin();
 $myName        = !empty($_SESSION['full_name']) ? $_SESSION['full_name'] : ($_SESSION['username'] ?? 'User');
 $parts         = explode(' ', trim($myName));
@@ -43,7 +55,7 @@ $myInitials    = strtoupper(substr($parts[0], 0, 1) . (count($parts) > 1 ? subst
     <?php include 'sidebar.php'; ?>
     <?php include 'header.php'; ?>
 
-    <main id="chatPage" style="margin-left:256px; height:calc(100dvh - 4rem); display:flex; flex-direction:column;">
+    <main id="chatPage" style="height:calc(100dvh - 4rem); display:flex; flex-direction:column;">
 
         <!-- Page Header -->
         <div class="page-header px-4 sm:px-8 py-2 sm:py-4 flex items-center justify-between flex-shrink-0">

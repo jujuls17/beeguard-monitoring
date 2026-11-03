@@ -68,6 +68,12 @@ function createUser() {
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         return ['success' => false, 'message' => 'Invalid email address.'];
     }
+    if ($full_name && !preg_match('/^[a-zA-Z\s.]+$/', $full_name)) {
+        return ['success' => false, 'message' => 'Full name must contain letters only.'];
+    }
+    if ($contact && !preg_match('/^\d{11}$/', $contact)) {
+        return ['success' => false, 'message' => 'Contact number must be exactly 11 digits.'];
+    }
     if (!$sec_q || !$sec_a) {
         return ['success' => false, 'message' => 'Security question and answer are required.'];
     }
@@ -122,6 +128,12 @@ function updateUser() {
     if (!$id) return ['success' => false, 'message' => 'Missing user ID.'];
     if (!$username || !$email) return ['success' => false, 'message' => 'Username and email are required.'];
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) return ['success' => false, 'message' => 'Invalid email address.'];
+    if ($full_name && !preg_match('/^[a-zA-Z\s.]+$/', $full_name)) {
+        return ['success' => false, 'message' => 'Full name must contain letters only.'];
+    }
+    if ($contact && !preg_match('/^\d{11}$/', $contact)) {
+        return ['success' => false, 'message' => 'Contact number must be exactly 11 digits.'];
+    }
 
     // Unique check (exclude self)
     $chk = $conn->prepare("SELECT id FROM users WHERE (username = ? OR email = ?) AND id != ? LIMIT 1");

@@ -1,24 +1,43 @@
 <?php
+ob_start();
+ini_set('display_errors', 0);
+
 session_start();
 require_once '../config.php';
 require_once '../functions.php';
 checkAuth();
 session_write_close();
+
 header('Content-Type: application/json');
+ob_clean();
 
-$range  = $_GET['range']   ?? '24h';
-$hiveId = $_GET['hive_id'] ?? 'all';
+$range    = $_GET['range']     ?? '24h';
+$hiveId   = $_GET['hive_id']   ?? 'all';
+$fromDate = $_GET['from_date'] ?? null;
 
-// Determine interval and grouping format based on range
+// Validate from_date format
+if ($fromDate && !preg_match('/^\d{4}-\d{2}-\d{2}$/', $fromDate)) {
+    $fromDate = null;
+}
+
+// When from_date is set, anchor interval to that date; otherwise use NOW()
+$anchor = $fromDate ? "'{$fromDate} 00:00:00'" : 'NOW()';
+
+// Map range → (SQL interval expression, label format, bucket truncation)
 $intervals = [
-    '1h'  => ['interval' => 'NOW() - INTERVAL 1 HOUR',  'fmt' => '%H:%i',     'trunc' => 'DATE_FORMAT(timestamp,\'%Y-%m-%d %H:%i:00\')'],
-    '6h'  => ['interval' => 'NOW() - INTERVAL 6 HOUR',  'fmt' => '%H:%i',     'trunc' => "DATE_FORMAT(DATE_SUB(timestamp, INTERVAL MINUTE(timestamp) MOD 15 MINUTE), '%Y-%m-%d %H:%i:00')"],
-    '24h' => ['interval' => 'NOW() - INTERVAL 24 HOUR', 'fmt' => '%H:00',     'trunc' => 'DATE_FORMAT(timestamp,\'%Y-%m-%d %H:00:00\')'],
-    '7d'  => ['interval' => 'NOW() - INTERVAL 7 DAY',   'fmt' => '%m/%d %H:00','trunc'=> "DATE_FORMAT(DATE_SUB(timestamp, INTERVAL HOUR(timestamp) MOD 6 HOUR), '%Y-%m-%d %H:00:00')"],
-    '30d' => ['interval' => 'NOW() - INTERVAL 30 DAY',  'fmt' => '%m/%d',     'trunc' => 'DATE_FORMAT(timestamp,\'%Y-%m-%d 00:00:00\')'],
+    '1h'  => ['interval' => "{$anchor} - INTERVAL 1 HOUR",  'end' => "{$anchor} + INTERVAL 1 HOUR",  'fmt' => '%H:%i',      'trunc' => 'DATE_FORMAT(timestamp,\'%Y-%m-%d %H:%i:00\')'],
+    '6h'  => ['interval' => "{$anchor} - INTERVAL 6 HOUR",  'end' => "{$anchor} + INTERVAL 6 HOUR",  'fmt' => '%H:%i',      'trunc' => "DATE_FORMAT(DATE_SUB(timestamp, INTERVAL MINUTE(timestamp) MOD 15 MINUTE), '%Y-%m-%d %H:%i:00')"],
+    '24h' => ['interval' => "{$anchor} - INTERVAL 24 HOUR", 'end' => "{$anchor} + INTERVAL 24 HOUR", 'fmt' => '%H:00',      'trunc' => 'DATE_FORMAT(timestamp,\'%Y-%m-%d %H:00:00\')'],
+    '7d'  => ['interval' => "{$anchor} - INTERVAL 7 DAY",   'end' => "{$anchor} + INTERVAL 7 DAY",   'fmt' => '%m/%d %H:00','trunc' => "DATE_FORMAT(DATE_SUB(timestamp, INTERVAL HOUR(timestamp) MOD 6 HOUR), '%Y-%m-%d %H:00:00')"],
+    '30d' => ['interval' => "{$anchor} - INTERVAL 30 DAY",  'end' => "{$anchor} + INTERVAL 30 DAY",  'fmt' => '%m/%d',      'trunc' => 'DATE_FORMAT(timestamp,\'%Y-%m-%d 00:00:00\')'],
 ];
 
 $cfg = $intervals[$range] ?? $intervals['24h'];
+
+// When from_date is given, show forward from that date; otherwise show backward to now
+$timeWhere = $fromDate
+    ? "timestamp >= '{$fromDate} 00:00:00' AND timestamp <= {$cfg['end']}"
+    : "timestamp >= {$cfg['interval']}";
 
 $hiveWhere = '';
 $params    = [];
@@ -37,7 +56,7 @@ $sql = "SELECT
             ROUND(AVG(co2),0)          AS co2,
             ROUND(AVG(sound_level),1)  AS sound
         FROM sensor_data
-        WHERE timestamp >= {$cfg['interval']}
+        WHERE {$timeWhere}
           {$hiveWhere}
         GROUP BY bucket
         ORDER BY bucket ASC";

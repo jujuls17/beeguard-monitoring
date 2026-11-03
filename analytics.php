@@ -29,36 +29,13 @@ $avgTemp      = getAverageTemperature($conn);
 $avgCO2       = getAvgCO2($conn);
 $avgSound     = getAvgSoundLevel($conn);
 $healthScore  = getHiveHealthScore($conn);
-$distribution = getHealthDistribution($conn);
 $weeklyTrends = getWeeklyTrends($conn);
 $totalReadings = getTotalReadings($conn);
 $totalHives   = count(getAllHives($conn));
 $healthyCount = countHealthyHives($conn);
 
 // ── Build chart data ───────────────────────────────────────────
-// Health Distribution pie
-$statusLabels = [
-    'normal'    => 'Normal',
-    'swarming'  => 'Swarming',
-    'queenless' => 'Queenless',
-];
-$statusColors = [
-    'normal'    => '#10B981',
-    'swarming'  => '#F97316',
-    'queenless' => '#EF4444',
-];
-
-$totalDist  = array_sum(array_column($distribution, 'count'));
-$pieLabels  = [];
-$pieData    = [];
-$pieColors  = [];
-foreach ($distribution as $row) {
-    $s = $row['colony_status'];
-    $pct = $totalDist > 0 ? round($row['count'] / $totalDist * 100) : 0;
-    $pieLabels[]  = ($statusLabels[$s] ?? ucfirst($s)) . ": {$pct}%";
-    $pieData[]    = $row['count'];
-    $pieColors[]  = $statusColors[$s] ?? '#6B7280';
-}
+// Health pie is now loaded via api/health_pie.php (AJAX, updates every 5 min)
 
 // Weekly bar chart — always show Sun→Mon→Tue→Wed→Thu→Fri→Sat (current calendar week)
 $dayAbbr = ['Sunday'=>'Sun','Monday'=>'Mon','Tuesday'=>'Tue','Wednesday'=>'Wed','Thursday'=>'Thu','Friday'=>'Fri','Saturday'=>'Sat'];
@@ -81,9 +58,9 @@ for ($i = 0; $i <= 6; $i++) {
     $date       = date('Y-m-d', strtotime("{$daysOffset} days"));
     $dayName    = date('l',     strtotime("{$daysOffset} days"));
     $weekDays[]   = $dayAbbr[$dayName] ?? substr($dayName, 0, 3);
-    $weekTemps[]  = isset($trendByDate[$date]) ? (float)$trendByDate[$date]['avg_temp']     : 0;
-    $weekHumids[] = isset($trendByDate[$date]) ? (float)$trendByDate[$date]['avg_humidity']  : 0;
-    $weekCO2[]    = isset($trendByDate[$date]) ? (int)$trendByDate[$date]['avg_co2']         : 0;
+    $weekTemps[]  = isset($trendByDate[$date]) ? (float)$trendByDate[$date]['avg_temp']     : null;
+    $weekHumids[] = isset($trendByDate[$date]) ? (float)$trendByDate[$date]['avg_humidity']  : null;
+    $weekCO2[]    = isset($trendByDate[$date]) ? (int)$trendByDate[$date]['avg_co2']         : null;
 }
 
 // ── Sound activity — last 24 h, hourly averages ───────────────
@@ -249,38 +226,89 @@ $scoreColor = $healthScore['score'] >= 80 ? 'text-green-600' : ($healthScore['sc
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-6">
                 <!-- Health Distribution -->
                 <div class="bg-white rounded-xl p-5 shadow-sm">
-                    <h3 class="font-bold mb-1">Hive Health Distribution</h3>
-                    <p class="text-xs text-gray-500 mb-4">Based on latest audio analysis per hive</p>
-                    <?php if (empty($pieData)): ?>
-                        <div class="flex flex-col items-center justify-center h-48 text-gray-400">
-                            <i class="fas fa-satellite-dish text-4xl mb-3"></i>
-                            <p class="text-sm">Waiting for ESP32 data...</p>
-                            <p class="text-xs mt-1">Connect your ESP32 to see live distribution</p>
+                    <div class="flex items-start justify-between mb-1 gap-2 flex-wrap">
+                        <h3 class="font-bold">Hive Health Distribution</h3>
+                        <div class="flex items-center gap-1 flex-wrap">
+                            <select id="pieHiveFilter"
+                                class="text-xs border border-gray-200 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-300 cursor-pointer">
+                                <option value="0">All Hives</option>
+                                <?php foreach (getAllHives($conn) as $h): ?>
+                                <option value="<?php echo $h['id']; ?>"><?php echo htmlspecialchars($h['name']); ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                            <input type="date" id="pieDatePicker"
+                                title="View a specific date"
+                                class="text-xs border border-gray-200 rounded-lg px-2 py-1 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-300 cursor-pointer">
+                            <button id="pieDateClearBtn" onclick="clearPieDate()"
+                                title="Back to today"
+                                class="text-xs px-2 py-1 text-gray-400 hover:text-gray-700 rounded-lg hover:bg-gray-100 transition hidden">
+                                <i class="fas fa-times"></i>
+                            </button>
                         </div>
-                    <?php else: ?>
-                        <div class="flex justify-center">
-                            <div style="width:280px; height:280px;">
-                                <canvas id="healthChart"></canvas>
+                    </div>
+                    <p class="text-xs text-gray-500 mb-3">
+                        <span id="pieSubtitle">All sensor readings today · Temp · Humidity · CO₂ · updates every 5 min</span>
+                    </p>
+                    <p class="text-xs text-right mb-1">
+                        <span id="pieDateLabel" class="text-gray-400 font-medium"></span>
+                    </p>
+
+                    <div class="flex justify-center">
+                        <div style="width:220px;height:220px;position:relative;">
+                            <canvas id="healthChart"></canvas>
+                            <div id="pieCenterLabel" style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none;">
+                                <span id="pieTotalNum" class="text-2xl font-black text-gray-700">—</span>
+                                <span class="text-xs text-gray-400">readings</span>
                             </div>
                         </div>
-                    <?php endif; ?>
+                    </div>
+
+                    <!-- Count badges -->
+                    <div class="flex justify-center gap-3 mt-4 flex-wrap">
+                        <div class="flex flex-col items-center px-4 py-2.5 rounded-xl" style="background:#D1FAE5;min-width:76px;">
+                            <i class="fas fa-check-circle mb-1" style="color:#10B981;font-size:15px;"></i>
+                            <span class="text-xl font-black" id="cntHealthy" style="color:#065F46;">—</span>
+                            <span class="text-xs font-bold" style="color:#065F46;">Healthy</span>
+                            <span class="text-xs opacity-70" id="pctHealthy" style="color:#065F46;">—</span>
+                        </div>
+                        <div class="flex flex-col items-center px-4 py-2.5 rounded-xl" style="background:#FFF7ED;min-width:76px;">
+                            <i class="fas fa-exclamation-triangle mb-1" style="color:#F97316;font-size:15px;"></i>
+                            <span class="text-xl font-black" id="cntWarning" style="color:#9A3412;">—</span>
+                            <span class="text-xs font-bold" style="color:#9A3412;">Warning</span>
+                            <span class="text-xs opacity-70" id="pctWarning" style="color:#9A3412;">—</span>
+                        </div>
+                        <div class="flex flex-col items-center px-4 py-2.5 rounded-xl" style="background:#FEF2F2;min-width:76px;">
+                            <i class="fas fa-times-circle mb-1" style="color:#EF4444;font-size:15px;"></i>
+                            <span class="text-xl font-black" id="cntCritical" style="color:#991B1B;">—</span>
+                            <span class="text-xs font-bold" style="color:#991B1B;">Critical</span>
+                            <span class="text-xs opacity-70" id="pctCritical" style="color:#991B1B;">—</span>
+                        </div>
+                    </div>
+                    <p class="text-center text-xs text-gray-400 mt-2">
+                        Last reading: <span id="pieLastReading">—</span> &nbsp;·&nbsp; Updated: <span id="pieUpdatedAt">—</span>
+                    </p>
                 </div>
 
                 <!-- Weekly Trends -->
                 <div class="bg-white rounded-xl p-5 shadow-sm">
-                    <h3 class="font-bold mb-1">Weekly Environmental Trends</h3>
-                    <p class="text-xs text-gray-500 mb-4">7-day average temperature & humidity</p>
-                    <?php if (empty($weeklyTrends)): ?>
-                        <div class="flex flex-col items-center justify-center h-48 text-gray-400">
-                            <i class="fas fa-satellite-dish text-4xl mb-3"></i>
-                            <p class="text-sm">Waiting for ESP32 data...</p>
-                            <p class="text-xs mt-1">Data will appear after first sensor reading</p>
-                        </div>
-                    <?php else: ?>
-                        <div style="height:250px;">
-                            <canvas id="weeklyChart"></canvas>
-                        </div>
-                    <?php endif; ?>
+                    <div class="flex items-center justify-between mb-1 gap-2 flex-wrap">
+                        <h3 class="font-bold">Weekly Environmental Trends</h3>
+                        <select id="weeklyWeekOffset"
+                            class="text-xs border border-gray-200 rounded-lg px-3 py-1.5 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-300 cursor-pointer">
+                            <option value="0">This Week</option>
+                            <option value="1">Last Week</option>
+                            <option value="2">2 Weeks Ago</option>
+                            <option value="3">3 Weeks Ago</option>
+                            <option value="4">4 Weeks Ago</option>
+                            <option value="5">5 Weeks Ago</option>
+                            <option value="6">6 Weeks Ago</option>
+                            <option value="7">7 Weeks Ago</option>
+                        </select>
+                    </div>
+                    <p class="text-xs text-gray-500 mb-4" id="weeklyDateRange">7-day average temperature, humidity &amp; CO₂</p>
+                    <div style="height:250px;">
+                        <canvas id="weeklyChart"></canvas>
+                    </div>
                 </div>
             </div>
 
@@ -310,6 +338,16 @@ $scoreColor = $healthScore['score'] >= 80 ? 'text-green-600' : ($healthScore['sc
                             <option value="7d">7 Days</option>
                             <option value="30d">30 Days</option>
                         </select>
+                        <div class="flex items-center gap-1">
+                            <input type="date" id="sensorFromDate"
+                                title="Show data from this date"
+                                class="text-xs border border-gray-200 rounded-lg px-2 py-1.5 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-300 cursor-pointer">
+                            <button id="sensorDateClearBtn" onclick="document.getElementById('sensorFromDate').value='';loadSensorChart();"
+                                title="Clear date — show recent data"
+                                class="text-xs px-2 py-1.5 text-gray-400 hover:text-gray-700 rounded-lg hover:bg-gray-100 transition hidden">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
                         <button id="sensorChartRefreshBtn" onclick="loadSensorChart()"
                             class="flex items-center gap-1.5 px-3 py-1.5 bg-blue-500 hover:bg-blue-600 text-white text-xs font-bold rounded-lg transition">
                             <i class="fas fa-sync-alt text-xs" id="sensorChartRefreshIcon"></i> Refresh
@@ -427,90 +465,182 @@ $scoreColor = $healthScore['score'] >= 80 ? 'text-green-600' : ($healthScore['sc
                 </span>`;
     }
 
-        <?php if (!empty($pieData)): ?>
-        new Chart(document.getElementById('healthChart'), {
-            type: 'pie',
-            data: {
-                labels: <?php echo json_encode($pieLabels); ?>,
-                datasets: [{
-                    data: <?php echo json_encode($pieData); ?>,
-                    backgroundColor: <?php echo json_encode($pieColors); ?>
-                }]
-            },
-            options: {
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        position: 'bottom',
-                        labels: { font: { size: 11 }, boxWidth: 12, padding: 10 }
-                    }
-                }
-            }
-        });
-        <?php endif; ?>
+        // ── Health Pie — live, updates every 5 minutes ──────────
+        const PIE_COLORS = {
+            Healthy:  '#10B981',
+            Warning:  '#F97316',
+            Critical: '#EF4444',
+        };
 
-        <?php if (!empty($weeklyTrends)): ?>
-        new Chart(document.getElementById('weeklyChart'), {
-            type: 'bar',
+        const healthChart = new Chart(document.getElementById('healthChart'), {
+            type: 'doughnut',
             data: {
-                labels: <?php echo json_encode($weekDays); ?>,
-                datasets: [
-                    {
-                        label: 'Avg Temperature (°C)',
-                        data: <?php echo json_encode($weekTemps); ?>,
-                        backgroundColor: '#F59E0B',
-                        yAxisID: 'yTemp',
-                        borderRadius: 4,
-                    },
-                    {
-                        label: 'Avg Humidity (%)',
-                        data: <?php echo json_encode($weekHumids); ?>,
-                        backgroundColor: '#60A5FA',
-                        yAxisID: 'yHumid',
-                        borderRadius: 4,
-                    },
-                    {
-                        label: 'Avg CO₂ (ppm)',
-                        data: <?php echo json_encode($weekCO2); ?>,
-                        backgroundColor: '#A78BFA',
-                        yAxisID: 'yCO2',
-                        borderRadius: 4,
-                    }
-                ]
+                labels: ['Healthy', 'Warning', 'Critical'],
+                datasets: [{ data: [0, 0, 0], backgroundColor: Object.values(PIE_COLORS), borderWidth: 2 }]
             },
             options: {
-                responsive: true,
                 maintainAspectRatio: false,
-                plugins: { legend: { position: 'bottom' } },
-                scales: {
-                    yTemp: {
-                        type: 'linear',
-                        position: 'left',
-                        min: 25, max: 42,
-                        title: { display: true, text: 'Temp (°C)', color: '#F59E0B' },
-                        ticks: { color: '#F59E0B' },
-                        grid: { color: 'rgba(245,158,11,0.1)' }
-                    },
-                    yHumid: {
-                        type: 'linear',
-                        position: 'right',
-                        min: 0, max: 100,
-                        title: { display: true, text: 'Humidity (%)', color: '#60A5FA' },
-                        ticks: { color: '#60A5FA' },
-                        grid: { drawOnChartArea: false }
-                    },
-                    yCO2: {
-                        type: 'linear',
-                        position: 'right',
-                        min: 0,
-                        title: { display: true, text: 'CO₂ (ppm)', color: '#A78BFA' },
-                        ticks: { color: '#A78BFA' },
-                        grid: { drawOnChartArea: false }
+                cutout: '62%',
+                plugins: {
+                    legend: { position: 'bottom', labels: { font: { size: 11 }, boxWidth: 12, padding: 8 } },
+                    tooltip: {
+                        callbacks: {
+                            label: ctx => {
+                                const total = ctx.dataset.data.reduce((a,b) => a+b, 0);
+                                const pct = total > 0 ? Math.round(ctx.raw / total * 100) : 0;
+                                return ` ${ctx.label}: ${ctx.raw} readings (${pct}%)`;
+                            }
+                        }
                     }
                 }
             }
         });
-        <?php endif; ?>
+
+        let pieAutoRefresh = null;
+
+        // Single source-of-truth fetch — always reads both controls directly
+        function updateHealthPie() {
+            const today     = new Date().toISOString().slice(0, 10);
+            const picked    = document.getElementById('pieDatePicker').value;   // '' or 'YYYY-MM-DD'
+            const hiveId    = document.getElementById('pieHiveFilter').value;   // '0' or hive id
+            const dateParam = picked || today;
+
+            fetch(`api/health_pie.php?date=${dateParam}&hive_id=${hiveId}`)
+                .then(r => r.json())
+                .then(d => {
+                    if (!d.success) return;
+                    const c = d.counts, total = d.total;
+
+                    healthChart.data.datasets[0].data = [c.Healthy, c.Warning, c.Critical];
+                    healthChart.update('active');
+
+                    const pct = v => total > 0 ? Math.round(v / total * 100) + '%' : '0%';
+                    document.getElementById('cntHealthy').textContent  = c.Healthy;
+                    document.getElementById('cntWarning').textContent  = c.Warning;
+                    document.getElementById('cntCritical').textContent = c.Critical;
+                    document.getElementById('pctHealthy').textContent  = pct(c.Healthy);
+                    document.getElementById('pctWarning').textContent  = pct(c.Warning);
+                    document.getElementById('pctCritical').textContent = pct(c.Critical);
+                    document.getElementById('pieTotalNum').textContent = total;
+                    const centerLabel = document.querySelector('#pieCenterLabel span:last-child');
+                    if (centerLabel) centerLabel.textContent = (d.mode === 'average') ? 'avg points' : 'readings';
+                    document.getElementById('pieLastReading').textContent = d.last_reading ?? '—';
+                    document.getElementById('pieUpdatedAt').textContent   = d.updated_at;
+
+                    const shownDate = d.fallback_date || dateParam;
+                    const isToday   = dateParam === today && !d.fallback_date;
+
+                    // Date badge (top-right)
+                    const dateLabel = d.fallback_date
+                        ? `Showing ${d.fallback_date} (no data for ${dateParam})`
+                        : (isToday ? '' : `Showing ${dateParam}`);
+                    document.getElementById('pieDateLabel').textContent = dateLabel;
+
+                    // Subtitle
+                    const hiveId  = document.getElementById('pieHiveFilter').value;
+                    const isAllHives = hiveId === '0';
+                    const subtitle = document.getElementById('pieSubtitle');
+                    if (subtitle) {
+                        const modeText = isAllHives
+                            ? 'Average of all hives'
+                            : 'Single hive readings';
+                        subtitle.textContent = isToday
+                            ? `${modeText} · Temp · Humidity · CO₂ · updates every 5 min`
+                            : `${modeText} for ${shownDate} · Temp · Humidity · CO₂`;
+                    }
+                })
+                .catch(() => {});
+        }
+
+        function onPieDateChange() {
+            const picked   = document.getElementById('pieDatePicker').value;
+            const clearBtn = document.getElementById('pieDateClearBtn');
+            if (clearBtn) clearBtn.classList.toggle('hidden', !picked);
+
+            // Pause auto-refresh when viewing a specific past date; resume for today
+            if (pieAutoRefresh) { clearInterval(pieAutoRefresh); pieAutoRefresh = null; }
+            if (!picked) {
+                pieAutoRefresh = setInterval(updateHealthPie, 5 * 60 * 1000);
+            }
+            updateHealthPie();
+        }
+
+        function clearPieDate() {
+            document.getElementById('pieDatePicker').value = '';
+            onPieDateChange();
+        }
+
+        document.getElementById('pieDatePicker').addEventListener('change', onPieDateChange);
+        document.getElementById('pieHiveFilter').addEventListener('change', updateHealthPie);
+
+        updateHealthPie();
+        pieAutoRefresh = setInterval(updateHealthPie, 5 * 60 * 1000);
+
+        let weeklyChartInstance = null;
+
+        function loadWeeklyChart(offset) {
+            fetch(`api/weekly_trends.php?week_offset=${offset}`)
+                .then(r => r.json())
+                .then(d => {
+                    if (!d.success) return;
+                    const sub = document.getElementById('weeklyDateRange');
+                    if (sub) sub.textContent = d.date_range;
+
+                    const newData = {
+                        labels: d.days,
+                        datasets: [
+                            { label: 'Avg Temp (°C)',     data: d.temp,     backgroundColor: '#F59E0B', yAxisID: 'yTemp',  borderRadius: 4 },
+                            { label: 'Avg Humidity (%)',  data: d.humidity, backgroundColor: '#60A5FA', yAxisID: 'yHumid', borderRadius: 4 },
+                            { label: 'Avg CO₂ (ppm)',     data: d.co2,      backgroundColor: '#A78BFA', yAxisID: 'yCO2',   borderRadius: 4 },
+                        ]
+                    };
+
+                    if (weeklyChartInstance) {
+                        weeklyChartInstance.data.labels   = newData.labels;
+                        weeklyChartInstance.data.datasets = newData.datasets;
+                        weeklyChartInstance.update('active');
+                    } else {
+                        weeklyChartInstance = new Chart(document.getElementById('weeklyChart'), {
+                            type: 'bar',
+                            data: newData,
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                plugins: { legend: { position: 'bottom' } },
+                                scales: {
+                                    yTemp: {
+                                        type: 'linear', position: 'left',
+                                        min: 25, max: 42,
+                                        title: { display: true, text: 'Temp (°C)', color: '#F59E0B' },
+                                        ticks: { color: '#F59E0B' },
+                                        grid: { color: 'rgba(245,158,11,0.1)' }
+                                    },
+                                    yHumid: {
+                                        type: 'linear', position: 'right',
+                                        min: 0, max: 100,
+                                        title: { display: true, text: 'Humidity (%)', color: '#60A5FA' },
+                                        ticks: { color: '#60A5FA' },
+                                        grid: { drawOnChartArea: false }
+                                    },
+                                    yCO2: {
+                                        type: 'linear', position: 'right', min: 0,
+                                        title: { display: true, text: 'CO₂ (ppm)', color: '#A78BFA' },
+                                        ticks: { color: '#A78BFA' },
+                                        grid: { drawOnChartArea: false }
+                                    }
+                                }
+                            }
+                        });
+                    }
+                })
+                .catch(() => {});
+        }
+
+        document.getElementById('weeklyWeekOffset').addEventListener('change', function () {
+            loadWeeklyChart(parseInt(this.value));
+        });
+
+        loadWeeklyChart(0);
         <?php if (!empty($soundRows)): ?>
         new Chart(document.getElementById('soundChart'), {
             type: 'line',
@@ -562,12 +692,18 @@ $scoreColor = $healthScore['score'] >= 80 ? 'text-green-600' : ($healthScore['sc
         let sensorChartInstance = null;
 
         function loadSensorChart() {
-            const range  = document.getElementById('sensorChartRange').value;
-            const hiveId = document.getElementById('sensorChartHive').value;
-            const icon   = document.getElementById('sensorChartRefreshIcon');
+            const range    = document.getElementById('sensorChartRange').value;
+            const hiveId   = document.getElementById('sensorChartHive').value;
+            const fromDate = document.getElementById('sensorFromDate').value;
+            const clearBtn = document.getElementById('sensorDateClearBtn');
+            const icon     = document.getElementById('sensorChartRefreshIcon');
             icon.classList.add('fa-spin');
 
-            fetch(`api/sensor_chart_data.php?range=${range}&hive_id=${hiveId}`)
+            // Show/hide the clear (×) button
+            if (clearBtn) clearBtn.classList.toggle('hidden', !fromDate);
+
+            const url = `api/sensor_chart_data.php?range=${range}&hive_id=${hiveId}` + (fromDate ? `&from_date=${fromDate}` : '');
+            fetch(url)
                 .then(r => r.json())
                 .then(d => {
                     icon.classList.remove('fa-spin');
@@ -664,9 +800,10 @@ $scoreColor = $healthScore['score'] >= 80 ? 'text-green-600' : ($healthScore['sc
                 .catch(() => icon.classList.remove('fa-spin'));
         }
 
-        // Auto-reload when dropdowns change
+        // Auto-reload when dropdowns / date change
         document.getElementById('sensorChartRange').addEventListener('change', loadSensorChart);
         document.getElementById('sensorChartHive').addEventListener('change', loadSensorChart);
+        document.getElementById('sensorFromDate').addEventListener('change', loadSensorChart);
 
         // Initial load
         loadSensorChart();
@@ -674,6 +811,7 @@ $scoreColor = $healthScore['score'] >= 80 ? 'text-green-600' : ($healthScore['sc
         function refreshReadings() {
             const btn  = document.getElementById('refreshBtn');
             const icon = document.getElementById('refreshIcon');
+            const savedScroll = window.scrollY;
             btn.disabled = true;
             icon.classList.add('fa-spin');
 
@@ -686,6 +824,7 @@ $scoreColor = $healthScore['score'] >= 80 ? 'text-green-600' : ($healthScore['sc
                     if (!data.hives.length) {
                         tbody.innerHTML = `<tr><td colspan="7" class="py-8 text-center text-gray-400 text-sm">
                             <i class="fas fa-satellite-dish mr-2"></i>No hives registered yet.</td></tr>`;
+                        requestAnimationFrame(() => window.scrollTo({ top: savedScroll, behavior: 'instant' }));
                         return;
                     }
 
@@ -737,12 +876,16 @@ $scoreColor = $healthScore['score'] >= 80 ? 'text-green-600' : ($healthScore['sc
                     }).join('');
 
                     document.getElementById('lastUpdated').textContent = 'Updated ' + data.updated_at;
+                    requestAnimationFrame(() => requestAnimationFrame(() =>
+                        window.scrollTo({ top: savedScroll, behavior: 'instant' })));
                 })
                 .catch(() => {
                     document.getElementById('liveReadingsBody').innerHTML =
                         `<tr><td colspan="7" class="py-6 text-center text-red-400 text-sm">
                             <i class="fas fa-exclamation-circle mr-1"></i>Failed to load data. Check connection.
                         </td></tr>`;
+                    requestAnimationFrame(() => requestAnimationFrame(() =>
+                        window.scrollTo({ top: savedScroll, behavior: 'instant' })));
                 })
                 .finally(() => {
                     icon.classList.remove('fa-spin');
@@ -753,6 +896,7 @@ $scoreColor = $healthScore['score'] >= 80 ? 'text-green-600' : ($healthScore['sc
         // Initial load + auto-refresh every 30 seconds
         refreshReadings();
         setInterval(refreshReadings, 15000);
+        window.__refreshPage = function() { refreshReadings(); refreshStats(); };
 
         // ── Auto-refresh top stat cards every 60 s ──────────────────
         function refreshStats() {

@@ -4,6 +4,14 @@ require_once 'config.php';
 require_once 'functions.php';
 checkAuth();
 
+// Mark inspection notes as seen (clears sidebar badge on first visit)
+if (isset($_SESSION['user_id'])) {
+    $_inspUid = (int)$_SESSION['user_id'];
+    $conn->query("INSERT INTO user_settings (user_id, last_inspection_seen)
+                  VALUES ($_inspUid, NOW())
+                  ON DUPLICATE KEY UPDATE last_inspection_seen = NOW()");
+}
+
 $hives = getAllHives($conn);
 $isAdmin = isAdmin();
 ?>
@@ -50,6 +58,32 @@ $isAdmin = isAdmin();
         .form-label { display:block; font-size:13px; font-weight:600; color:#374151; margin-bottom:5px; }
         .note-card { transition: transform 0.2s, box-shadow 0.2s; }
         .note-card:hover { transform: translateY(-3px); box-shadow: 0 12px 32px rgba(0,0,0,0.1); }
+        .note-card.note-unread {
+            box-shadow: 0 0 0 2px #10B981, 0 0 18px 4px rgba(16,185,129,0.35);
+            animation: noteGlow 2s ease-in-out infinite alternate;
+        }
+        .note-card.note-unread:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 0 2px #10B981, 0 8px 28px rgba(16,185,129,0.45);
+        }
+        @keyframes noteGlow {
+            from { box-shadow: 0 0 0 2px #10B981, 0 0 12px 3px rgba(16,185,129,0.25); }
+            to   { box-shadow: 0 0 0 2px #10B981, 0 0 22px 7px rgba(16,185,129,0.50); }
+        }
+        .note-unread-dot {
+            display: inline-block;
+            width: 8px; height: 8px;
+            background: #10B981;
+            border-radius: 50%;
+            margin-left: 6px;
+            vertical-align: middle;
+            animation: dotPulse 1.5s ease-in-out infinite;
+            flex-shrink: 0;
+        }
+        @keyframes dotPulse {
+            0%,100% { opacity: 1; transform: scale(1); }
+            50%      { opacity: 0.5; transform: scale(0.7); }
+        }
         .cond-excellent { background:#D1FAE5; color:#065F46; }
         .cond-good      { background:#DBEAFE; color:#1E40AF; }
         .cond-fair      { background:#FEF3C7; color:#92400E; }
@@ -263,30 +297,28 @@ $isAdmin = isAdmin();
         </div>
     </div>
 
-    <!-- ── Delete Confirm ── -->
-    <div id="deleteModal" class="modal-overlay" onclick="if(event.target===this)closeDeleteModal()">
-        <div class="modal-card" style="max-width:400px;">
-            <div class="p-6 text-center">
-                <div class="w-16 h-16 bg-red-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                    <i class="fas fa-trash text-red-500 text-2xl"></i>
-                </div>
-                <h3 class="font-bold text-lg text-gray-800 mb-2">Delete Inspection Note?</h3>
-                <p class="text-sm text-gray-500 mb-6">This inspection record will be permanently deleted and cannot be recovered.</p>
-                <div class="flex gap-3">
-                    <button onclick="closeDeleteModal()" class="flex-1 py-2.5 border border-gray-300 rounded-xl text-sm font-semibold hover:bg-gray-50 transition">Cancel</button>
-                    <button onclick="confirmDelete()" id="deleteConfirmBtn"
-                            class="flex-1 py-2.5 bg-red-500 hover:bg-red-600 text-white rounded-xl text-sm font-bold transition">
-                        <i class="fas fa-trash mr-1"></i> Delete
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <script>
     let allNotes = [];
-    let deleteTargetId = null;
     const isAdmin = <?php echo $isAdmin ? 'true' : 'false'; ?>;
+
+    // ── Viewed-notes tracking (per user, localStorage) ───────
+    const VIEWED_KEY = 'beeguard_viewed_notes_<?php echo (int)$_SESSION['user_id']; ?>';
+    function loadViewed() {
+        try { return new Set(JSON.parse(localStorage.getItem(VIEWED_KEY) || '[]')); }
+        catch(e) { return new Set(); }
+    }
+    function markViewed(id) {
+        const s = loadViewed();
+        s.add(String(id));
+        try { localStorage.setItem(VIEWED_KEY, JSON.stringify([...s])); } catch(e) {}
+        // remove glow from the card immediately
+        const card = document.querySelector(`.note-card[data-id="${id}"]`);
+        if (card) {
+            card.classList.remove('note-unread');
+            const dot = card.querySelector('.note-unread-dot');
+            if (dot) dot.remove();
+        }
+    }
 
     const condLabel  = { excellent:'Excellent', good:'Good', fair:'Fair', poor:'Poor', critical:'Critical' };
     const strLabel   = { strong:'Strong Colony', moderate:'Moderate', weak:'Weak Colony', queenless:'Queenless' };
@@ -353,12 +385,15 @@ $isAdmin = isAdmin();
             return;
         }
 
+        const viewed = loadViewed();
         grid.innerHTML = notes.map(n => {
             const c = condColors[n.hive_condition] || condColors.good;
             const shortObs = (n.observations || '').substring(0, 120) + ((n.observations || '').length > 120 ? '...' : '');
             const inspector = n.inspector_name || n.inspector_username || '—';
             const isAdminNote = n.inspector_role === 'admin';
             const canEdit = isAdmin || n.user_id == <?php echo (int)$_SESSION['user_id']; ?>;
+            const isUnread = !viewed.has(String(n.id));
+            const unreadDot = isUnread ? '<span class="note-unread-dot" title="New — not yet viewed"></span>' : '';
 
             const adminBadge = isAdminNote
                 ? `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-xs font-bold bg-purple-100 text-purple-700 ml-1">
@@ -366,13 +401,13 @@ $isAdmin = isAdmin();
                    </span>`
                 : '';
 
-            return `<div class="note-card bg-white rounded-2xl overflow-hidden shadow-sm border-l-4" style="border-left-color:${c.border};">
+            return `<div class="note-card${isUnread ? ' note-unread' : ''} bg-white rounded-2xl overflow-hidden shadow-sm border-l-4" data-id="${n.id}" style="border-left-color:${c.border};">
                 <div class="p-5">
                     <div class="flex items-start justify-between mb-3">
                         <div>
                             <h3 class="font-bold text-gray-800 flex items-center gap-2 flex-wrap">
                                 <i class="fas fa-hive text-green-500 text-sm"></i>
-                                ${escHtml(n.hive_name)}${adminBadge}
+                                ${escHtml(n.hive_name)}${adminBadge}${unreadDot}
                             </h3>
                             <p class="text-xs text-gray-500 mt-0.5">
                                 <i class="fas fa-calendar mr-1"></i>${n.inspection_date}
@@ -492,6 +527,7 @@ $isAdmin = isAdmin();
 
     // ── View modal ───────────────────────────────────────────
     function openView(id) {
+        markViewed(id);
         fetch(`api/inspection_crud.php?action=get&id=${id}`)
             .then(r => r.json())
             .then(data => {
@@ -547,11 +583,6 @@ $isAdmin = isAdmin();
             if (confirm('Delete this inspection note? This cannot be undone.')) doDelete();
         }
     }
-
-    function closeDeleteModal() {
-        document.getElementById('deleteModal').classList.remove('active');
-    }
-    function confirmDelete() { closeDeleteModal(); }
 
     function escHtml(str) {
         return String(str ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');

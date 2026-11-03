@@ -6,6 +6,7 @@ session_start();
 require_once '../config.php';
 require_once '../functions.php';
 checkAuth();
+session_write_close(); // release session lock so concurrent requests don't queue
 
 header('Content-Type: application/json');
 ob_clean();                        // discard anything output during includes

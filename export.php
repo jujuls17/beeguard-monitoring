@@ -52,7 +52,7 @@ $totalAll         = $countSensor + $countAudio + $countAlerts + $countLog + $cou
                     <!-- Data Type -->
                     <div class="mb-4">
                         <label class="block text-sm font-semibold text-gray-700 mb-2">Data Type</label>
-                        <select id="dataType" onchange="updatePreview()"
+                        <select id="dataType" onchange="onDataTypeChange()"
                             class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-yellow-500 focus:outline-none">
                             <option value="all">All Data</option>
                             <option value="sensor">Environmental Data (Temperature, Humidity, CO₂, Sound)</option>
@@ -60,7 +60,28 @@ $totalAll         = $countSensor + $countAudio + $countAlerts + $countLog + $cou
                             <option value="alerts">Alerts History</option>
                             <option value="activity">Activity Log</option>
                             <option value="inspection">Inspection Notes</option>
+                            <option value="analytics">📊 Analytics Summary (Averages)</option>
                         </select>
+                    </div>
+
+                    <!-- Analytics Period (shown only when Analytics Summary is selected) -->
+                    <div id="analyticsPeriodWrap" class="mb-4 hidden">
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Summary Period</label>
+                        <div class="grid grid-cols-3 gap-2">
+                            <button id="period-weekly" onclick="selectPeriod('weekly')"
+                                class="py-2 px-3 bg-yellow-500 text-white rounded-lg text-sm font-semibold hover:bg-yellow-600 transition">
+                                <i class="fas fa-calendar-week mr-1"></i> Weekly
+                            </button>
+                            <button id="period-monthly" onclick="selectPeriod('monthly')"
+                                class="py-2 px-3 border-2 border-gray-300 text-gray-600 rounded-lg text-sm font-semibold hover:bg-gray-50 transition">
+                                <i class="fas fa-calendar-alt mr-1"></i> Monthly
+                            </button>
+                            <button id="period-annual" onclick="selectPeriod('annual')"
+                                class="py-2 px-3 border-2 border-gray-300 text-gray-600 rounded-lg text-sm font-semibold hover:bg-gray-50 transition">
+                                <i class="fas fa-calendar mr-1"></i> Annual
+                            </button>
+                        </div>
+                        <p class="text-xs text-gray-400 mt-1">Aggregated averages — Temp · Humidity · CO₂ · Sound · Health counts</p>
                     </div>
 
                     <!-- Date Range -->
@@ -212,7 +233,7 @@ $totalAll         = $countSensor + $countAudio + $countAlerts + $countLog + $cou
                             <i class="fas fa-history text-yellow-600"></i> Recent Downloads
                         </h3>
                         <div id="recentDownloads" class="space-y-2">
-                            <p class="text-sm text-gray-400 text-center py-4">No downloads yet this session</p>
+                            <p class="no-downloads text-sm text-gray-400 text-center py-4">No recent downloads</p>
                         </div>
                     </div>
                 </div>
@@ -238,8 +259,31 @@ $totalAll         = $countSensor + $countAudio + $countAlerts + $countLog + $cou
             audio:      'Audio Analysis',
             alerts:     'Alerts History',
             activity:   'Activity Log',
-            inspection: 'Inspection Notes'
+            inspection: 'Inspection Notes',
+            analytics:  'Analytics Summary'
         };
+
+        let selectedPeriod = 'weekly';
+
+        function selectPeriod(p) {
+            selectedPeriod = p;
+            ['weekly','monthly','annual'].forEach(x => {
+                const btn = document.getElementById('period-' + x);
+                if (x === p) {
+                    btn.className = 'py-2 px-3 bg-yellow-500 text-white rounded-lg text-sm font-semibold hover:bg-yellow-600 transition';
+                } else {
+                    btn.className = 'py-2 px-3 border-2 border-gray-300 text-gray-600 rounded-lg text-sm font-semibold hover:bg-gray-50 transition';
+                }
+            });
+            updatePreview();
+        }
+
+        function onDataTypeChange() {
+            const type = document.getElementById('dataType').value;
+            const wrap = document.getElementById('analyticsPeriodWrap');
+            wrap.classList.toggle('hidden', type !== 'analytics');
+            updatePreview();
+        }
 
         const rangeLabels = {
             '7':'Last 7 Days','30':'Last 30 Days','90':'Last 3 Months',
@@ -261,23 +305,44 @@ $totalAll         = $countSensor + $countAudio + $countAlerts + $countLog + $cou
             updatePreview();
         }
 
-        function addRecentDownload(type, range, hive, fmt, time) {
+        const LS_KEY = 'beeguard_recent_downloads';
+
+        function loadRecentDownloads() {
+            try {
+                const saved = JSON.parse(localStorage.getItem(LS_KEY) || '[]');
+                if (saved.length) {
+                    saved.forEach(d => renderDownloadEntry(d, false));
+                }
+            } catch(e) {}
+        }
+
+        function renderDownloadEntry(d, prepend = true) {
             const container = document.getElementById('recentDownloads');
+            const placeholder = container.querySelector('p.no-downloads');
+            if (placeholder) placeholder.remove();
             const fmtColor = {CSV:'bg-green-100 text-green-700', WORD:'bg-blue-100 text-blue-700', PDF:'bg-red-100 text-red-700'};
             const entry = document.createElement('div');
             entry.className = 'flex items-center gap-3 p-2.5 bg-gray-50 rounded-lg';
             entry.innerHTML = `
                 <i class="fas fa-file-download text-yellow-500"></i>
                 <div class="flex-1 min-w-0">
-                    <p class="text-sm font-semibold text-gray-700 truncate">${type} — ${range}</p>
-                    <p class="text-xs text-gray-400">${hive} &bull; ${time}</p>
+                    <p class="text-sm font-semibold text-gray-700 truncate">${d.type} — ${d.range}</p>
+                    <p class="text-xs text-gray-400">${d.hive} &bull; ${d.time}</p>
                 </div>
-                <span class="text-xs font-bold px-2 py-0.5 rounded-full ${fmtColor[fmt]||'bg-gray-100 text-gray-600'}">${fmt}</span>`;
-            const placeholder = container.querySelector('p');
-            if (placeholder) placeholder.remove();
-            container.insertBefore(entry, container.firstChild);
-            // Keep max 5
+                <span class="text-xs font-bold px-2 py-0.5 rounded-full ${fmtColor[d.fmt]||'bg-gray-100 text-gray-600'}">${d.fmt}</span>`;
+            if (prepend) container.insertBefore(entry, container.firstChild);
+            else container.appendChild(entry);
             while (container.children.length > 5) container.removeChild(container.lastChild);
+        }
+
+        function addRecentDownload(type, range, hive, fmt, time) {
+            const entry = { type, range, hive, fmt, time };
+            renderDownloadEntry(entry, true);
+            try {
+                const saved = JSON.parse(localStorage.getItem(LS_KEY) || '[]');
+                saved.unshift(entry);
+                localStorage.setItem(LS_KEY, JSON.stringify(saved.slice(0, 5)));
+            } catch(e) {}
         }
 
         function updatePreview() {
@@ -286,11 +351,18 @@ $totalAll         = $countSensor + $countAudio + $countAlerts + $countLog + $cou
             const hive  = document.getElementById('hiveFilter');
             const hiveTxt = hive.options[hive.selectedIndex].text;
 
-            document.getElementById('prev-type').textContent   = typeLabels[type];
+            const periodLabels = { weekly:'Weekly', monthly:'Monthly', annual:'Annual' };
+            const typeDisplay = type === 'analytics'
+                ? `Analytics Summary — ${periodLabels[selectedPeriod]} Averages`
+                : typeLabels[type];
+
+            document.getElementById('prev-type').textContent   = typeDisplay;
             document.getElementById('prev-range').textContent  = rangeLabels[range];
             document.getElementById('prev-hive').textContent   = hiveTxt;
             document.getElementById('prev-format').textContent = selectedFormat.toUpperCase();
-            document.getElementById('prev-count').textContent  = dbCounts[type].toLocaleString() + ' (approx)';
+            document.getElementById('prev-count').textContent  = type === 'analytics'
+                ? 'aggregated rows'
+                : (dbCounts[type] ?? dbCounts.all).toLocaleString() + ' (approx)';
         }
 
         function doExport() {
@@ -305,7 +377,7 @@ $totalAll         = $countSensor + $countAudio + $countAlerts + $countLog + $cou
             icon.className = 'fas fa-spinner fa-spin';
             txt.textContent = 'Generating...';
 
-            const url = `api/export_data.php?type=${type}&range=${range}&hive_id=${hiveId}&format=${selectedFormat}`;
+            const url = `api/export_data.php?type=${type}&range=${range}&hive_id=${hiveId}&format=${selectedFormat}&period=${selectedPeriod}`;
 
             if (selectedFormat === 'pdf') {
                 window.open(url, '_blank');
@@ -331,7 +403,8 @@ $totalAll         = $countSensor + $countAudio + $countAlerts + $countLog + $cou
             }, 2000);
         }
 
-        updatePreview();
+        onDataTypeChange();
+        loadRecentDownloads();
     </script>
 </body>
 </html>

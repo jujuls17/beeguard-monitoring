@@ -22,6 +22,10 @@ checkAuth();
             from { opacity:0; transform:translateY(-8px); }
             to   { opacity:1; transform:translateY(0); }
         }
+        .range-ok   { background:#ECFDF5; color:#065F46; }
+        .range-warn { background:#FFFBEB; color:#92400E; }
+        .range-crit { background:#FEF2F2; color:#991B1B; }
+        .range-cell { padding:4px 10px; border-radius:6px; font-size:12px; font-weight:600; white-space:nowrap; }
     </style>
 </head>
 <body class="bg-gray-50">
@@ -40,13 +44,200 @@ checkAuth();
                     </span>
                     Help & Documentation
                 </h1>
-                <p class="text-gray-500 text-sm mt-0.5">Get support and learn how to use BeeGuard effectively</p>
+                <p class="text-gray-500 text-sm mt-0.5">System reference, sensor thresholds, and frequently asked questions</p>
             </div>
         </div>
 
         <div class="p-8 space-y-8">
 
-            <!-- FAQ + System Info row -->
+            <!-- ── Sensor Reference Table ──────────────────────────────── -->
+            <div class="bg-white rounded-xl p-6">
+                <h3 class="font-bold text-lg text-gray-900 mb-1 flex items-center gap-2">
+                    <i class="fas fa-sliders text-amber-500"></i>
+                    Sensor Optimal Ranges &amp; Alert Thresholds
+                </h3>
+                <p class="text-sm text-gray-500 mb-5">These are the exact thresholds BeeGuard uses to generate warnings and critical alerts. Based on standard honeybee colony biology research.</p>
+
+                <!-- Temperature -->
+                <div class="mb-6">
+                    <div class="flex items-center gap-2 mb-3">
+                        <span class="w-7 h-7 rounded-lg flex items-center justify-center bg-orange-50">
+                            <i class="fas fa-thermometer-half text-orange-500 text-sm"></i>
+                        </span>
+                        <h4 class="font-semibold text-gray-800">Temperature (DHT22 · GPIO 4)</h4>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm border-collapse">
+                            <thead>
+                                <tr class="bg-gray-50 text-gray-500 text-xs uppercase tracking-wide">
+                                    <th class="text-left px-4 py-2.5 font-semibold rounded-tl-lg">Range</th>
+                                    <th class="text-left px-4 py-2.5 font-semibold">Status</th>
+                                    <th class="text-left px-4 py-2.5 font-semibold rounded-tr-lg">What It Means</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-100">
+                                <tr>
+                                    <td class="px-4 py-3 font-mono font-semibold text-green-700">33 – 36 °C</td>
+                                    <td class="px-4 py-3"><span class="range-cell range-ok">✓ Optimal</span></td>
+                                    <td class="px-4 py-3 text-gray-600">Ideal brood nest temperature. Bees are healthy and thermoregulating normally.</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-3 font-mono font-semibold text-yellow-700">36 – 38 °C</td>
+                                    <td class="px-4 py-3"><span class="range-cell range-warn">⚠ Warning (High)</span></td>
+                                    <td class="px-4 py-3 text-gray-600">Above optimal. Increase ventilation, reduce direct sun. Monitor for 2 hours.</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-3 font-mono font-semibold text-yellow-700">18 – 33 °C</td>
+                                    <td class="px-4 py-3"><span class="range-cell range-warn">⚠ Warning (Low)</span></td>
+                                    <td class="px-4 py-3 text-gray-600">Below optimal. Reduce entrance size to retain heat; add insulation.</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-3 font-mono font-semibold text-red-700">&gt; 38 °C</td>
+                                    <td class="px-4 py-3"><span class="range-cell range-crit">✕ Critical (High)</span></td>
+                                    <td class="px-4 py-3 text-gray-600">Heat stress risk. Open entrance immediately. Shade hive; check queen within 24 h.</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-3 font-mono font-semibold text-red-700">&lt; 18 °C</td>
+                                    <td class="px-4 py-3"><span class="range-cell range-crit">✕ Critical (Low)</span></td>
+                                    <td class="px-4 py-3 text-gray-600">Hypothermia risk. Insulate immediately. Reduce entrance to 1-bee gap.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Humidity -->
+                <div class="mb-6">
+                    <div class="flex items-center gap-2 mb-3">
+                        <span class="w-7 h-7 rounded-lg flex items-center justify-center bg-blue-50">
+                            <i class="fas fa-droplet text-blue-500 text-sm"></i>
+                        </span>
+                        <h4 class="font-semibold text-gray-800">Humidity (DHT22 · GPIO 4)</h4>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm border-collapse">
+                            <thead>
+                                <tr class="bg-gray-50 text-gray-500 text-xs uppercase tracking-wide">
+                                    <th class="text-left px-4 py-2.5 font-semibold rounded-tl-lg">Range</th>
+                                    <th class="text-left px-4 py-2.5 font-semibold">Status</th>
+                                    <th class="text-left px-4 py-2.5 font-semibold rounded-tr-lg">What It Means</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-100">
+                                <tr>
+                                    <td class="px-4 py-3 font-mono font-semibold text-green-700">40 – 95 %RH</td>
+                                    <td class="px-4 py-3"><span class="range-cell range-ok">✓ Optimal</span></td>
+                                    <td class="px-4 py-3 text-gray-600">Bees are managing hive humidity normally. Honey curing is proceeding well.</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-3 font-mono font-semibold text-yellow-700">95 – 98 %RH</td>
+                                    <td class="px-4 py-3"><span class="range-cell range-warn">⚠ Warning (High)</span></td>
+                                    <td class="px-4 py-3 text-gray-600">High humidity. Improve ventilation; prop lid or open screened bottom board.</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-3 font-mono font-semibold text-yellow-700">30 – 40 %RH</td>
+                                    <td class="px-4 py-3"><span class="range-cell range-warn">⚠ Warning (Low)</span></td>
+                                    <td class="px-4 py-3 text-gray-600">Low humidity. Provide a water source within 50 m of the hive.</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-3 font-mono font-semibold text-red-700">&gt; 98 %RH</td>
+                                    <td class="px-4 py-3"><span class="range-cell range-crit">✕ Critical (High)</span></td>
+                                    <td class="px-4 py-3 text-gray-600">Fungal disease risk (chalkbrood). Open all ventilation; inspect for water ingress.</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-3 font-mono font-semibold text-red-700">&lt; 30 %RH</td>
+                                    <td class="px-4 py-3"><span class="range-cell range-crit">✕ Critical (Low)</span></td>
+                                    <td class="px-4 py-3 text-gray-600">Dehydration risk. Provide water immediately; check for severe nectar dearth.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- CO2 -->
+                <div class="mb-6">
+                    <div class="flex items-center gap-2 mb-3">
+                        <span class="w-7 h-7 rounded-lg flex items-center justify-center bg-purple-50">
+                            <i class="fas fa-wind text-purple-500 text-sm"></i>
+                        </span>
+                        <h4 class="font-semibold text-gray-800">CO₂ Level (MQ-135 · GPIO 34)</h4>
+                    </div>
+                    <p class="text-xs text-gray-400 mb-3">Sensor is mounted <strong>inside</strong> the hive — expected values are much higher than outdoor ambient (~400 ppm).</p>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm border-collapse">
+                            <thead>
+                                <tr class="bg-gray-50 text-gray-500 text-xs uppercase tracking-wide">
+                                    <th class="text-left px-4 py-2.5 font-semibold rounded-tl-lg">Range</th>
+                                    <th class="text-left px-4 py-2.5 font-semibold">Status</th>
+                                    <th class="text-left px-4 py-2.5 font-semibold rounded-tr-lg">What It Means</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-100">
+                                <tr>
+                                    <td class="px-4 py-3 font-mono font-semibold text-green-700">≤ 4,000 ppm</td>
+                                    <td class="px-4 py-3"><span class="range-cell range-ok">✓ Normal</span></td>
+                                    <td class="px-4 py-3 text-gray-600">Healthy colony. Bees are actively fanning and ventilating the hive.</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-3 font-mono font-semibold text-yellow-700">4,000 – 6,000 ppm</td>
+                                    <td class="px-4 py-3"><span class="range-cell range-warn">⚠ Warning</span></td>
+                                    <td class="px-4 py-3 text-gray-600">Poor airflow. Open the screened bottom board or entrance reducer.</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-3 font-mono font-semibold text-red-700">&gt; 6,000 ppm</td>
+                                    <td class="px-4 py-3"><span class="range-cell range-crit">✕ Critical</span></td>
+                                    <td class="px-4 py-3 text-gray-600">Severe ventilation failure. Open all entrances immediately; brood suffocation risk.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Sound / Colony Status -->
+                <div>
+                    <div class="flex items-center gap-2 mb-3">
+                        <span class="w-7 h-7 rounded-lg flex items-center justify-center bg-green-50">
+                            <i class="fas fa-microphone text-green-600 text-sm"></i>
+                        </span>
+                        <h4 class="font-semibold text-gray-800">Sound / Colony Status (MAX4466 · GPIO 35 + CNN)</h4>
+                    </div>
+                    <p class="text-xs text-gray-400 mb-3">The ESP32 reports raw <strong>sound level (0–100%)</strong> and <strong>dominant frequency (Hz)</strong>. Colony status (normal/queenless/swarming) is classified by uploading a WAV recording to the CNN model — it is <em>not</em> inferred automatically from the live level.</p>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm border-collapse">
+                            <thead>
+                                <tr class="bg-gray-50 text-gray-500 text-xs uppercase tracking-wide">
+                                    <th class="text-left px-4 py-2.5 font-semibold rounded-tl-lg">Colony State</th>
+                                    <th class="text-left px-4 py-2.5 font-semibold">Typical Frequency</th>
+                                    <th class="text-left px-4 py-2.5 font-semibold">Alert Level</th>
+                                    <th class="text-left px-4 py-2.5 font-semibold rounded-tr-lg">What to Do</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-100">
+                                <tr>
+                                    <td class="px-4 py-3 font-semibold text-green-700">Normal</td>
+                                    <td class="px-4 py-3 font-mono text-gray-600">200 – 500 Hz</td>
+                                    <td class="px-4 py-3"><span class="range-cell range-ok">✓ Healthy</span></td>
+                                    <td class="px-4 py-3 text-gray-600">No action needed. Colony is working normally.</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-3 font-semibold text-red-700">Queenless</td>
+                                    <td class="px-4 py-3 font-mono text-gray-600">400 – 600 Hz</td>
+                                    <td class="px-4 py-3"><span class="range-cell range-crit">✕ Critical</span></td>
+                                    <td class="px-4 py-3 text-gray-600">Inspect for queen cells or eggs. Re-queen if absent for more than 5 days.</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-3 font-semibold text-orange-700">Swarming</td>
+                                    <td class="px-4 py-3 font-mono text-gray-600">500 – 800 Hz</td>
+                                    <td class="px-4 py-3"><span class="range-cell range-warn">⚠ Warning</span></td>
+                                    <td class="px-4 py-3 text-gray-600">Look for queen cells. Consider splitting the colony to prevent swarm loss.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ── FAQ + System Info row ──────────────────────────────── -->
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
                 <!-- FAQ (2/3 width) -->
@@ -61,44 +252,55 @@ checkAuth();
                         $faqs = [
                             // ── System ────────────────────────────────────────────────
                             ['🖥️ &nbsp;What is BeeGuard and how does it work?',
-                             'BeeGuard is an IoT-based smart beehive monitoring system. ESP32 microcontrollers attached to each hive collect real-time sensor data (temperature, humidity, CO₂, and sound) and send it to this dashboard over Wi-Fi every 10 seconds. A machine-learning model then analyzes the audio to detect colony health problems automatically.'],
+                             'BeeGuard is an IoT-based smart beehive monitoring system designed for precision apiculture. ESP32 microcontrollers attached to each hive collect real-time sensor data — temperature, humidity, CO₂, and sound — and send it to this web dashboard over Wi-Fi every <strong>15 seconds</strong>. A CNN machine-learning model then analyzes uploaded audio recordings to detect colony health problems (normal, queenless, or swarming). A separate YOLOv8 AI model monitors the hive entrance via USB camera in real time for non-bee insect intrusions.'],
 
                             ['📊 &nbsp;How often is data collected and displayed?',
-                             'Sensor data is posted by the ESP32 every 10 seconds and stored in the database. The dashboard auto-refreshes every 30 seconds to show the latest readings. The ML audio analysis runs every 60 seconds. All historical data is kept and can be exported at any time.'],
+                             'The ESP32 sends sensor data every <strong>15 seconds</strong> and stores it in the database. The Live Hives and Dashboard pages auto-refresh every <strong>15 seconds</strong>. Analytics charts refresh every <strong>60 seconds</strong>. A device is marked <em>offline</em> if no data is received for more than <strong>2 minutes</strong>. All historical data is kept permanently and can be exported at any time from the Export Data page.'],
 
                             ['🔔 &nbsp;What kinds of alerts does the system generate?',
-                             'BeeGuard generates alert types including: High/Low Temperature, High Humidity, High CO₂, Queenless Colony, Swarming Detected, Camera Insect Intrusion, and ESP32 Offline. Each alert has a severity level (info / warning / critical) and is logged with a timestamp per hive.'],
+                             'BeeGuard generates these alert types automatically:<br><br>
+                             <b>Temperature</b> — too high (&gt;36°C warning, &gt;38°C critical) or too low (&lt;33°C warning, &lt;18°C critical)<br>
+                             <b>Humidity</b> — too high (&gt;95% warning, &gt;98% critical) or too low (&lt;40% warning, &lt;30% critical)<br>
+                             <b>CO₂</b> — elevated (4,000–6,000 ppm warning, &gt;6,000 ppm critical)<br>
+                             <b>Colony Status</b> — queenless or swarming detected by CNN audio analysis<br>
+                             <b>Camera</b> — non-bee insect detected at hive entrance by YOLOv8<br><br>
+                             Each alert has a severity level (info / warning / critical) and is shown on the Alerts page with a recommended beekeeper action.'],
 
                             ['📷 &nbsp;How does the camera insect detection work?',
-                             'A USB webcam streams live video from the hive entrance. A custom-trained YOLOv8 (nano) AI model — trained on 2,000+ bee and insect photos — detects and classifies bees (green box), wasps, hornets, moths, and flies (red box) in real time. If a non-bee insect is detected, an alert is automatically created in the database. The camera runs 24/7 on a separate Python process.'],
+                             'A USB webcam streams live video from the hive entrance at up to 10 FPS. A custom-trained YOLOv8 (nano) model — trained on bee and insect photos — detects and classifies objects in real time: bees get a <span style="color:#16A34A;font-weight:bold;">green box</span>, while wasps, hornets, moths, and flies get a <span style="color:#DC2626;font-weight:bold;">red box</span>. If a non-bee insect is detected above the confidence threshold (0.25), an alert is automatically created. The camera runs on a separate Python process (port 5050) and does not affect the main PHP server performance.'],
 
-                            ['🤖 &nbsp;How accurate is the machine learning model?',
-                             'The audio classification CNN achieves approximately 92% accuracy across 6 colony states. The camera insect detector (YOLOv8n) uses a confidence threshold of 0.25 — meaning it only labels a detection when it is at least 25% confident. You can improve accuracy over time by collecting more labeled hive audio samples and retraining via the ML Training page.'],
+                            ['🤖 &nbsp;How does the CNN audio analysis work?',
+                             'The CNN (Convolutional Neural Network) model analyzes 3-second WAV recordings of hive audio. It extracts 40 MFCC (Mel-Frequency Cepstral Coefficient) features from each recording, producing a 40×216 spectrogram input. Three Conv2D layers with Global Average Pooling then classify the audio into one of 3 colony states: <b>Normal</b>, <b>Queenless</b>, or <b>Swarming</b>. To get a colony status, go to <b>Upload Sound</b>, choose the hive, and upload a WAV recording — the result appears in the hive modal and Live Hives page within seconds.'],
 
                             ['💾 &nbsp;What should I do when I receive a critical alert?',
-                             'Critical alerts require immediate attention. Open the Alerts page, read the recommended action for that alert type, then physically inspect the hive. For a Queenless alert: look for queen cells or eggs. For Swarming: inspect for queen cells and consider splitting the hive. Dismiss the alert once resolved.'],
+                             'Critical alerts require immediate attention. Open the <b>Alerts</b> page, read the recommended action for that specific alert type, then physically inspect the hive. For a <b>Queenless</b> alert: look for queen cells or eggs in the brood frames. For <b>Swarming</b>: inspect for capped queen cells and consider splitting the colony. For <b>High Temperature</b>: open the entrance and provide shade. Dismiss the alert once the issue is resolved.'],
 
                             // ── Sensors ───────────────────────────────────────────────
-                            ['🌡️ &nbsp;What sensors are used in each hive?',
-                             'Each hive uses three sensors connected to an ESP32: <br><br>
-                             <b>DHT22</b> (GPIO 4) — measures temperature (°C) and relative humidity (%RH) with ±0.5 °C / ±2–5% accuracy.<br>
-                             <b>MQ-135</b> (GPIO 34) — measures air quality and CO₂ concentration (ppm). High CO₂ can indicate poor ventilation or overcrowding.<br>
-                             <b>MAX4466</b> (GPIO 35) — a microphone amplifier that captures hive audio for colony-state ML analysis.'],
+                            ['🌡️ &nbsp;What sensors are used in each hive node?',
+                             'Each hive sensor node uses three sensors connected to a 30-pin ESP32:<br><br>
+                             <b>DHT22</b> (GPIO 4) — measures temperature (°C) and relative humidity (%RH). Accuracy: ±0.5°C and ±2–5%RH. Samples every 2 seconds; ESP32 sends the latest reading every 15 seconds.<br><br>
+                             <b>MQ-135</b> (GPIO 34, ADC 12-bit) — measures CO₂ concentration in ppm via analog voltage. Calibration baseline (CO2_R0) is set to 400.0 in fresh air. CO₂ scale factor (CO2_SCALE) is 1.8 for inside-hive placement.<br><br>
+                             <b>MAX4466</b> (GPIO 35) — electret microphone amplifier. Captures 512-sample RMS for sound level (0–100%) and 2048-sample zero-crossing for dominant frequency (Hz). The microphone is placed <em>inside</em> the hive directly on the brood frames.'],
 
-                            ['🌡️ &nbsp;What are the normal temperature and humidity ranges for a beehive?',
-                             'A healthy honeybee colony maintains the brood nest at 34–36 °C (93–97 °F) regardless of outside temperature — this is called thermoregulation. Relative humidity in the nest is typically kept at 40–80 %RH. Readings outside these ranges (e.g., temperature below 32 °C or above 38 °C) will trigger a warning or critical alert.'],
+                            ['📡 &nbsp;How does the ESP32 connect to the system?',
+                             'The ESP32 connects to the same Wi-Fi network as the server PC. On boot it calls <code>GET /beemonitoring/api/get_config.php</code> to fetch its sync interval, then POSTs a JSON payload to <code>/beemonitoring/api/receive_data.php</code> every 15 seconds. The payload includes: <code>api_key</code>, <code>device_id</code>, <code>hive_id</code>, <code>temperature</code>, <code>humidity</code>, <code>co2</code>, <code>sound_level</code>, and <code>dominant_freq</code>. The API key is <code>BEEGUARD_SECRET_2026</code> and must match in both <code>config.h</code> and the server. If the server IP changes (DHCP), update <code>SERVER_HOST</code> in <code>config.h</code> and reflash.'],
 
-                            ['💨 &nbsp;What does the CO₂ sensor measure and why does it matter?',
-                             'The MQ-135 sensor measures the concentration of CO₂ and other gases in the air near the hive entrance (in ppm — parts per million). Normal outdoor CO₂ is ~400 ppm. Inside a well-ventilated hive it stays below 3,000 ppm. Readings above 5,000 ppm suggest poor ventilation, overcrowding, or a closed entrance, which can stress the colony and reduce honey production.'],
+                            ['🔧 &nbsp;How do I register a new ESP32 device?',
+                             'Flash the ESP32 firmware with the correct <code>WIFI_SSID</code>, <code>WIFI_PASSWORD</code>, <code>SERVER_HOST</code>, <code>DEVICE_ID</code>, and <code>HIVE_ID</code> values in <code>config.h</code>. Once powered on and connected to Wi-Fi, the device will appear in the <b>Detected New ESP32 Devices</b> section on the Devices page within 15 seconds. Click <b>Register</b> to assign it to a new or existing hive. If the device already has a matching <code>HIVE_ID</code> in the database it will send data immediately.'],
 
-                            ['🔊 &nbsp;What does the sound sensor detect?',
-                             'The MAX4466 microphone captures continuous audio from inside the hive. The system extracts 40 MFCC (Mel-Frequency Cepstral Coefficient) features from the audio and passes them to a CNN model (3 Conv2D layers + GlobalAveragePooling) trained to recognize 3 colony states: <b>Normal</b>, <b>Queenless</b>, and <b>Swarming</b>. Each state produces a distinct sound pattern beekeepers can learn to recognize. Colony status is inferred by audio_service.py running on the laptop, not by the ESP32.'],
+                            ['📤 &nbsp;Can I export the sensor data?',
+                             'Yes. Go to the <b>Export Data</b> page to download sensor readings, ML predictions, and alert history in CSV, JSON, or PDF format. You can filter by hive, sensor type, and date range. All data is stored permanently — there is no automatic deletion. This is useful for thesis research, academic analysis, and physical beekeeper records.'],
 
-                            ['📡 &nbsp;What is the ESP32 and how does it connect?',
-                             'The ESP32 is a low-cost Wi-Fi + Bluetooth microcontroller that acts as the "brain" of each hive sensor node. It reads the DHT22, MQ-135, and MAX4466 every 10 seconds and sends the data to this dashboard via an HTTP POST request over your local Wi-Fi network. The firmware version is ESP32 v2.4.1. If an ESP32 goes offline (no data received for 5 minutes), an alert is generated automatically.'],
+                            ['🏥 &nbsp;What is the Hive Health Score?',
+                             'The hive health score (0–100) is a composite metric calculated from the latest sensor readings per hive:<br><br>
+                             • Temperature outside 33–36°C → −5 points<br>
+                             • CO₂ above 4,000 ppm → −5 points<br>
+                             • Humidity outside 40–95% → −3 points<br>
+                             • Colony status not "normal" (CNN audio result) → −8 points<br><br>
+                             A score of 80 or above is considered <b>Healthy</b>. The Dashboard shows the average score across all active hives.'],
 
-                            ['📤 &nbsp;Can I export the sensor data for research or records?',
-                             'Yes. Go to the <b>Export Data</b> page to download sensor readings, ML predictions, and alert history in CSV, JSON, or PDF format. You can filter by hive, sensor type, and date range. This is useful for thesis research, academic analysis, or keeping beekeeping records.'],
+                            ['📋 &nbsp;What are Inspection Notes?',
+                             'Inspection Notes are manual records created by beekeepers or admins to document physical hive checks. Each note records: inspection date, hive condition (excellent / good / fair / poor / critical), colony strength (strong / moderate / weak / queenless), and free-text observations and recommendations. Notes are visible on the Inspection Notes page and help correlate sensor data with real-world hive state. You can also mark a hive as "checked" directly from the Hive modal using the <b>Mark as Checked</b> button — this saves the timestamp of the last physical inspection.'],
                         ];
                         foreach ($faqs as $i => $faq):
                         ?>
@@ -128,10 +330,14 @@ checkAuth();
                         <div class="space-y-3">
                             <?php
                             $info = [
-                                ['fa-tag', 'text-yellow-600', '#FEF9C3', 'Version', 'BeeGuard v1.0.0'],
-                                ['fa-brain', 'text-purple-600', '#F5F3FF', 'ML Model', 'CNN v2.3.1'],
-                                ['fa-microchip', 'text-green-600', '#ECFDF5', 'Firmware', 'ESP32 v2.4.1'],
-                                ['fa-calendar', 'text-blue-600', '#EFF6FF', 'Last Update', 'May 2026'],
+                                ['fa-tag',        'text-yellow-600',  '#FEF9C3', 'Version',         'BeeGuard v1.0.0'],
+                                ['fa-brain',       'text-purple-600',  '#F5F3FF', 'CNN Model',        'AudioCNN v3.0 (3-class)'],
+                                ['fa-camera',      'text-blue-600',    '#EFF6FF', 'Camera Model',     'YOLOv8n (Custom)'],
+                                ['fa-microchip',   'text-green-600',   '#ECFDF5', 'Firmware',         'ESP32 v2.4.1'],
+                                ['fa-wifi',        'text-indigo-600',  '#EEF2FF', 'Send Interval',    'Every 15 seconds'],
+                                ['fa-clock',       'text-orange-600',  '#FFF7ED', 'Offline Timeout',  '2 minutes'],
+                                ['fa-database',    'text-gray-600',    '#F9FAFB', 'Database',         'MySQL (bee_monitoring)'],
+                                ['fa-calendar',    'text-blue-600',    '#EFF6FF', 'Last Update',      'October 2026'],
                             ];
                             foreach ($info as [$icon, $color, $bg, $label, $val]):
                             ?>
@@ -158,11 +364,12 @@ checkAuth();
                         <div class="space-y-2">
                             <?php
                             $links = [
-                                ['hives.php',           'fa-layer-group', 'View Live Hives'],
-                                ['analytics.php',       'fa-chart-line',  'Open Analytics'],
-                                ['alerts.php',          'fa-bell',        'Check Alerts'],
-                                ['export.php',          'fa-download',    'Export Data'],
-                                ['inspection_notes.php','fa-clipboard',   'Inspection Notes'],
+                                ['hives.php',            'fa-layer-group', 'View Live Hives'],
+                                ['analytics.php',        'fa-chart-line',  'Open Analytics'],
+                                ['alerts.php',           'fa-bell',        'Check Alerts'],
+                                ['upload_sound.php',     'fa-microphone',  'Upload Sound for CNN'],
+                                ['export.php',           'fa-download',    'Export Data'],
+                                ['inspection_notes.php', 'fa-clipboard',   'Inspection Notes'],
                             ];
                             foreach ($links as [$href, $icon, $label]):
                             ?>
@@ -191,16 +398,18 @@ checkAuth();
                         </div>
                         <div>
                             <h3 class="text-xl font-black text-white">Need Additional Support?</h3>
-                            <p class="text-yellow-100 text-sm mt-0.5">Our team is ready to help you get the most from BeeGuard.</p>
+                            <p class="text-yellow-100 text-sm mt-0.5">Contact the BeeGuard team for hardware setup, calibration help, or firmware issues.</p>
                         </div>
                     </div>
                     <div class="flex items-center gap-3 flex-shrink-0">
-                        <button class="bg-white text-yellow-600 px-5 py-2.5 rounded-xl font-bold text-sm hover:bg-yellow-50 transition-all shadow">
-                            <i class="fas fa-envelope mr-2"></i>Contact Support
-                        </button>
-                        <button class="border-2 border-white/60 text-white px-5 py-2.5 rounded-xl font-bold text-sm hover:bg-white/10 transition-all">
-                            <i class="fas fa-calendar mr-2"></i>Schedule Demo
-                        </button>
+                        <a href="mailto:jtgutierrez3165qc@student.fatima.edu.ph"
+                           class="bg-white text-yellow-600 px-5 py-2.5 rounded-xl font-bold text-sm hover:bg-yellow-50 transition-all shadow flex items-center gap-2">
+                            <i class="fas fa-envelope"></i>Contact Support
+                        </a>
+                        <a href="inspection_notes.php"
+                           class="border-2 border-white/60 text-white px-5 py-2.5 rounded-xl font-bold text-sm hover:bg-white/10 transition-all flex items-center gap-2">
+                            <i class="fas fa-clipboard"></i>Log Inspection
+                        </a>
                     </div>
                 </div>
             </div>

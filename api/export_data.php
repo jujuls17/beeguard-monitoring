@@ -1,18 +1,23 @@
 <?php
+ob_start();
 session_start();
 require_once '../config.php';
 require_once '../functions.php';
 checkAuth();
+ob_clean();
 
 $type   = $_GET['type']    ?? 'all';
 $range  = (int)($_GET['range']   ?? 7);
 $hiveId = (int)($_GET['hive_id'] ?? 0);
 $format = $_GET['format']  ?? 'csv';
+$period = $_GET['period']  ?? 'weekly';
 
-$allowedTypes   = ['all','sensor','audio','alerts','activity','inspection'];
+$allowedTypes   = ['all','sensor','audio','alerts','activity','inspection','analytics'];
 $allowedFormats = ['csv','word','pdf'];
+$allowedPeriods = ['weekly','monthly','annual'];
 if (!in_array($type,   $allowedTypes))   $type   = 'all';
 if (!in_array($format, $allowedFormats)) $format = 'csv';
+if (!in_array($period, $allowedPeriods)) $period = 'weekly';
 
 // ── Fetch helpers (each uses correct column names per table) ──────────
 function buildDateWhere(string $col, int $range): string {
@@ -108,19 +113,16 @@ function fetchInspections($conn, int $range, int $hiveId): array {
     $dc = buildDateWhere('n.inspection_date', $range);
     $hc = $hiveId > 0 ? "AND n.hive_id = {$hiveId}" : '';
     $sql = "SELECT n.id,
-                   h.name  AS hive_name,
-                   h.hive_id AS hive_code,
+                   h.name     AS hive_name,
+                   h.hive_id  AS hive_code,
                    u.username AS inspector,
-                   u.role AS inspector_role,
                    n.inspection_date,
+                   n.hive_condition,
                    n.colony_strength,
-                   n.queen_present,
-                   n.brood_pattern,
-                   n.honey_stores,
-                   n.pest_disease_signs,
-                   n.actions_taken,
+                   n.observations,
+                   n.recommendations,
                    n.notes,
-                   n.next_inspection_date
+                   n.created_at
             FROM inspection_notes n
             LEFT JOIN hives h ON h.id = n.hive_id
             LEFT JOIN users u ON u.id = n.user_id
@@ -131,25 +133,87 @@ function fetchInspections($conn, int $range, int $hiveId): array {
     return $res->fetch_all(MYSQLI_ASSOC);
 }
 
+function fetchAnalyticsSummary($conn, string $period, int $range, int $hiveId): array {
+    $dc = $range > 0 ? "AND sd.timestamp >= NOW() - INTERVAL {$range} DAY" : '';
+    $hc = $hiveId > 0 ? "AND sd.hive_id = {$hiveId}" : '';
+
+    $groupExpr = match($period) {
+        'monthly' => "DATE_FORMAT(sd.timestamp, '%Y-%m')",
+        'annual'  => "YEAR(sd.timestamp)",
+        default   => "YEARWEEK(sd.timestamp, 1)",   // weekly (ISO)
+    };
+    $labelExpr = match($period) {
+        'monthly' => "DATE_FORMAT(sd.timestamp, '%b %Y')",
+        'annual'  => "YEAR(sd.timestamp)",
+        default   => "CONCAT('Week ', WEEK(sd.timestamp,1), ' (', MIN(DATE(sd.timestamp)), ' – ', MAX(DATE(sd.timestamp)), ')')",
+    };
+
+    $sql = "SELECT
+                COALESCE(h.name, '—')    AS hive_name,
+                COALESCE(h.hive_id,'—')  AS hive_code,
+                {$labelExpr}             AS period_label,
+                MIN(DATE(sd.timestamp))  AS period_start,
+                MAX(DATE(sd.timestamp))  AS period_end,
+                ROUND(AVG(sd.temperature),1)  AS avg_temp_c,
+                ROUND(MIN(sd.temperature),1)  AS min_temp_c,
+                ROUND(MAX(sd.temperature),1)  AS max_temp_c,
+                ROUND(AVG(sd.humidity),1)     AS avg_humidity_pct,
+                ROUND(MIN(sd.humidity),1)     AS min_humidity_pct,
+                ROUND(MAX(sd.humidity),1)     AS max_humidity_pct,
+                ROUND(AVG(sd.co2),0)          AS avg_co2_ppm,
+                ROUND(MAX(sd.co2),0)          AS max_co2_ppm,
+                ROUND(AVG(sd.sound_level),1)  AS avg_sound_pct,
+                COUNT(*)                      AS total_readings,
+                SUM(CASE WHEN
+                    (sd.temperature IS NOT NULL AND (sd.temperature < 18 OR sd.temperature > 38))
+                    OR (sd.humidity IS NOT NULL AND (sd.humidity < 30 OR sd.humidity > 98))
+                    OR (sd.co2 IS NOT NULL AND sd.co2 > 6000)
+                    THEN 1 ELSE 0 END)         AS critical_readings,
+                SUM(CASE WHEN
+                    NOT ((sd.temperature IS NOT NULL AND (sd.temperature < 18 OR sd.temperature > 38))
+                        OR (sd.humidity IS NOT NULL AND (sd.humidity < 30 OR sd.humidity > 98))
+                        OR (sd.co2 IS NOT NULL AND sd.co2 > 6000))
+                    AND (
+                        (sd.temperature IS NOT NULL AND (sd.temperature < 33 OR sd.temperature > 36))
+                        OR (sd.humidity IS NOT NULL AND (sd.humidity < 40 OR sd.humidity > 95))
+                        OR (sd.co2 IS NOT NULL AND sd.co2 > 4000)
+                    ) THEN 1 ELSE 0 END)       AS warning_readings,
+                SUM(CASE WHEN
+                    (sd.temperature IS NULL OR (sd.temperature >= 33 AND sd.temperature <= 36))
+                    AND (sd.humidity IS NULL OR (sd.humidity >= 40 AND sd.humidity <= 95))
+                    AND (sd.co2 IS NULL OR sd.co2 <= 4000)
+                    THEN 1 ELSE 0 END)         AS healthy_readings
+            FROM sensor_data sd
+            LEFT JOIN hives h ON h.id = sd.hive_id
+            WHERE 1=1 {$hc} {$dc}
+              AND (sd.temperature IS NOT NULL OR sd.humidity IS NOT NULL OR sd.co2 IS NOT NULL)
+            GROUP BY h.id, {$groupExpr}
+            ORDER BY period_start ASC, hive_name ASC";
+
+    $res = $conn->query($sql);
+    return $res ? $res->fetch_all(MYSQLI_ASSOC) : [];
+}
+
 // ── Collect data ──────────────────────────────────────────────────────
 $data = [];
-if ($type === 'sensor'     || $type === 'all') $data['Sensor Data']      = fetchSensor($conn, $range, $hiveId);
-if ($type === 'audio'      || $type === 'all') $data['Audio Analysis']   = fetchAudio($conn, $range, $hiveId);
-if ($type === 'alerts'     || $type === 'all') $data['Alerts']           = fetchAlerts($conn, $range, $hiveId);
-if ($type === 'activity'   || $type === 'all') $data['Activity Log']     = fetchActivity($conn, $range, $hiveId);
-if ($type === 'inspection' || $type === 'all') $data['Inspection Notes'] = fetchInspections($conn, $range, $hiveId);
+if ($type === 'analytics') {
+    $periodLabel = match($period) { 'monthly'=>'Monthly','annual'=>'Annual',default=>'Weekly' };
+    $data["{$periodLabel} Analytics Summary"] = fetchAnalyticsSummary($conn, $period, $range, $hiveId);
+} else {
+    if ($type === 'sensor'     || $type === 'all') $data['Sensor Data']      = fetchSensor($conn, $range, $hiveId);
+    if ($type === 'audio'      || $type === 'all') $data['Audio Analysis']   = fetchAudio($conn, $range, $hiveId);
+    if ($type === 'alerts'     || $type === 'all') $data['Alerts']           = fetchAlerts($conn, $range, $hiveId);
+    if ($type === 'activity'   || $type === 'all') $data['Activity Log']     = fetchActivity($conn, $range, $hiveId);
+    if ($type === 'inspection' || $type === 'all') $data['Inspection Notes'] = fetchInspections($conn, $range, $hiveId);
+}
 
 $rangeLabel = match($range) {
     7 => '7days', 30 => '30days', 90 => '3months', 180 => '6months', 365 => '1year',
     default => 'alltime'
 };
 $timestamp = date('Ymd_His');
-$filename  = "beeguard_{$type}_{$rangeLabel}_{$timestamp}";
-
-$uname = $_SESSION['username'] ?? 'user';
-$totalRecordsExported = array_sum(array_map('count', $data));
-logActivity($conn, null, 'Data Export',
-    "User '$uname' exported $type data ($format format, $rangeLabel, $hiveText) — $totalRecordsExported records", 'info');
+$typeSlug  = $type === 'analytics' ? "analytics_{$period}" : $type;
+$filename  = "beeguard_{$typeSlug}_{$rangeLabel}_{$timestamp}";
 
 $rangeText = match($range) {
     7 => 'Last 7 Days', 30 => 'Last 30 Days', 90 => 'Last 3 Months',
@@ -157,6 +221,11 @@ $rangeText = match($range) {
 };
 $hiveText   = $hiveId > 0 ? "Hive #{$hiveId}" : 'All Hives';
 $exportedAt = date('F j, Y  H:i:s');
+
+$uname = $_SESSION['username'] ?? 'user';
+$totalRecordsExported = array_sum(array_map('count', $data));
+logActivity($conn, null, 'Data Export',
+    "User '$uname' exported $type data ($format format, $rangeLabel, $hiveText) — $totalRecordsExported records", 'info');
 
 // ── Word (.doc) ───────────────────────────────────────────────────────
 if ($format === 'word') {
@@ -335,6 +404,14 @@ header('Content-Type: text/html; charset=UTF-8');
           } elseif ($key === 'colony_status') {
               $label = ucwords(str_replace('_', ' ', (string)$val));
               $cell = "<span class=\"badge badge-normal\">{$label}</span>";
+          } elseif ($key === 'healthy_readings') {
+              $cell = "<span class=\"badge badge-normal\">" . htmlspecialchars((string)($val ?? '0')) . "</span>";
+          } elseif ($key === 'warning_readings') {
+              $cell = "<span class=\"badge badge-warning\">" . htmlspecialchars((string)($val ?? '0')) . "</span>";
+          } elseif ($key === 'critical_readings') {
+              $cell = $val > 0
+                  ? "<span class=\"badge badge-critical\">" . htmlspecialchars((string)$val) . "</span>"
+                  : "<span class=\"badge badge-normal\">0</span>";
           }
       ?><td><?php echo $cell; ?></td><?php endforeach; ?></tr>
     <?php endforeach; ?>

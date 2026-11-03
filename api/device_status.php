@@ -1,13 +1,18 @@
 <?php
+ob_start();
+ini_set('display_errors', 0);
+
 session_start();
 require_once '../config.php';
 require_once '../functions.php';
 checkAuth();
-session_write_close(); // release session lock so concurrent requests don't queue
+session_write_close();
 
 header('Content-Type: application/json');
+ob_clean();
 
 // Mark devices offline if no sync in last 5 minutes
+// (ESP32 restart: 30s MQ-135 warmup + up to 50s WiFi retry = ~80s; 5min gives safe margin)
 $conn->query(
     "UPDATE edge_devices
      SET status = 'offline'

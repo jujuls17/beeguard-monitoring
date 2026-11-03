@@ -40,8 +40,13 @@ try { $conn->query("CREATE TABLE IF NOT EXISTS chat_reads (
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 )"); } catch (Throwable $e) {}
 
+try { $conn->query("ALTER TABLE hives ADD COLUMN IF NOT EXISTS camera_index INT DEFAULT NULL"); } catch (Throwable $e) {}
 try { $conn->query("ALTER TABLE users ADD COLUMN IF NOT EXISTS security_question VARCHAR(255) DEFAULT NULL"); } catch (Throwable $e) {}
 try { $conn->query("ALTER TABLE users ADD COLUMN IF NOT EXISTS security_answer VARCHAR(255) DEFAULT NULL"); } catch (Throwable $e) {}
+try { $conn->query("ALTER TABLE users ADD COLUMN IF NOT EXISTS contact_number VARCHAR(30) DEFAULT NULL"); } catch (Throwable $e) {}
+try { $conn->query("ALTER TABLE users MODIFY COLUMN role ENUM('admin','user','beekeeper') DEFAULT 'user'"); } catch (Throwable $e) {}
+try { $conn->query("ALTER TABLE user_settings ADD COLUMN IF NOT EXISTS last_inspection_seen DATETIME DEFAULT NULL"); } catch (Throwable $e) {}
+try { $conn->query("ALTER TABLE user_settings ADD COLUMN IF NOT EXISTS last_alerts_seen DATETIME DEFAULT NULL"); } catch (Throwable $e) {}
 try { $conn->query("CREATE TABLE IF NOT EXISTS password_resets (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
@@ -52,6 +57,9 @@ try { $conn->query("CREATE TABLE IF NOT EXISTS password_resets (
     INDEX idx_token (token),
     INDEX idx_user (user_id)
 )"); } catch (Throwable $e) {}
+
+try { $conn->query("ALTER TABLE hives ADD COLUMN IF NOT EXISTS last_checked_at DATETIME DEFAULT NULL"); } catch (Throwable $e) {}
+try { $conn->query("ALTER TABLE hives ADD COLUMN IF NOT EXISTS last_checked_by INT DEFAULT NULL"); } catch (Throwable $e) {}
 
 // Error reporting
 error_reporting(E_ALL);

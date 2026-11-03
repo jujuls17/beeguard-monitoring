@@ -4,6 +4,14 @@ require_once 'config.php';
 require_once 'functions.php';
 checkAuth();
 
+// Mark alerts as seen for this user so the bell badge clears on next page load
+if (isset($_SESSION['user_id'])) {
+    $_alertsUid = (int)$_SESSION['user_id'];
+    $conn->query("INSERT INTO user_settings (user_id, last_alerts_seen)
+                  VALUES ($_alertsUid, NOW())
+                  ON DUPLICATE KEY UPDATE last_alerts_seen = NOW()");
+}
+
 $hives = getAllHives($conn);
 
 // Stat counts (always full scope, unfiltered)
@@ -117,7 +125,7 @@ while ($tr = $typesRes->fetch_assoc()) {
                     <div class="flex items-start justify-between">
                         <div>
                             <p class="text-sm font-medium opacity-80 mb-1">Dismissed</p>
-                            <h2 class="text-4xl font-black"><?php echo $totalHistory; ?></h2>
+                            <h2 class="text-4xl font-black" id="statDismissed"><?php echo $totalHistory; ?></h2>
                         </div>
                         <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
                             <i class="fas fa-history text-xl"></i>
@@ -246,10 +254,19 @@ while ($tr = $typesRes->fetch_assoc()) {
     function goPage(p) { state.page = p; fetchAlerts(); }
 
     // ── Fetch & render ────────────────────────────────────────────
-    function fetchAlerts() {
+    // silent=true skips the loading spinner so auto-refresh won't jump scroll
+    function fetchAlerts(silent = false) {
         const panel = document.getElementById('alertPanel');
-        panel.innerHTML = `<div class="flex items-center justify-center py-12 text-gray-400">
-            <i class="fas fa-spinner fa-spin text-2xl mr-3"></i> Loading...</div>`;
+        const savedScroll = window.scrollY;
+
+        if (!silent) {
+            panel.style.minHeight = '';
+            panel.innerHTML = `<div class="flex items-center justify-center py-12 text-gray-400">
+                <i class="fas fa-spinner fa-spin text-2xl mr-3"></i> Loading...</div>`;
+        } else {
+            // Lock current height so the page can't shrink during re-render
+            panel.style.minHeight = panel.offsetHeight + 'px';
+        }
 
         const p = new URLSearchParams({
             tab:      state.tab,
@@ -260,10 +277,16 @@ while ($tr = $typesRes->fetch_assoc()) {
             page:     state.page,
         });
 
+        const restore = () => {
+            panel.style.minHeight = '';
+            requestAnimationFrame(() => requestAnimationFrame(() =>
+                window.scrollTo({ top: savedScroll, behavior: 'instant' })));
+        };
+
         fetch('api/alerts_filter.php?' + p)
             .then(r => r.json())
             .then(data => {
-                if (!data.success) return;
+                if (!data.success) { restore(); return; }
                 document.getElementById('resultCount').textContent =
                     data.total.toLocaleString() + ' result' + (data.total !== 1 ? 's' : '');
 
@@ -271,6 +294,7 @@ while ($tr = $typesRes->fetch_assoc()) {
                     panel.innerHTML = emptyState(state.tab);
                     document.getElementById('alertPageInfo').textContent = '';
                     document.getElementById('alertPageBtns').innerHTML  = '';
+                    restore();
                     return;
                 }
 
@@ -279,10 +303,14 @@ while ($tr = $typesRes->fetch_assoc()) {
                     : renderHistoryList(data.rows);
 
                 renderPagination(data.page, data.pages, data.total);
+                restore();
             })
             .catch(() => {
-                panel.innerHTML = `<div class="bg-white rounded-xl p-10 text-center text-red-400">
-                    <i class="fas fa-exclamation-circle text-3xl mb-3 block"></i>Failed to load alerts.</div>`;
+                if (!silent) {
+                    panel.innerHTML = `<div class="bg-white rounded-xl p-10 text-center text-red-400">
+                        <i class="fas fa-exclamation-circle text-3xl mb-3 block"></i>Failed to load alerts.</div>`;
+                }
+                restore();
             });
     }
 
@@ -511,22 +539,34 @@ while ($tr = $typesRes->fetch_assoc()) {
     // ── Init ───────────────────────────────────────────────────────
     switchTab('active');
 
+    // Tell header.php's doReload() to use this instead of location.reload()
+    // so scroll position, active tab, and filter state survive the 15s refresh tick
+    window.__refreshPage = function() { fetchAlerts(true); };
+
     // ── Auto-refresh every 30s ────────────────────────────────────
     let _lastAlertCount = <?php echo $totalActive; ?>;
     setInterval(() => {
-        fetchAlerts();
+        fetchAlerts(true);
         // Also refresh stat cards
         fetch('api/alerts_filter.php?tab=active&page=1')
             .then(r => r.json())
             .then(d => {
                 if (!d.success) return;
-                const total    = d.total;
-                const crit     = d.rows.filter(a => a.severity === 'critical').length;
-                const warn     = d.rows.filter(a => a.severity === 'warning').length;
-                document.getElementById('statTotal').textContent   = total;
+                const gs   = d.global_stats || {};
+                const total = gs.total ?? d.total;
+                const crit  = gs.critical  ?? 0;
+                const warn  = gs.warning   ?? 0;
+                const dismissed = gs.dismissed ?? null;
+                document.getElementById('statTotal').textContent    = total;
                 document.getElementById('statCritical').textContent = crit;
                 document.getElementById('statWarning').textContent  = warn;
                 document.getElementById('activeBadge').textContent  = total;
+                if (dismissed !== null) {
+                    const histEl = document.getElementById('statDismissed');
+                    if (histEl) histEl.textContent = dismissed;
+                    const histBadge = document.getElementById('histBadge');
+                    if (histBadge) histBadge.textContent = dismissed;
+                }
                 if (total > _lastAlertCount) {
                     showAlertToast(total - _lastAlertCount + ' new alert(s) received!');
                 }

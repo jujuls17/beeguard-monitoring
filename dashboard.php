@@ -76,7 +76,7 @@ $avgCO2         = getAvgCO2($conn);
                     <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse inline-block"></span>
                     Live monitoring active
                 </div>
-                <span id="lastUpdatedAgo" class="hidden"></span>
+                <span id="lastUpdatedAgo" class="text-xs text-gray-400"></span>
             </div>
         </div>
 
@@ -409,7 +409,9 @@ $avgCO2         = getAvgCO2($conn);
             .catch(() => {});
     }
 
-    // Run immediately + every 30s
+    window.__refreshPage = function() { refreshStats(); };
+
+    // Run immediately + every 15s
     refreshStats();
     setInterval(refreshStats, 15000);
 

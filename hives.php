@@ -7,7 +7,32 @@ checkAuth();
 $hives = getAllHives($conn);
 $totalHives = count($hives);
 $normalCount = 0; $warnCount = 0; $noDataCount = 0;
-$isAdmin = isAdmin();
+$isAdmin   = isAdmin();
+$canCheck  = in_array($_SESSION['role'] ?? '', ['admin', 'beekeeper']);
+
+// Returns [bg, labelColor, valueColor] for a sensor tile based on thresholds
+function sensorTileStyle($type, $value) {
+    if ($value === null) return ['#F9FAFB', '#9CA3AF', '#6B7280'];
+    $v = (float)$value;
+    $green  = ['#ECFDF5', '#16A34A', '#15803D'];
+    $orange = ['#FFF7ED', '#F97316', '#EA580C'];
+    $red    = ['#FEF2F2', '#EF4444', '#DC2626'];
+    switch ($type) {
+        case 'temp':
+            if ($v >= 33 && $v <= 36) return $green;
+            if ($v > 38 || $v < 18)  return $red;
+            return $orange;
+        case 'humidity':
+            if ($v >= 40 && $v <= 95) return $green;
+            if ($v > 98 || $v < 30)  return $red;
+            return $orange;
+        case 'co2':
+            if ($v <= 4000) return $green;
+            if ($v > 6000)  return $red;
+            return $orange;
+    }
+    return ['#F9FAFB', '#9CA3AF', '#6B7280'];
+}
 
 // Pre-calculate stats before HTML renders
 foreach ($hives as $_hive) {
@@ -237,27 +262,32 @@ foreach ($hives as $_hive) {
                         </div>
                         <div class="p-4" id="card-body-<?php echo $hive['id']; ?>">
                             <?php if ($sensor): ?>
+                                <?php
+                                    [$tBg,$tLc,$tVc] = sensorTileStyle('temp',     $sensor['temperature']);
+                                    [$hBg,$hLc,$hVc] = sensorTileStyle('humidity', $sensor['humidity']);
+                                    [$cBg,$cLc,$cVc] = sensorTileStyle('co2',      $sensor['co2']);
+                                ?>
                                 <div class="grid grid-cols-3 gap-2 mb-3">
                                     <!-- Temperature -->
-                                    <div class="rounded-xl p-2.5" style="background:#EFF6FF;">
-                                        <p class="text-xs font-bold mb-0.5" style="color:#60A5FA;">Temp</p>
-                                        <p class="font-black leading-tight" style="font-size:15px;color:#2563EB;" id="temp-<?php echo $hive['id']; ?>"><?php echo number_format($sensor['temperature'], 1); ?>°C</p>
+                                    <div class="rounded-xl p-2.5" id="tile-temp-<?php echo $hive['id']; ?>" style="background:<?php echo $tBg; ?>;">
+                                        <p class="text-xs font-bold mb-0.5" id="tile-label-temp-<?php echo $hive['id']; ?>" style="color:<?php echo $tLc; ?>;">Temp</p>
+                                        <p class="font-black leading-tight" style="font-size:15px;color:<?php echo $tVc; ?>;" id="temp-<?php echo $hive['id']; ?>"><?php echo number_format($sensor['temperature'], 1); ?>°C</p>
                                         <div style="height:42px;position:relative;margin-top:3px;">
                                             <canvas id="chart-temp-<?php echo $hive['id']; ?>"></canvas>
                                         </div>
                                     </div>
                                     <!-- Humidity -->
-                                    <div class="rounded-xl p-2.5" style="background:#FFF1F2;">
-                                        <p class="text-xs font-bold mb-0.5" style="color:#F87171;">Humidity</p>
-                                        <p class="font-black leading-tight" style="font-size:15px;color:#DC2626;" id="humid-<?php echo $hive['id']; ?>"><?php echo number_format($sensor['humidity'], 1); ?>%</p>
+                                    <div class="rounded-xl p-2.5" id="tile-humidity-<?php echo $hive['id']; ?>" style="background:<?php echo $hBg; ?>;">
+                                        <p class="text-xs font-bold mb-0.5" id="tile-label-humidity-<?php echo $hive['id']; ?>" style="color:<?php echo $hLc; ?>;">Humidity</p>
+                                        <p class="font-black leading-tight" style="font-size:15px;color:<?php echo $hVc; ?>;" id="humid-<?php echo $hive['id']; ?>"><?php echo number_format($sensor['humidity'], 1); ?>%</p>
                                         <div style="height:42px;position:relative;margin-top:3px;">
                                             <canvas id="chart-humid-<?php echo $hive['id']; ?>"></canvas>
                                         </div>
                                     </div>
                                     <!-- CO₂ -->
-                                    <div class="rounded-xl p-2.5" style="background:#FFFBEB;">
-                                        <p class="text-xs font-bold mb-0.5" style="color:#FBBF24;">CO₂</p>
-                                        <p class="font-black leading-tight" style="font-size:15px;color:#D97706;" id="co2-<?php echo $hive['id']; ?>"><?php echo $sensor['co2']; ?>ppm</p>
+                                    <div class="rounded-xl p-2.5" id="tile-co2-<?php echo $hive['id']; ?>" style="background:<?php echo $cBg; ?>;">
+                                        <p class="text-xs font-bold mb-0.5" id="tile-label-co2-<?php echo $hive['id']; ?>" style="color:<?php echo $cLc; ?>;">CO₂</p>
+                                        <p class="font-black leading-tight" style="font-size:15px;color:<?php echo $cVc; ?>;" id="co2-<?php echo $hive['id']; ?>"><?php echo $sensor['co2']; ?>ppm</p>
                                         <div style="height:42px;position:relative;margin-top:3px;">
                                             <canvas id="chart-co2-<?php echo $hive['id']; ?>"></canvas>
                                         </div>
@@ -345,8 +375,8 @@ foreach ($hives as $_hive) {
                                 <div class="grid grid-cols-3 gap-3 mb-4">
                                     <?php
                                     $tOk = $sensor['temperature'] >= 33 && $sensor['temperature'] <= 36;
-                                    $hOk = $sensor['humidity'] <= 75;
-                                    $cOk = $sensor['co2'] <= 2000;
+                                    $hOk = $sensor['humidity'] >= 40 && $sensor['humidity'] <= 95;
+                                    $cOk = $sensor['co2'] <= 4000;
                                     ?>
                                     <div class="sensor-pill text-white" id="modal-pill-temp-<?php echo $hive['id']; ?>" style="background:linear-gradient(135deg,<?php echo $tOk?'#F97316,#EA580C':'#EF4444,#DC2626';?>);box-shadow:0 2px 10px rgba(<?php echo $tOk?'249,115,22':'239,68,68';?>,0.25);">
                                         <span class="text-xs opacity-80 font-medium">Temperature</span>
@@ -486,6 +516,43 @@ foreach ($hives as $_hive) {
                                     <i class="fas fa-lightbulb text-yellow-500"></i> Smart Recommendations
                                 </p>
                                 <div style="display:flex;flex-direction:column;gap:10px;">
+
+                                    <!-- Insect detection recommendation (shown live when camera detects insects) -->
+                                    <div id="modal-insect-rec-<?php echo $hive['id']; ?>"
+                                         class="rec-item"
+                                         style="display:none;background:#FFF1F2;border-left-color:#F87171;">
+                                        <div style="display:flex;align-items:flex-start;gap:12px;">
+                                            <div style="width:36px;height:36px;border-radius:10px;background:white;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                                                <i class="fas fa-bug" style="color:#EF4444;"></i>
+                                            </div>
+                                            <div style="flex:1;">
+                                                <p style="font-weight:700;color:#EF4444;font-size:14px;margin-bottom:2px;">
+                                                    Non-Bee Insect Detected at Entrance
+                                                </p>
+                                                <p style="font-size:13px;color:#6B7280;margin-bottom:8px;" id="modal-insect-rec-msg-<?php echo $hive['id']; ?>">
+                                                    Insects detected at hive entrance by camera.
+                                                </p>
+                                                <div style="display:flex;flex-direction:column;gap:4px;">
+                                                    <p style="font-size:12px;color:#374151;display:flex;align-items:flex-start;gap:6px;">
+                                                        <i class="fas fa-arrow-right" style="color:#EF4444;margin-top:3px;font-size:10px;"></i>
+                                                        Inspect entrance for wasps, hornets, or robber bees
+                                                    </p>
+                                                    <p style="font-size:12px;color:#374151;display:flex;align-items:flex-start;gap:6px;">
+                                                        <i class="fas fa-arrow-right" style="color:#EF4444;margin-top:3px;font-size:10px;"></i>
+                                                        Consider installing an entrance reducer to limit access
+                                                    </p>
+                                                    <p style="font-size:12px;color:#374151;display:flex;align-items:flex-start;gap:6px;">
+                                                        <i class="fas fa-arrow-right" style="color:#EF4444;margin-top:3px;font-size:10px;"></i>
+                                                        Check for robbing behavior — guard bees fighting at entrance
+                                                    </p>
+                                                    <p style="font-size:12px;color:#374151;display:flex;align-items:flex-start;gap:6px;">
+                                                        <i class="fas fa-arrow-right" style="color:#EF4444;margin-top:3px;font-size:10px;"></i>
+                                                        Remove any nearby food sources attracting insects
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <?php foreach ($recommendations as $rec):
                                         $rc = $rec['type'];
                                         $bg   = $rc==='critical'?'#FFF1F2':($rc==='warning'?'#FFFBEB':($rc==='success'?'#F0FDF4':'#EFF6FF'));
@@ -517,15 +584,48 @@ foreach ($hives as $_hive) {
                                 </div>
 
                                 <!-- Footer -->
-                                <div style="margin-top:14px;padding:10px 14px;background:#F8FAFC;border-radius:10px;display:flex;align-items:center;justify-content:space-between;">
-                                    <p style="font-size:12px;color:#94A3B8;">
-                                        <i class="far fa-clock mr-1"></i>Last updated: <strong style="color:#64748B;"><?php echo time_elapsed_string($sensor['timestamp']); ?></strong>
-                                    </p>
-                                    <button onclick="closeModal(<?php echo $hive['id']; ?>)"
-                                            style="font-size:13px;font-weight:600;color:#F59E0B;background:none;border:none;cursor:pointer;padding:4px 8px;border-radius:8px;transition:background 0.2s;"
-                                            onmouseover="this.style.background='#FEF3C7'" onmouseout="this.style.background='none'">
-                                        Close <i class="fas fa-times ml-1"></i>
-                                    </button>
+                                <!-- Footer -->
+                                <?php
+                                    $lastCheckedAt  = $hive['last_checked_at'] ?? null;
+                                    $checkedElapsed = $lastCheckedAt ? time_elapsed_string($lastCheckedAt) : null;
+                                    $checkerName = null;
+                                    if ($lastCheckedAt && !empty($hive['last_checked_by'])) {
+                                        $cr = $conn->query("SELECT username FROM users WHERE id = " . (int)$hive['last_checked_by']);
+                                        if ($cr) { $crow = $cr->fetch_assoc(); $checkerName = $crow['username'] ?? null; }
+                                    }
+                                ?>
+                                <div style="margin-top:14px;padding:10px 14px;background:#F8FAFC;border-radius:10px;display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;">
+                                    <div style="display:flex;flex-direction:column;gap:3px;">
+                                        <p style="font-size:12px;color:#94A3B8;margin:0;">
+                                            <i class="far fa-clock mr-1"></i>Last updated: <strong style="color:#64748B;"><?php echo time_elapsed_string($sensor['timestamp']); ?></strong>
+                                        </p>
+                                        <p style="font-size:12px;color:#94A3B8;margin:0;" id="modal-last-checked-<?php echo $hive['id']; ?>">
+                                            <?php if ($checkedElapsed): ?>
+                                            <i class="fas fa-check-circle mr-1" style="color:#22C55E;"></i>Last checked: <strong style="color:#64748B;"><?php echo $checkedElapsed; ?></strong>
+                                            <?php if ($checkerName): ?><span style="color:#CBD5E1;"> by <?php echo htmlspecialchars($checkerName); ?></span><?php endif; ?>
+                                            <?php else: ?>
+                                            <i class="fas fa-circle mr-1" style="color:#CBD5E1;font-size:8px;"></i><span style="color:#CBD5E1;">Not yet checked</span>
+                                            <?php endif; ?>
+                                        </p>
+                                    </div>
+                                    <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
+                                        <?php if ($canCheck): ?>
+                                        <div style="display:flex;align-items:center;gap:6px;">
+                                            <span style="font-size:11px;color:#94A3B8;font-style:italic;white-space:nowrap;">Click if already checked the hive</span>
+                                            <button id="btn-check-<?php echo $hive['id']; ?>"
+                                                    onclick="markChecked(<?php echo $hive['id']; ?>)"
+                                                    style="display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;color:#fff;background:linear-gradient(135deg,#22C55E,#16A34A);border:none;cursor:pointer;padding:5px 12px;border-radius:8px;transition:opacity 0.2s;box-shadow:0 2px 8px rgba(34,197,94,0.25);"
+                                                    onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">
+                                                <i class="fas fa-check"></i> Mark as Checked
+                                            </button>
+                                        </div>
+                                        <?php endif; ?>
+                                        <button onclick="closeModal(<?php echo $hive['id']; ?>)"
+                                                style="font-size:13px;font-weight:600;color:#F59E0B;background:none;border:none;cursor:pointer;padding:4px 8px;border-radius:8px;transition:background 0.2s;"
+                                                onmouseover="this.style.background='#FEF3C7'" onmouseout="this.style.background='none'">
+                                            Close <i class="fas fa-times ml-1"></i>
+                                        </button>
+                                    </div>
                                 </div>
 
                                 <?php else: ?>
@@ -694,6 +794,9 @@ foreach ($hives as $_hive) {
 
                     if (!data.online) {
                         bar.style.display = 'none';
+                        // Hide insect rec when camera is offline
+                        const recOff = document.getElementById('modal-insect-rec-' + hiveId);
+                        if (recOff) recOff.style.display = 'none';
                         return;
                     }
 
@@ -706,6 +809,18 @@ foreach ($hives as $_hive) {
                         alertEl.style.display = hasInsects ? 'flex' : 'none';
                     }
 
+                    // Show / update insect detection recommendation
+                    const insectRec    = document.getElementById('modal-insect-rec-'     + hiveId);
+                    const insectRecMsg = document.getElementById('modal-insect-rec-msg-' + hiveId);
+                    if (insectRec) {
+                        insectRec.style.display = hasInsects ? '' : 'none';
+                        if (hasInsects && insectRecMsg) {
+                            const n = data.insect_count ?? 0;
+                            insectRecMsg.textContent = n + ' non-bee insect' + (n > 1 ? 's' : '') +
+                                ' detected at hive entrance by camera. Immediate inspection recommended.';
+                        }
+                    }
+
                 });
 
                 // Update lightbox stats bar
@@ -714,7 +829,7 @@ foreach ($hives as $_hive) {
             .catch(() => {});
     }
     refreshDetectionStats();
-    setInterval(refreshDetectionStats, 1000);
+    setInterval(refreshDetectionStats, 5000);
 
     // Also update lightbox stats bar
     function updateLightboxStats(beeCount, insectCount, ts) {
@@ -726,8 +841,46 @@ foreach ($hives as $_hive) {
             (insectCount > 0 ? `<span style="color:#FCA5A5;font-size:11px;margin-left:12px;"><i class="fas fa-exclamation-triangle"></i> Alert!</span>` : '');
     }
 
-    // Auto-refresh every 5 seconds
+    // Returns [bg, labelColor, valueColor] for a sensor type + value
+    function sensorTileColors(type, value) {
+        const green  = ['#ECFDF5', '#16A34A', '#15803D'];
+        const orange = ['#FFF7ED', '#F97316', '#EA580C'];
+        const red    = ['#FEF2F2', '#EF4444', '#DC2626'];
+        const grey   = ['#F9FAFB', '#9CA3AF', '#6B7280'];
+        if (value === null || isNaN(value)) return grey;
+        const v = parseFloat(value);
+        if (type === 'temp') {
+            if (v >= 33 && v <= 36) return green;
+            if (v > 38 || v < 18)  return red;
+            return orange;
+        }
+        if (type === 'humidity') {
+            if (v >= 40 && v <= 95) return green;
+            if (v > 98 || v < 30)  return red;
+            return orange;
+        }
+        if (type === 'co2') {
+            if (v <= 4000) return green;
+            if (v > 6000)  return red;
+            return orange;
+        }
+        return grey;
+    }
+
+    function applyTileColor(type, value, hiveId) {
+        const [bg, lc, vc] = sensorTileColors(type, value);
+        const tile  = document.getElementById(`tile-${type}-${hiveId}`);
+        const label = document.getElementById(`tile-label-${type}-${hiveId}`);
+        const val   = document.getElementById(type === 'humidity' ? `humid-${hiveId}` : `${type}-${hiveId}`);
+        if (tile)  tile.style.background = bg;
+        if (label) label.style.color = lc;
+        if (val)   val.style.color = vc;
+    }
+
     setInterval(refreshHiveCards, 15000);
+    // Tell header.php's doReload() to use JS refresh instead of location.reload()
+    // (header already guards against reload when .modal.active is open)
+    window.__refreshPage = function() { refreshHiveCards(); };
 
     // ── Sparkline charts ─────────────────────────────────────
     function loadHiveCharts() {
@@ -850,21 +1003,28 @@ foreach ($hives as $_hive) {
                     set(`co2-${id}`, s.co2 + 'ppm');
                     set(`time-${id}`, s.elapsed);
                     // Update modal sensor pills too
-                    const tVal = parseFloat(s.temperature), tOk = tVal >= 33 && tVal <= 36;
-                    const hVal = parseFloat(s.humidity),    hOk = hVal <= 75;
-                    const cVal = parseInt(s.co2),            cOk = cVal <= 2000;
+                    const tVal = parseFloat(s.temperature);
+                    const hVal = parseFloat(s.humidity);
+                    const cVal = parseInt(s.co2);
+                    const tOk  = tVal >= 33 && tVal <= 36;
+                    const hOk  = hVal >= 40 && hVal <= 95;
+                    const cOk  = cVal <= 4000;
+                    // Update card tiles with threshold colors
+                    applyTileColor('temp',     tVal, id);
+                    applyTileColor('humidity', hVal, id);
+                    applyTileColor('co2',      cVal, id);
                     set(`modal-temp-${id}`,   s.temperature + '°C');
                     set(`modal-humid-${id}`,  s.humidity + '%');
                     set(`modal-co2-${id}`,    s.co2 + ' ppm');
-                    set(`modal-temp-status-${id}`,  tOk ? '✓ Optimal (33–36°C)' : '⚠ Check ventilation');
-                    set(`modal-humid-status-${id}`, hOk ? '✓ Normal range'       : '⚠ Too humid');
-                    set(`modal-co2-status-${id}`,   cOk ? '✓ Good (<2000)'       : '⚠ Elevated');
+                    set(`modal-temp-status-${id}`,  tOk ? '✓ Optimal (33–36°C)' : (tVal > 38 || tVal < 18 ? '✗ Critical' : '⚠ Off range'));
+                    set(`modal-humid-status-${id}`, hOk ? '✓ Normal (40–95%)'   : (hVal > 98 || hVal < 30 ? '✗ Critical' : '⚠ Off range'));
+                    set(`modal-co2-status-${id}`,   cOk ? '✓ Good (≤4000 ppm)'  : (cVal > 6000            ? '✗ Critical' : '⚠ Elevated'));
                     const pillT = document.getElementById(`modal-pill-temp-${id}`);
-                    if (pillT) pillT.style.background = `linear-gradient(135deg,${tOk?'#F97316,#EA580C':'#EF4444,#DC2626'})`;
+                    if (pillT) pillT.style.background = `linear-gradient(135deg,${tOk?'#F97316,#EA580C':(tVal > 38||tVal < 18?'#EF4444,#DC2626':'#F97316,#EA580C')})`;
                     const pillH = document.getElementById(`modal-pill-humid-${id}`);
-                    if (pillH) pillH.style.background = `linear-gradient(135deg,${hOk?'#3B82F6,#2563EB':'#F59E0B,#D97706'})`;
+                    if (pillH) pillH.style.background = `linear-gradient(135deg,${hOk?'#3B82F6,#2563EB':(hVal > 98||hVal < 30?'#EF4444,#DC2626':'#F59E0B,#D97706')})`;
                     const pillC = document.getElementById(`modal-pill-co2-${id}`);
-                    if (pillC) pillC.style.background = `linear-gradient(135deg,${cOk?'#8B5CF6,#7C3AED':'#EF4444,#DC2626'})`;
+                    if (pillC) pillC.style.background = `linear-gradient(135deg,${cOk?'#8B5CF6,#7C3AED':(cVal > 6000?'#EF4444,#DC2626':'#F59E0B,#D97706')})`;
                     const soundPct = h.sound ?? 0;
                     set(`sound-val-${id}`, soundPct + '%');
                     const bar = document.getElementById(`sound-bar-${id}`);
@@ -893,7 +1053,7 @@ foreach ($hives as $_hive) {
                     const badgeText = document.getElementById(`badge-text-${id}`);
                     if (badgeEl) {
                         if (h.badge) {
-                            badgeEl.className = `inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold ${h.badge.bg} ${h.badge.color}`;
+                            badgeEl.className = 'inline-flex items-center gap-1 px-2 py-0.5 rounded-lg text-xs font-semibold';
                             badgeEl.style.background = h.badge.bg;
                             badgeEl.style.color = h.badge.color;
                             badgeEl.classList.remove('hidden');
@@ -988,6 +1148,45 @@ foreach ($hives as $_hive) {
         .catch(() => {
             if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-stop"></i> Stop'; }
             showToast('Could not reach server to stop camera.', 'critical');
+        });
+    }
+
+    // ── Mark hive as physically checked ─────────────────────────
+    function markChecked(hiveId) {
+        const btn = document.getElementById('btn-check-' + hiveId);
+        if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving…'; }
+        fetch('api/check_hive.php', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            body: 'hive_id=' + hiveId
+        })
+        .then(r => r.json())
+        .then(d => {
+            if (!d.success) {
+                showToast('Failed to save check: ' + (d.message || ''), 'critical');
+                if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-check"></i> Mark as Checked'; }
+                return;
+            }
+            const el = document.getElementById('modal-last-checked-' + hiveId);
+            if (el) {
+                el.innerHTML = '<i class="fas fa-check-circle mr-1" style="color:#22C55E;"></i>'
+                    + 'Last checked: <strong style="color:#64748B;">' + d.elapsed + '</strong>'
+                    + ' <span style="color:#CBD5E1;">by you</span>';
+            }
+            if (btn) {
+                btn.disabled = false;
+                btn.style.background = 'linear-gradient(135deg,#6B7280,#4B5563)';
+                btn.innerHTML = '<i class="fas fa-check-double"></i> Checked ✓';
+                setTimeout(() => {
+                    btn.style.background = 'linear-gradient(135deg,#22C55E,#16A34A)';
+                    btn.innerHTML = '<i class="fas fa-check"></i> Mark as Checked';
+                }, 3000);
+            }
+            showToast('Hive marked as checked!', 'success');
+        })
+        .catch(() => {
+            if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-check"></i> Mark as Checked'; }
+            showToast('Could not reach server.', 'critical');
         });
     }
 

@@ -44,6 +44,10 @@ $userCount  = (int)$conn->query("SELECT COUNT(*) c FROM activity_log WHERE event
             padding: 7px 12px; background: white;
         }
         .input-sm:focus { outline: none; border-color: #F59E0B; }
+        .log-row { cursor: pointer; }
+        .log-row:hover td { background: rgba(245,158,11,0.06); }
+        #logDetailModal { display:none; position:fixed; inset:0; z-index:99999; background:rgba(10,6,0,0.65); backdrop-filter:blur(4px); overflow-y:auto; padding:24px 16px; }
+        #logDetailModal.active { display:block; }
     </style>
 </head>
 <body class="bg-gray-50">
@@ -107,6 +111,8 @@ $userCount  = (int)$conn->query("SELECT COUNT(*) c FROM activity_log WHERE event
                             <option value="24h">24 Hours</option>
                             <option value="7d">7 Days</option>
                             <option value="30d">30 Days</option>
+                            <option value="3mo">3 Months</option>
+                            <option value="6mo">6 Months</option>
                         </select>
                         <div class="flex flex-wrap items-center gap-2 ml-auto">
                             <input type="date" id="hiveFrom" class="input-sm">
@@ -128,10 +134,11 @@ $userCount  = (int)$conn->query("SELECT COUNT(*) c FROM activity_log WHERE event
                                     <th class="px-5 py-3 text-left text-gray-600 font-semibold">Event</th>
                                     <th class="px-5 py-3 text-left text-gray-600 font-semibold">Details</th>
                                     <th class="px-5 py-3 text-left text-gray-600 font-semibold">Severity</th>
+                                    <?php if (isAdmin()): ?><th class="px-3 py-3"></th><?php endif; ?>
                                 </tr>
                             </thead>
                             <tbody id="hiveLogBody">
-                                <tr><td colspan="5" class="py-10 text-center text-gray-400">
+                                <tr><td colspan="6" class="py-10 text-center text-gray-400">
                                     <i class="fas fa-spinner fa-spin mr-2"></i>Loading...
                                 </td></tr>
                             </tbody>
@@ -178,6 +185,8 @@ $userCount  = (int)$conn->query("SELECT COUNT(*) c FROM activity_log WHERE event
                             <option value="24h">24 Hours</option>
                             <option value="7d">7 Days</option>
                             <option value="30d">30 Days</option>
+                            <option value="3mo">3 Months</option>
+                            <option value="6mo">6 Months</option>
                         </select>
                         <div class="flex flex-wrap items-center gap-2 ml-auto">
                             <input type="date" id="userFrom" class="input-sm">
@@ -199,10 +208,11 @@ $userCount  = (int)$conn->query("SELECT COUNT(*) c FROM activity_log WHERE event
                                     <th class="px-5 py-3 text-left text-gray-600 font-semibold">Event</th>
                                     <th class="px-5 py-3 text-left text-gray-600 font-semibold">Details</th>
                                     <th class="px-5 py-3 text-left text-gray-600 font-semibold">Severity</th>
+                                    <th class="px-3 py-3"></th>
                                 </tr>
                             </thead>
                             <tbody id="userLogBody">
-                                <tr><td colspan="5" class="py-10 text-center text-gray-400">
+                                <tr><td colspan="6" class="py-10 text-center text-gray-400">
                                     <i class="fas fa-spinner fa-spin mr-2"></i>Loading...
                                 </td></tr>
                             </tbody>
@@ -218,7 +228,52 @@ $userCount  = (int)$conn->query("SELECT COUNT(*) c FROM activity_log WHERE event
         </div>
     </main>
 
+    <!-- ── Log Detail Modal ── -->
+    <div id="logDetailModal" onclick="if(event.target===this)closeLogDetail()">
+        <div style="background:#fff;width:100%;max-width:560px;margin:0 auto;border-radius:20px;box-shadow:0 24px 80px rgba(0,0,0,0.35);animation:modalIn 0.25s cubic-bezier(0.34,1.56,0.64,1) both;">
+            <div class="px-6 py-5 flex items-center justify-between border-b border-gray-100">
+                <h3 class="font-bold text-base text-gray-800 flex items-center gap-2">
+                    <i id="ldIcon" class="fas fa-info-circle text-blue-500"></i>
+                    <span id="ldEvent" class="truncate">—</span>
+                </h3>
+                <button onclick="closeLogDetail()" class="w-9 h-9 rounded-xl hover:bg-gray-100 flex items-center justify-center transition flex-shrink-0">
+                    <i class="fas fa-times text-gray-500"></i>
+                </button>
+            </div>
+            <div class="p-6 space-y-4">
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="bg-gray-50 rounded-xl p-3">
+                        <p class="text-xs text-gray-400 font-semibold mb-1">Timestamp</p>
+                        <p class="text-sm font-semibold text-gray-800" id="ldTimestamp">—</p>
+                    </div>
+                    <div class="bg-gray-50 rounded-xl p-3">
+                        <p class="text-xs text-gray-400 font-semibold mb-1">Severity</p>
+                        <p id="ldSeverity">—</p>
+                    </div>
+                    <div class="bg-gray-50 rounded-xl p-3" id="ldHiveBlock">
+                        <p class="text-xs text-gray-400 font-semibold mb-1">Hive</p>
+                        <p class="text-sm font-semibold text-gray-800" id="ldHive">—</p>
+                    </div>
+                    <div class="bg-gray-50 rounded-xl p-3" id="ldUserBlock">
+                        <p class="text-xs text-gray-400 font-semibold mb-1">User</p>
+                        <p class="text-sm font-semibold text-gray-800" id="ldUser">—</p>
+                    </div>
+                </div>
+                <div class="bg-gray-50 rounded-xl p-4">
+                    <p class="text-xs text-gray-400 font-semibold mb-2">Full Details</p>
+                    <p class="text-sm text-gray-700 leading-relaxed whitespace-pre-wrap break-words" id="ldDetails">—</p>
+                </div>
+            </div>
+            <div class="px-6 pb-6">
+                <button onclick="closeLogDetail()" class="w-full py-2.5 border border-gray-300 rounded-xl text-sm font-semibold hover:bg-gray-50 transition">Close</button>
+            </div>
+        </div>
+    </div>
+
     <script>
+    const isAdmin = <?php echo isAdmin() ? 'true' : 'false'; ?>;
+    const logMap  = {};   // id → row data, populated on each render
+
     // ── State ────────────────────────────────────────────────────
     const hiveState = { range: '1h', hive_id: 'all', page: 1, customFrom: '', customTo: '' };
     const userState = { range: '1h', user_id: 'all', page: 1, customFrom: '', customTo: '' };
@@ -234,11 +289,13 @@ $userCount  = (int)$conn->query("SELECT COUNT(*) c FROM activity_log WHERE event
             ? 'flex items-center gap-2 px-5 py-2.5 rounded-lg font-semibold text-sm transition bg-yellow-500 text-white'
             : 'flex items-center gap-2 px-5 py-2.5 rounded-lg font-semibold text-sm transition bg-white text-gray-600 border border-gray-300 hover:bg-gray-50';
 
-        document.getElementById('tab-user').className = tab === 'user'
-            ? 'flex items-center gap-2 px-5 py-2.5 rounded-lg font-semibold text-sm transition text-white'
-            : 'flex items-center gap-2 px-5 py-2.5 rounded-lg font-semibold text-sm transition bg-white text-gray-600 border border-gray-300 hover:bg-gray-50';
-        if (tab === 'user') document.getElementById('tab-user').style.background = 'linear-gradient(135deg,#6366F1,#8B5CF6)';
-        else document.getElementById('tab-user').style.background = '';
+        const tabUser = document.getElementById('tab-user');
+        if (tabUser) {
+            tabUser.className = tab === 'user'
+                ? 'flex items-center gap-2 px-5 py-2.5 rounded-lg font-semibold text-sm transition text-white'
+                : 'flex items-center gap-2 px-5 py-2.5 rounded-lg font-semibold text-sm transition bg-white text-gray-600 border border-gray-300 hover:bg-gray-50';
+            tabUser.style.background = tab === 'user' ? 'linear-gradient(135deg,#6366F1,#8B5CF6)' : '';
+        }
 
         if (tab === 'user') loadUserLog();
     }
@@ -287,8 +344,9 @@ $userCount  = (int)$conn->query("SELECT COUNT(*) c FROM activity_log WHERE event
     // ── HIVE LOG ──────────────────────────────────────────────────
     function loadHiveLog() {
         hiveState.hive_id = document.getElementById('hiveHiveFilter').value;
+        const savedScroll = window.scrollY;
         const tbody = document.getElementById('hiveLogBody');
-        tbody.innerHTML = `<tr><td colspan="5" class="py-10 text-center text-gray-400">
+        tbody.innerHTML = `<tr><td colspan="6" class="py-10 text-center text-gray-400">
             <i class="fas fa-spinner fa-spin mr-2"></i>Loading...</td></tr>`;
 
         const p = new URLSearchParams({ tab:'hive', range:hiveState.range, hive_id:hiveState.hive_id, page:hiveState.page });
@@ -300,27 +358,40 @@ $userCount  = (int)$conn->query("SELECT COUNT(*) c FROM activity_log WHERE event
                 if (!d.success) return;
                 document.getElementById('badge-hive').textContent = d.total.toLocaleString();
                 if (!d.rows.length) {
-                    tbody.innerHTML = `<tr><td colspan="5" class="py-12 text-center text-gray-400 text-sm">
+                    tbody.innerHTML = `<tr><td colspan="6" class="py-12 text-center text-gray-400 text-sm">
                         <i class="fas fa-satellite-dish text-3xl mb-3 block"></i>No hive activity for the selected period.</td></tr>`;
                     document.getElementById('hivePageInfo').textContent = '';
                     document.getElementById('hivePageBtns').innerHTML = '';
+                    requestAnimationFrame(() => window.scrollTo({ top: savedScroll, behavior: 'instant' }));
                     return;
                 }
                 tbody.innerHTML = d.rows.map(r => {
+                    logMap[r.id] = r;
                     const ts = new Date(r.timestamp).toLocaleString();
                     const hive = r.hive_name
                         ? `<span class="bg-yellow-100 text-yellow-800 px-2 py-0.5 rounded text-xs font-mono">${esc(r.hive_code)}</span>
                            <span class="text-xs text-gray-500 ml-1">${esc(r.hive_name)}</span>`
                         : `<span class="text-gray-400">—</span>`;
-                    return `<tr class="border-b border-gray-50 hover:bg-yellow-50/40 transition">
+                    const delBtn = isAdmin
+                        ? `<button onclick="event.stopPropagation();deleteLog(${r.id},'hive')"
+                               class="w-7 h-7 flex items-center justify-center rounded-lg bg-red-50 hover:bg-red-100 text-red-400 hover:text-red-600 transition" title="Delete log">
+                               <i class="fas fa-trash text-xs"></i>
+                           </button>`
+                        : '';
+                    return `<tr class="log-row border-b border-gray-50 transition" id="log-row-${r.id}" onclick="openLogDetail(${r.id})">
                         <td class="px-5 py-3 text-gray-500 whitespace-nowrap text-xs">${ts}</td>
                         <td class="px-5 py-3">${hive}</td>
                         <td class="px-5 py-3 whitespace-nowrap">${sevIconEl(r.severity)}${esc(r.event_type)}</td>
-                        <td class="px-5 py-3 text-gray-600 max-w-xs truncate" title="${esc(r.details)}">${esc(r.details)}</td>
+                        <td class="px-5 py-3 text-gray-600 max-w-xs truncate">${esc(r.details)}</td>
                         <td class="px-5 py-3">${sevBadge(r.severity)}</td>
+                        <td class="px-3 py-3">${delBtn}</td>
                     </tr>`;
                 }).join('');
                 renderPagination('hivePageInfo','hivePageBtns', d.page, d.pages, d.total, 50, 'hiveGoPage');
+                requestAnimationFrame(() => {
+                    window.scrollTo({ top: savedScroll, behavior: 'instant' });
+                    if (_openLogId && logMap[_openLogId]) openLogDetail(_openLogId);
+                });
             });
     }
 
@@ -346,8 +417,9 @@ $userCount  = (int)$conn->query("SELECT COUNT(*) c FROM activity_log WHERE event
     function loadUserLog() {
         const uSel = document.getElementById('userUserFilter');
         userState.user_id = uSel ? uSel.value : 'all';
+        const savedScroll = window.scrollY;
         const tbody = document.getElementById('userLogBody');
-        tbody.innerHTML = `<tr><td colspan="5" class="py-10 text-center text-gray-400">
+        tbody.innerHTML = `<tr><td colspan="6" class="py-10 text-center text-gray-400">
             <i class="fas fa-spinner fa-spin mr-2"></i>Loading...</td></tr>`;
 
         const p = new URLSearchParams({ tab:'user', range:userState.range, user_id:userState.user_id, page:userState.page });
@@ -359,13 +431,15 @@ $userCount  = (int)$conn->query("SELECT COUNT(*) c FROM activity_log WHERE event
                 if (!d.success) return;
                 document.getElementById('badge-user').textContent = d.total.toLocaleString();
                 if (!d.rows.length) {
-                    tbody.innerHTML = `<tr><td colspan="5" class="py-12 text-center text-gray-400 text-sm">
+                    tbody.innerHTML = `<tr><td colspan="6" class="py-12 text-center text-gray-400 text-sm">
                         <i class="fas fa-clipboard-list text-3xl mb-3 block"></i>No activity for the selected period.</td></tr>`;
                     document.getElementById('userPageInfo').textContent = '';
                     document.getElementById('userPageBtns').innerHTML = '';
+                    requestAnimationFrame(() => window.scrollTo({ top: savedScroll, behavior: 'instant' }));
                     return;
                 }
                 tbody.innerHTML = d.rows.map(r => {
+                    logMap[r.id] = r;
                     const ts = new Date(r.timestamp).toLocaleString();
                     const uname = r.username
                         ? `<div class="flex items-center gap-2">
@@ -379,15 +453,24 @@ $userCount  = (int)$conn->query("SELECT COUNT(*) c FROM activity_log WHERE event
                                </div>
                            </div>`
                         : `<span class="text-gray-400 text-xs italic">System</span>`;
-                    return `<tr class="border-b border-gray-50 hover:bg-indigo-50/30 transition">
+                    const delBtn = `<button onclick="event.stopPropagation();deleteLog(${r.id},'user')"
+                               class="w-7 h-7 flex items-center justify-center rounded-lg bg-red-50 hover:bg-red-100 text-red-400 hover:text-red-600 transition" title="Delete log">
+                               <i class="fas fa-trash text-xs"></i>
+                           </button>`;
+                    return `<tr class="log-row border-b border-gray-50 transition" id="log-row-${r.id}" onclick="openLogDetail(${r.id})">
                         <td class="px-5 py-3 text-gray-500 whitespace-nowrap text-xs">${ts}</td>
                         <td class="px-5 py-3">${uname}</td>
                         <td class="px-5 py-3 whitespace-nowrap">${sevIconEl(r.severity)}${esc(r.event_type)}</td>
-                        <td class="px-5 py-3 text-gray-600 max-w-xs truncate" title="${esc(r.details)}">${esc(r.details)}</td>
+                        <td class="px-5 py-3 text-gray-600 max-w-xs truncate">${esc(r.details)}</td>
                         <td class="px-5 py-3">${sevBadge(r.severity)}</td>
+                        <td class="px-3 py-3">${delBtn}</td>
                     </tr>`;
                 }).join('');
                 renderPagination('userPageInfo','userPageBtns', d.page, d.pages, d.total, 50, 'userGoPage');
+                requestAnimationFrame(() => {
+                    window.scrollTo({ top: savedScroll, behavior: 'instant' });
+                    if (_openLogId && logMap[_openLogId]) openLogDetail(_openLogId);
+                });
             });
     }
 
@@ -408,6 +491,77 @@ $userCount  = (int)$conn->query("SELECT COUNT(*) c FROM activity_log WHERE event
     }
 
     function userGoPage(p) { userState.page = p; loadUserLog(); }
+
+    // ── Log detail modal ──────────────────────────────────────
+    let _openLogId = null;
+
+    function openLogDetail(id) {
+        const row = logMap[id];
+        if (!row) return;
+        _openLogId = id;
+        const iconMap = { critical:'fa-exclamation-circle', warning:'fa-exclamation-triangle', success:'fa-check-circle', info:'fa-info-circle' };
+        const colorMap = { critical:'text-red-500', warning:'text-yellow-500', success:'text-green-500', info:'text-blue-500' };
+        const sev = row.severity || 'info';
+
+        document.getElementById('ldEvent').textContent     = row.event_type || '—';
+        document.getElementById('ldTimestamp').textContent = new Date(row.timestamp).toLocaleString();
+        document.getElementById('ldDetails').textContent   = row.details || '—';
+
+        const ldIcon = document.getElementById('ldIcon');
+        ldIcon.className = `fas ${iconMap[sev] || 'fa-info-circle'} ${colorMap[sev] || 'text-blue-500'}`;
+
+        document.getElementById('ldSeverity').innerHTML = sevBadge(sev);
+
+        const hiveBlock = document.getElementById('ldHiveBlock');
+        const userBlock = document.getElementById('ldUserBlock');
+
+        if (row.hive_name) {
+            hiveBlock.classList.remove('hidden');
+            document.getElementById('ldHive').innerHTML =
+                `<span class="bg-yellow-100 text-yellow-800 px-2 py-0.5 rounded text-xs font-mono mr-1">${esc(row.hive_code)}</span>${esc(row.hive_name)}`;
+        } else {
+            hiveBlock.classList.add('hidden');
+        }
+
+        if (row.username) {
+            userBlock.classList.remove('hidden');
+            document.getElementById('ldUser').textContent =
+                (row.full_name || row.username) + (row.user_role ? ' (' + row.user_role + ')' : '');
+        } else {
+            userBlock.classList.add('hidden');
+        }
+
+        document.getElementById('logDetailModal').classList.add('active');
+    }
+
+    function closeLogDetail() {
+        document.getElementById('logDetailModal').classList.remove('active');
+        _openLogId = null;
+    }
+
+    document.addEventListener('keydown', e => {
+        if (e.key === 'Escape') closeLogDetail();
+    });
+
+    function deleteLog(id, tab) {
+        adminDelete('Delete this activity log entry? This cannot be undone.', () => {
+            fetch('api/delete_activity.php', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                body: 'id=' + id
+            })
+            .then(r => r.json())
+            .then(d => {
+                if (d.success) {
+                    const row = document.getElementById('log-row-' + id);
+                    if (row) row.remove();
+                } else {
+                    alert(d.message || 'Failed to delete log.');
+                }
+            })
+            .catch(() => alert('Network error. Please try again.'));
+        });
+    }
 
     function esc(str) {
         return String(str ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');

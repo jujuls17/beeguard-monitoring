@@ -29,18 +29,22 @@ try {
     echo json_encode(['success' => false, 'message' => $e->getMessage()]);
 }
 
+// ── Dataset ───────────────────────────────────────────────────
+// Counts the files train_model.py actually trains on: ml/data/audio/{class}/*.wav|*.mp3
+function getDatasetCounts(): array {
+    $counts = [];
+    foreach (['normal', 'queenless', 'swarming'] as $cls) {
+        $dir = ML_DIR . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'audio' . DIRECTORY_SEPARATOR . $cls;
+        $files = array_merge(glob($dir . '/*.wav') ?: [], glob($dir . '/*.mp3') ?: []);
+        $counts[$cls] = count($files);
+    }
+    return $counts;
+}
+
 // ── Status ────────────────────────────────────────────────────
 function getStatus(): array {
-    global $conn;
-
-    $count = 0;
-    $r = $conn->query("SELECT COUNT(*) AS c FROM sound_uploads");
-    if ($r) $count = (int)$r->fetch_assoc()['c'];
-
-    // Per-class sample counts
-    $classCounts = [];
-    $rc = $conn->query("SELECT classification, COUNT(*) AS c FROM sound_uploads GROUP BY classification");
-    if ($rc) while ($row = $rc->fetch_assoc()) $classCounts[$row['classification']] = (int)$row['c'];
+    $classCounts = getDatasetCounts();
+    $count       = array_sum($classCounts);
 
     // Model metrics (saved by train_model.py)
     $metricsFile = ML_DIR . DIRECTORY_SEPARATOR . 'models' . DIRECTORY_SEPARATOR . 'metrics.json';
@@ -90,8 +94,7 @@ function getStatus(): array {
 function startTraining(): array {
     global $conn;
 
-    $r     = $conn->query("SELECT COUNT(*) AS c FROM sound_uploads");
-    $count = $r ? (int)$r->fetch_assoc()['c'] : 0;
+    $count = array_sum(getDatasetCounts());
 
     if ($count < 2) {
         return ['success' => false, 'message' => "At least 2 sound samples required. You have {$count}."];

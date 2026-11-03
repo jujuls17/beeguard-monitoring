@@ -217,7 +217,9 @@ $hives = getAllHives($conn);
                 <div class="grid grid-cols-2 gap-4">
                     <div class="col-span-2">
                         <label class="form-label">Full Name</label>
-                        <input type="text" id="fFullName" placeholder="e.g. Juan dela Cruz" class="input-field">
+                        <input type="text" id="fFullName" placeholder="e.g. Juan dela Cruz" class="input-field"
+                               oninput="this.value=this.value.replace(/[^a-zA-Z\s.]/g,'')">
+                        <p class="text-xs text-gray-400 mt-1"><i class="fas fa-info-circle mr-1"></i>Letters only (spaces and periods allowed)</p>
                     </div>
                     <div id="fUsernameRow">
                         <label class="form-label">Username <span class="text-red-500">*</span></label>
@@ -233,7 +235,9 @@ $hives = getAllHives($conn);
                     </div>
                     <div>
                         <label class="form-label">Contact Number</label>
-                        <input type="text" id="fContact" placeholder="+63 9XX XXX XXXX" class="input-field">
+                        <input type="text" id="fContact" placeholder="09XXXXXXXXX" class="input-field"
+                               maxlength="11" oninput="this.value=this.value.replace(/\D/g,'').slice(0,11)">
+                        <p class="text-xs text-gray-400 mt-1"><i class="fas fa-info-circle mr-1"></i>Numbers only, exactly 11 digits (e.g. 09171234567)</p>
                     </div>
                     <div>
                         <label class="form-label">Assigned Hive (optional)</label>
@@ -614,7 +618,19 @@ $hives = getAllHives($conn);
     }
 
     function submitUserForm() {
-        const id   = document.getElementById('editUserId').value;
+        const id        = document.getElementById('editUserId').value;
+        const fullName  = document.getElementById('fFullName').value.trim();
+        const contact   = document.getElementById('fContact').value.trim();
+
+        if (fullName && !/^[a-zA-Z\s.]+$/.test(fullName)) {
+            showFormMsg('error', 'Full name must contain letters only.');
+            return;
+        }
+        if (contact && !/^\d{11}$/.test(contact)) {
+            showFormMsg('error', 'Contact number must be exactly 11 digits (e.g. 09171234567).');
+            return;
+        }
+
         const body = new URLSearchParams({
             action: id ? 'update' : 'create', id,
             full_name:         document.getElementById('fFullName').value.trim(),
@@ -694,6 +710,18 @@ $hives = getAllHives($conn);
     }
 
     loadUsers();
+
+    // Silent data refresh for header.php's 15s auto-refresh.
+    // Skips reload entirely when any modal is open (form or view).
+    window.__refreshPage = function () {
+        const formOpen = document.getElementById('userFormModal').classList.contains('active');
+        const viewOpen = document.getElementById('viewUserModal').classList.contains('active');
+        if (formOpen || viewOpen) return;   // never interrupt an open modal
+        const scrollY = window.scrollY;
+        loadUsers();
+        // Restore scroll position after the table re-renders
+        requestAnimationFrame(() => window.scrollTo(0, scrollY));
+    };
     </script>
 </body>
 </html>

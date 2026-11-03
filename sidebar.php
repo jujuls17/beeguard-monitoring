@@ -1,12 +1,13 @@
 <?php
 $current_page = basename($_SERVER['PHP_SELF']);
 
-$_unreadAlerts  = 0;
-$_totalHives    = 0;
-$_unreadChat    = 0;
-$_pendingDevices = 0;
-$_systemOnline  = false;
-$_activeHives   = 0;
+$_unreadAlerts       = 0;
+$_totalHives         = 0;
+$_unreadChat         = 0;
+$_pendingDevices     = 0;
+$_pendingInspections = 0;
+$_systemOnline       = false;
+$_activeHives        = 0;
 if (isset($conn)) {
     $r = $conn->query("SELECT COUNT(*) as c FROM alerts WHERE is_read = 0");
     if ($r) $_unreadAlerts = (int)$r->fetch_assoc()['c'];
@@ -21,6 +22,15 @@ if (isset($conn)) {
                              WHERE id > COALESCE((SELECT last_read_id FROM chat_reads WHERE user_id = $uid), 0)
                              AND user_id != $uid");
         if ($rc) $_unreadChat = (int)$rc->fetch_assoc()['c'];
+
+        // Inspection notes badge: notes added since user last visited inspection_notes.php
+        $ri = $conn->query("SELECT COUNT(*) AS c FROM inspection_notes
+                            WHERE user_id != $uid
+                            AND created_at > COALESCE(
+                                (SELECT last_inspection_seen FROM user_settings WHERE user_id = $uid),
+                                '1970-01-01'
+                            )");
+        if ($ri) $_pendingInspections = (int)$ri->fetch_assoc()['c'];
     }
     // Pending unregistered ESP32s (admin only)
     if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin') {
@@ -37,6 +47,10 @@ function navLink($page, $current, $href, $icon, $label, $badge = null) {
             $color = 'bg-red-500 text-white';
         } elseif ($icon === 'fa-microchip') {
             $color = 'bg-blue-500 text-white';
+        } elseif ($icon === 'fa-comments') {
+            $color = 'bg-green-500 text-white';
+        } elseif ($icon === 'fa-clipboard-list') {
+            $color = 'bg-amber-500 text-white';
         } else {
             $color = 'bg-yellow-400 text-gray-900';
         }
@@ -91,8 +105,8 @@ function navLink($page, $current, $href, $icon, $label, $badge = null) {
 
         <?php echo navLink('activity.php',        $current_page, 'activity.php',        'fa-list-alt',       'Activity Log'); ?>
         <?php echo navLink('devices.php',         $current_page, 'devices.php',         'fa-microchip',      'Edge Devices', $_pendingDevices ?: null); ?>
-        <?php echo navLink('export.php',          $current_page, 'export.php',          'fa-download',       'Data Export'); ?>
-        <?php echo navLink('inspection_notes.php',$current_page, 'inspection_notes.php','fa-clipboard-list', 'Inspection Notes'); ?>
+<?php echo navLink('export.php',          $current_page, 'export.php',          'fa-download',       'Data Export'); ?>
+        <?php echo navLink('inspection_notes.php',$current_page, 'inspection_notes.php','fa-clipboard-list', 'Inspection Notes', $_pendingInspections ?: null); ?>
         <?php echo navLink('chat.php',            $current_page, 'chat.php',            'fa-comments',       'Group Chat', $_unreadChat ?: null); ?>
 
         <div class="border-t border-yellow-800/20 my-4"></div>

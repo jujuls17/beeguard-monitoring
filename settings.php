@@ -36,8 +36,15 @@ $stmt->execute();
 $s = $stmt->get_result()->fetch_assoc();
 $stmt->close();
 if (!$s) {
-    $conn->query("INSERT INTO user_settings (user_id) VALUES ({$_SESSION['user_id']})");
-    $s = ['email_notifications'=>1,'push_notifications'=>1,'alert_critical'=>1,'alert_warnings'=>1,'alert_informational'=>0,'data_retention'=>'90','sync_interval'=>5,'ml_confidence'=>85,'auto_backup'=>1];
+    $conn->query("INSERT INTO user_settings (user_id) VALUES (" . (int)$_SESSION['user_id'] . ")");
+    $stmt2 = $conn->prepare("SELECT * FROM user_settings WHERE user_id = ?");
+    $stmt2->bind_param("i", $_SESSION['user_id']);
+    $stmt2->execute();
+    $s = $stmt2->get_result()->fetch_assoc();
+    $stmt2->close();
+    if (!$s) {
+        $s = ['email_notifications'=>1,'push_notifications'=>1,'alert_critical'=>1,'alert_warnings'=>1,'alert_informational'=>0,'data_retention'=>'90','sync_interval'=>15,'ml_confidence'=>85,'auto_backup'=>1];
+    }
 }
 ?>
 <!DOCTYPE html>
@@ -613,7 +620,7 @@ if (!$s) {
                 <div class="flex items-center gap-2 mb-3">
                     <i class="fas ${c.icon}"></i>
                     <span class="font-bold text-sm">ML Prediction: ${escHtml(pred.label)}</span>
-                    <span class="ml-auto text-xs font-bold opacity-75">${pred.confidence}% confidence</span>
+                    <span class="ml-auto text-xs font-bold opacity-75">${pred.confidence}% confidence${pred.clips_analyzed > 1 ? ` &bull; ${pred.clips_analyzed} clips` : ''}</span>
                 </div>
                 <div class="space-y-1.5">
                     ${probs.map(([k, v]) => `
@@ -1075,6 +1082,18 @@ if (!$s) {
             })
             .catch(() => showModalMsg('passwordMsg','error','Request failed. Try again.'));
         }
+
+        // Prevent header.php's 15s hard reload from jumping scroll or interrupting uploads.
+        // Instead silently refresh just the dynamic data.
+        window.__refreshPage = function () {
+            // Skip refresh entirely if an upload is in progress
+            const uploadBtn = document.getElementById('uploadBtn');
+            if (uploadBtn && uploadBtn.disabled && uploadBtn._file) return;
+            // Skip if a training poll is actively running
+            if (typeof _trainingPollTimer !== 'undefined' && _trainingPollTimer) return;
+            loadModelStatus();
+            loadRecentUploads();
+        };
     </script>
 </body>
 </html>

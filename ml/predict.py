@@ -37,7 +37,7 @@ def _get_model_path():
 
 
 def extract_mfcc(y: np.ndarray) -> np.ndarray:
-    """Shared preprocessing: returns (1, 40, 216, 1) batched MFCC tensor."""
+    """Preprocess one 5-second clip: returns (1, 40, 216, 1) batched MFCC tensor."""
     target_len = SAMPLE_RATE * DURATION_SEC
     if len(y) < target_len:
         y = np.pad(y, (0, target_len - len(y)))
@@ -52,6 +52,23 @@ def extract_mfcc(y: np.ndarray) -> np.ndarray:
         mfcc = mfcc[:, :TARGET_FRAMES]
 
     return mfcc[:, :, np.newaxis][np.newaxis, ...].astype(np.float32)  # (1,40,216,1)
+
+
+def split_into_clips(y: np.ndarray, sr: int = SAMPLE_RATE,
+                     clip_sec: int = DURATION_SEC) -> list:
+    """Split waveform into non-overlapping 5-second clips (same as train_model.py)."""
+    clip_len = sr * clip_sec
+    clips = []
+    offset = 0
+    while offset + clip_len <= len(y):
+        clips.append(y[offset: offset + clip_len])
+        offset += clip_len
+    # Include partial last clip if at least 1 second remains
+    if len(y) - offset >= sr:
+        tail = y[offset:]
+        tail = np.pad(tail, (0, clip_len - len(tail)))
+        clips.append(tail)
+    return clips
 
 
 def analyze_frequency(y: np.ndarray, sr: int = SAMPLE_RATE) -> dict:
@@ -118,9 +135,15 @@ def predict(file_path: str) -> dict:
     except Exception as e:
         return {'error': f'Failed to load audio: {e}'}
 
+    # Split full audio into 5-second clips (same as training) and average probabilities
+    clips = split_into_clips(y)
+    if not clips:
+        clips = [y]  # fallback: use whatever audio we have
+
     t_start = time.perf_counter()
-    X = extract_mfcc(y)
-    probs = model.predict(X, verbose=0)[0]
+    batch = np.vstack([extract_mfcc(c) for c in clips])   # (N, 40, 216, 1)
+    clip_probs = model.predict(batch, verbose=0)           # (N, 3)
+    probs = clip_probs.mean(axis=0)                        # average across all clips
     inference_ms = round((time.perf_counter() - t_start) * 1000, 1)
 
     class_idx  = int(np.argmax(probs))
@@ -140,6 +163,7 @@ def predict(file_path: str) -> dict:
         'prob_queenless':    round(float(probs[1]) * 100, 1),
         'prob_swarming':     round(float(probs[2]) * 100, 1),
         'inference_ms':      inference_ms,
+        'clips_analyzed':    len(clips),
         'frequency':         freq_info,
     }
 

@@ -4,11 +4,11 @@ require_once 'config.php';
 require_once 'functions.php';
 checkAuth();
 
-// Auto-mark devices offline if no sync in last 5 minutes
+// Auto-mark devices offline if no sync in last 1 minute
 $conn->query(
     "UPDATE edge_devices
      SET status = 'offline'
-     WHERE last_sync < DATE_SUB(NOW(), INTERVAL 5 MINUTE)
+     WHERE last_sync < DATE_SUB(NOW(), INTERVAL 1 MINUTE)
        AND status != 'offline'"
 );
 
@@ -237,7 +237,10 @@ $warningCount = count(array_filter($devices, fn($d) => $d['status'] == 'warning'
     </main>
 
     <script>
+        const isAdmin = <?php echo isAdmin() ? 'true' : 'false'; ?>;
+
         function fetchDevices() {
+            const savedScroll = window.scrollY;
             fetch('api/device_status.php')
                 .then(r => r.json())
                 .then(data => {
@@ -254,6 +257,7 @@ $warningCount = count(array_filter($devices, fn($d) => $d['status'] == 'warning'
                             <i class="fas fa-microchip text-3xl mb-3"></i>
                             <p>No devices registered yet.</p>
                         </div>`;
+                        requestAnimationFrame(() => window.scrollTo({ top: savedScroll, behavior: 'instant' }));
                         return;
                     }
 
@@ -325,11 +329,15 @@ $warningCount = count(array_filter($devices, fn($d) => $d['status'] == 'warning'
                         <div class="grid grid-cols-2 gap-2 mb-3">
                             ${sensorDefs.map((s, idx) => {
                                 const connected = sensors[s.key] === true;
-                                const bg     = connected ? '#f0fdf4' : '#fef2f2';
-                                const border = connected ? '#bbf7d0' : '#fecaca';
-                                const ic     = connected ? '#16a34a' : '#dc2626';
-                                const dot    = connected ? '#22c55e' : '#ef4444';
-                                const label  = connected ? 'Connected' : 'Not Connected';
+                                // Camera always shows its real state; for others, if device is offline
+                                // show "Device Offline" (grey) not "Not Connected" (red) — it's a
+                                // network issue, not a hardware disconnect.
+                                const isDeviceOffline = !isOnline && s.key !== 'camera';
+                                const bg     = connected ? '#f0fdf4' : isDeviceOffline ? '#F9FAFB' : '#fef2f2';
+                                const border = connected ? '#bbf7d0' : isDeviceOffline ? '#E5E7EB' : '#fecaca';
+                                const ic     = connected ? '#16a34a' : isDeviceOffline ? '#9CA3AF' : '#dc2626';
+                                const dot    = connected ? '#22c55e' : isDeviceOffline ? '#9CA3AF' : '#ef4444';
+                                const label  = connected ? 'Connected' : isDeviceOffline ? 'Device Offline' : 'Not Connected';
                                 const span   = (idx === sensorDefs.length - 1 && sensorDefs.length % 2 !== 0) ? ' style="grid-column:span 2;"' : '';
                                 return `<div class="rounded-lg p-2.5"${span} style="background:${bg};border:1px solid ${border}${span ? ';' : ''}">
                                     <div class="flex items-center gap-1.5 mb-1">
@@ -380,12 +388,18 @@ $warningCount = count(array_filter($devices, fn($d) => $d['status'] == 'warning'
                                         Last sync: ${syncLabel} &bull; ${d.last_sync}
                                     </p>
                                 </div>
+                                ${isAdmin ? `
+                                <button onclick="removeEdgeDevice('${d.device_id}')"
+                                        class="w-full py-2 flex items-center justify-center gap-2 rounded-lg border border-red-200 text-red-500 hover:bg-red-50 hover:text-red-700 transition text-xs font-semibold">
+                                    <i class="fas fa-trash"></i> Remove Device
+                                </button>` : ''}
                             </div>
                         </div>`;
                     }).join('');
 
                     // Update live downtime counters
                     updateSyncCounters();
+                    requestAnimationFrame(() => window.scrollTo({ top: savedScroll, behavior: 'instant' }));
                 })
                 .catch(() => {
                     document.getElementById('lastChecked').textContent = 'Connection error';
@@ -417,6 +431,7 @@ $warningCount = count(array_filter($devices, fn($d) => $d['status'] == 'warning'
         // Load immediately then poll every 10 seconds
         fetchDevices();
         setInterval(fetchDevices, 15000);
+        window.__refreshPage = function() { fetchDevices(); };
         setInterval(updateSyncCounters, 1000);
 
         <?php if (isAdmin()): ?>

@@ -97,7 +97,7 @@ void loop() {
         updateOLED();
     }
 
-    // Send to server every 5 minutes
+    // Send to server on the configured interval (default 15s from config.h)
     if (now - lastSendTime >= (unsigned long)syncIntervalMs) {
         lastSendTime = now;
         sendToServer(g_temperature, g_humidity, g_co2, g_soundLevel, g_dominantFreq);
@@ -303,17 +303,14 @@ void fetchServerConfig() {
     if (code == 200) {
         StaticJsonDocument<512> doc;
         if (!deserializeJson(doc, http.getString())) {
-            // Prefer sync_interval_seconds (new), fall back to minutes (legacy)
             int secs = doc["sync_interval_seconds"] | 0;
-            if (secs <= 0) {
-                int mins = doc["sync_interval_minutes"] | 5;
-                secs = mins * 60;
-            }
+            if (secs < 10) secs = SEND_INTERVAL_MS / 1000; // never shorter than config.h default
             syncIntervalMs = secs * 1000;
             Serial.printf("[Config] Hive: %s | Sync: every %ds\n",
                           (const char*)doc["hive_name"], secs);
         }
     } else {
+        // Server unreachable on boot — use config.h default (15s), NOT 5-minute fallback
         Serial.printf("[Config] Server %d — using default %ds interval\n",
                       code, syncIntervalMs / 1000);
     }

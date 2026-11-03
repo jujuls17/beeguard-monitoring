@@ -198,7 +198,7 @@ def build_cnn(input_shape=(N_MFCC, TARGET_FRAMES, 1), n_classes=3):
 
 # ── Evaluation Outputs ─────────────────────────────────────────────
 def save_confusion_matrix(y_true, y_pred):
-    cm = confusion_matrix(y_true, y_pred)
+    cm = confusion_matrix(y_true, y_pred, labels=list(range(len(CLASSES))))
 
     # PNG heatmap
     fig, ax = plt.subplots(figsize=(6, 5))
@@ -332,6 +332,19 @@ def main():
     # ── 80/20 group split by original_recording_id ──────────────────
     gss = GroupShuffleSplit(n_splits=1, test_size=0.2, random_state=RANDOM_SEED)
     train_idx, val_idx = next(gss.split(X, y, groups=groups))
+
+    # Guarantee at least 1 clip per class in validation (handles tiny classes like swarming)
+    all_idx = set(range(len(X)))
+    val_set = set(val_idx.tolist())
+    for class_i in range(len(CLASSES)):
+        if not any(y[i] == class_i for i in val_set):
+            # Find a clip of this class currently in training and move it to val
+            for i in train_idx:
+                if y[i] == class_i:
+                    val_set.add(i)
+                    break
+    val_idx   = np.array(sorted(val_set))
+    train_idx = np.array(sorted(all_idx - val_set))
 
     X_train, X_val = X[train_idx], X[val_idx]
     y_train, y_val = y[train_idx], y[val_idx]

@@ -16,9 +16,12 @@
  * }
  */
 
+ob_start();
+ini_set('display_errors', 0);
 require_once '../config.php';
 
 header('Content-Type: application/json');
+ob_clean();
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
@@ -50,7 +53,7 @@ $probNormal   = round((float)($data['prob_normal']    ?? 0), 2);
 $probQueenless = round((float)($data['prob_queenless'] ?? 0), 2);
 $probSwarming = round((float)($data['prob_swarming']  ?? 0), 2);
 $inferenceMs  = isset($data['inference_ms']) ? (int)$data['inference_ms'] : null;
-$deviceId     = $conn->real_escape_string($data['device_id'] ?? '');
+$deviceId     = $data['device_id'] ?? '';
 
 if (!$hiveId || !in_array($status, $validStatuses)) {
     http_response_code(422);
@@ -91,7 +94,12 @@ if (isset($alertMessages[$status])) {
 }
 
 // Update device sync time
-$conn->query("UPDATE edge_devices SET last_sync = NOW() WHERE device_id = '$deviceId'");
+if ($deviceId !== '') {
+    $dStmt = $conn->prepare("UPDATE edge_devices SET last_sync = NOW() WHERE device_id = ?");
+    $dStmt->bind_param("s", $deviceId);
+    $dStmt->execute();
+    $dStmt->close();
+}
 
 echo json_encode([
     'success'   => true,

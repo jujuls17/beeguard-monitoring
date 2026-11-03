@@ -1,10 +1,15 @@
 <?php
+ob_start();
+ini_set('display_errors', 0);
+
 session_start();
 require_once '../config.php';
 require_once '../functions.php';
 checkAuth();
 session_write_close();
+
 header('Content-Type: application/json');
+ob_clean();
 
 // Beekeepers can only see hive activities — force tab to 'hive'
 $tab = (!isAdmin() || !in_array($_GET['tab'] ?? '', ['hive', 'user'])) ? 'hive' : $_GET['tab'];
@@ -21,6 +26,8 @@ $presets = [
     '24h' => 'NOW() - INTERVAL 24 HOUR',
     '7d'  => 'NOW() - INTERVAL 7 DAY',
     '30d' => 'NOW() - INTERVAL 30 DAY',
+    '3mo' => 'NOW() - INTERVAL 3 MONTH',
+    '6mo' => 'NOW() - INTERVAL 6 MONTH',
 ];
 
 $whereParts = [];

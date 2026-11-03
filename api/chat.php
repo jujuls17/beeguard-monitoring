@@ -1,16 +1,16 @@
 <?php
 ob_start();
 ini_set('display_errors', 0);
+error_reporting(0);
 
 session_start();
 require_once '../config.php';
 require_once '../functions.php';
 checkAuth();
+session_write_close(); // release session lock — polling every 3s must not block other requests
 
 header('Content-Type: application/json');
 ob_clean();
-ini_set('display_errors', 0);
-error_reporting(0);
 
 $action = $_REQUEST['action'] ?? '';
 
@@ -150,7 +150,11 @@ function deleteMessage(): array {
 function getMembers(): array {
     global $conn;
     $r = $conn->query(
-        "SELECT id, username, full_name, role FROM users ORDER BY role ASC, username ASC"
+        "SELECT id, username, full_name,
+                CASE WHEN role = 'admin' THEN 'admin' ELSE 'beekeeper' END AS role
+         FROM users
+         WHERE account_status = 'active'
+         ORDER BY role ASC, username ASC"
     );
     $members = $r ? $r->fetch_all(MYSQLI_ASSOC) : [];
     return ['success' => true, 'members' => $members, 'total' => count($members)];

@@ -14,7 +14,7 @@
 // --- Server Settings ---
 // Run ipconfig (Windows) or ifconfig (Linux/Mac) to get your PC IP
 // Example: "192.168.1.100"
-#define SERVER_HOST         "10.164.152.103"
+#define SERVER_HOST         "10.57.66.103"
 #define SERVER_PORT         80
 #define API_BASE            "/beemonitoring/api"
 #define API_KEY             "BEEGUARD_SECRET_2026"

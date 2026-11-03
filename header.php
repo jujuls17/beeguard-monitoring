@@ -5,11 +5,15 @@ $current_time = date('g:i:s A');
 
 $alert_count = 0;
 $recent_alerts = [];
-$alert_result = $conn->query("SELECT COUNT(*) as count FROM alerts WHERE is_read = 0");
-if ($alert_result) $alert_count = (int)$alert_result->fetch_assoc()['count'];
-
-$ra = $conn->query("SELECT a.*, h.name as hive_name FROM alerts a LEFT JOIN hives h ON a.hive_id = h.id WHERE a.is_read = 0 ORDER BY a.created_at DESC LIMIT 5");
-if ($ra) while ($row = $ra->fetch_assoc()) $recent_alerts[] = $row;
+if (isset($conn)) {
+    // Only show alerts created after the user last saw the bell — keeps badge from counting already-seen notifications
+    $uid_h = isset($_SESSION['user_id']) ? (int)$_SESSION['user_id'] : 0;
+    $seen_clause = $uid_h ? "AND a.created_at > COALESCE((SELECT last_alerts_seen FROM user_settings WHERE user_id = $uid_h), '1970-01-01')" : '';
+    $alert_result = $conn->query("SELECT COUNT(*) as count FROM alerts a WHERE a.is_read = 0 $seen_clause");
+    if ($alert_result) $alert_count = (int)$alert_result->fetch_assoc()['count'];
+    $ra = $conn->query("SELECT a.*, h.name as hive_name FROM alerts a LEFT JOIN hives h ON a.hive_id = h.id WHERE a.is_read = 0 $seen_clause ORDER BY a.created_at DESC LIMIT 5");
+    if ($ra) while ($row = $ra->fetch_assoc()) $recent_alerts[] = $row;
+}
 ?>
 
 <header id="mainHeader" class="fixed top-0 right-0 left-64 text-white z-30" style="transition:left 0.35s cubic-bezier(0.4,0,0.2,1);">
@@ -126,11 +130,14 @@ setInterval(() => {
     if (el) el.textContent = new Date().toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',second:'2-digit',hour12:true});
 }, 1000);
 
-/* Mark all alerts as read + clear badge */
+/* Mark alerts as SEEN (updates timestamp only — does NOT dismiss/resolve alerts) */
 function markAlertsRead() {
-    fetch('api/mark_alerts_read.php').catch(() => {});
+    fetch('api/mark_alerts_seen.php', {method: 'POST'}).catch(() => {});
     // Hide badge immediately in UI
-    document.querySelectorAll('#notificationBtn .animate-bounce, #notificationBtn span').forEach(el => el.remove());
+    document.querySelectorAll('#notificationBtn span').forEach(el => el.remove());
+    // Close dropdown
+    const dd = document.getElementById('notificationDropdown');
+    if (dd) dd.classList.add('hidden');
 }
 
 /* Notification toggle */
@@ -207,7 +214,14 @@ if (_isMobile()) _clearInlineLayout();
     function doReload() {
         const modalOpen = document.querySelector('.modal.active');
         const typing    = document.activeElement && ['INPUT','TEXTAREA','SELECT'].includes(document.activeElement.tagName);
-        if (!modalOpen && !typing) location.reload();
+        if (modalOpen || typing) return;
+        // If the current page provides its own refresh function, use it instead of a hard reload
+        // so scroll position, open panels, and filter state are preserved
+        if (typeof window.__refreshPage === 'function') {
+            window.__refreshPage();
+        } else {
+            location.reload();
+        }
     }
     // Wait until the next 15s boundary, then tick every 15s
     const msUntilNext = INTERVAL - (Date.now() % INTERVAL);

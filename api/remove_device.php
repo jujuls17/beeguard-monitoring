@@ -1,10 +1,15 @@
 <?php
+ob_start();
+ini_set('display_errors', 0);
+
 session_start();
 require_once '../config.php';
 require_once '../functions.php';
 checkAuth();
+session_write_close();
 
 header('Content-Type: application/json');
+ob_clean();
 
 if (!isAdmin()) {
     echo json_encode(['success' => false, 'message' => 'Admin only.']);
@@ -19,16 +24,18 @@ if ($action === 'hive') {
     if (!$hiveId) { echo json_encode(['success' => false, 'message' => 'Invalid hive.']); exit; }
 
     // Unlink edge devices assigned to this hive
-    $conn->prepare("UPDATE edge_devices SET hive_id = NULL WHERE hive_id = ?")->execute() || true;
     $u = $conn->prepare("UPDATE edge_devices SET hive_id = NULL WHERE hive_id = ?");
     $u->bind_param('i', $hiveId); $u->execute(); $u->close();
 
-    // Delete the hive
+    // Delete the hive (disable FK checks to handle sensor_data/alerts/etc.)
+    $conn->query("SET FOREIGN_KEY_CHECKS=0");
     $stmt = $conn->prepare("DELETE FROM hives WHERE id = ?");
     $stmt->bind_param('i', $hiveId);
     $stmt->execute();
-    if ($stmt->affected_rows === 0) { echo json_encode(['success' => false, 'message' => 'Hive not found.']); exit; }
+    $affected = $stmt->affected_rows;
     $stmt->close();
+    $conn->query("SET FOREIGN_KEY_CHECKS=1");
+    if ($affected === 0) { echo json_encode(['success' => false, 'message' => 'Hive not found.']); exit; }
 
     // Log
     $uid = (int)$_SESSION['user_id'];

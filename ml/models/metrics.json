@@ -1,50 +1,50 @@
 {
-  "val_accuracy": 55.9,
-  "final_accuracy": 55.9,
+  "val_accuracy": 90.85,
+  "final_accuracy": 90.85,
   "per_class": {
     "normal": {
-      "precision": 0.7571,
-      "recall": 0.4953,
-      "f1": 0.5989,
-      "support": 107
+      "precision": 0.8864,
+      "recall": 1.0,
+      "f1": 0.9398,
+      "support": 117
     },
     "queenless": {
-      "precision": 0.4066,
-      "recall": 0.7115,
-      "f1": 0.5175,
-      "support": 52
+      "precision": 1.0,
+      "recall": 0.6739,
+      "f1": 0.8052,
+      "support": 46
     },
     "swarming": {
-      "precision": 0.0,
-      "recall": 0.0,
-      "f1": 0.0,
-      "support": 2
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "support": 1
     }
   },
   "macro_avg": {
-    "precision": 0.3879,
-    "recall": 0.4023,
-    "f1": 0.3721
+    "precision": 0.9621,
+    "recall": 0.8913,
+    "f1": 0.915
   },
-  "overall_accuracy": 55.9,
+  "overall_accuracy": 90.85,
   "train_clip_counts": {
-    "normal": 395,
-    "queenless": 214,
-    "swarming": 2
+    "normal": 398,
+    "queenless": 220,
+    "swarming": 7
   },
   "val_clip_counts": {
-    "normal": 107,
-    "queenless": 52,
-    "swarming": 2
+    "normal": 117,
+    "queenless": 46,
+    "swarming": 1
   },
-  "epochs_run": 9,
-  "training_date": "2026-10-23 13:51:53",
+  "epochs_run": 12,
+  "training_date": "2026-10-28 23:39:55",
   "classes": [
     "normal",
     "queenless",
     "swarming"
   ],
   "model": "BeeGuard CNN (Conv2D x3 + GAP)",
-  "sample_count": 772,
-  "trained_at": "Oct 23, 2026 13:51"
+  "sample_count": 789,
+  "trained_at": "Oct 28, 2026 23:39"
 }

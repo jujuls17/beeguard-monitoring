@@ -1,9 +1,15 @@
 <?php
+ob_start();
+ini_set('display_errors', 0);
+
 session_start();
 require_once '../config.php';
 require_once '../functions.php';
 checkAuth();
+session_write_close();
+
 header('Content-Type: application/json');
+ob_clean();
 
 $tab      = ($_GET['tab']      ?? 'active') === 'history' ? 'history' : 'active';
 $severity = $_GET['severity']  ?? 'all';
@@ -110,11 +116,30 @@ $typesRes = $conn->query("SELECT DISTINCT alert_type FROM alerts WHERE alert_typ
 $alertTypes = [];
 while ($tr = $typesRes->fetch_assoc()) $alertTypes[] = $tr['alert_type'];
 
+// Global active counts for stat cards (always unfiltered, regardless of current filter/page)
+$globalStats = ['total' => 0, 'critical' => 0, 'warning' => 0, 'dismissed' => 0];
+$gs = $conn->query("SELECT
+    SUM(is_read = 0) AS active_total,
+    SUM(is_read = 0 AND severity = 'critical') AS critical,
+    SUM(is_read = 0 AND severity = 'warning') AS warning,
+    SUM(is_read = 1) AS dismissed
+    FROM alerts");
+if ($gs) {
+    $gr = $gs->fetch_assoc();
+    $globalStats = [
+        'total'     => (int)$gr['active_total'],
+        'critical'  => (int)$gr['critical'],
+        'warning'   => (int)$gr['warning'],
+        'dismissed' => (int)$gr['dismissed'],
+    ];
+}
+
 echo json_encode([
-    'success'     => true,
-    'rows'        => $rows,
-    'total'       => $total,
-    'page'        => $page,
-    'pages'       => (int)ceil($total / $limit),
-    'alert_types' => $alertTypes,
+    'success'      => true,
+    'rows'         => $rows,
+    'total'        => $total,
+    'page'         => $page,
+    'pages'        => (int)ceil($total / $limit),
+    'alert_types'  => $alertTypes,
+    'global_stats' => $globalStats,
 ]);

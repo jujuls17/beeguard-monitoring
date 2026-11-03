@@ -1,8 +1,11 @@
 <?php
+ob_start();
+ini_set('display_errors', 0);
 session_start();
 require_once 'config.php';
 require_once 'functions.php';
 checkAuth();
+session_write_close();
 
 $uploadDir = __DIR__ . '/uploads/sounds/';
 if (!is_dir($uploadDir)) {
@@ -26,6 +29,7 @@ $conn->query("
 ");
 
 header('Content-Type: application/json');
+ob_clean();
 
 $labelMap = [
     'normal'    => 'Normal',
@@ -79,6 +83,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && ($_GET['action'] ?? '') === 'delete'
         exit;
     }
     if (file_exists($filePath)) @unlink($filePath);
+    foreach (glob(__DIR__ . '/ml/data/audio/*/' . basename($row['stored_filename'])) ?: [] as $copy) @unlink($copy);
     $uname = $_SESSION['username'] ?? 'user';
     logActivity($conn, null, 'Sound Deleted',
         "User '$uname' deleted sound file: {$row['stored_filename']}", 'warning');
@@ -139,6 +144,13 @@ if (!$stmt->execute()) {
     exit;
 }
 $stmt->close();
+
+// Copy into the training dataset (train_model.py only reads .wav/.mp3 from ml/data/audio/{class}/)
+if (in_array($ext, ['wav', 'mp3'])) {
+    $datasetDir = __DIR__ . '/ml/data/audio/' . $classification . '/';
+    if (!is_dir($datasetDir)) mkdir($datasetDir, 0755, true);
+    @copy($destPath, $datasetDir . $storedName);
+}
 
 $uname = $_SESSION['username'] ?? 'user';
 $labelDisplay = $labelMap[$classification] ?? $classification;

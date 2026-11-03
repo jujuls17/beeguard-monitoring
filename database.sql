@@ -9,9 +9,12 @@ CREATE TABLE IF NOT EXISTS users (
     username VARCHAR(50) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL,
     email VARCHAR(100),
-    role ENUM('admin', 'user') DEFAULT 'user',
+    role ENUM('admin', 'user', 'beekeeper') DEFAULT 'user',
     account_status ENUM('active', 'inactive') NOT NULL DEFAULT 'active',
     assigned_hive_id INT DEFAULT NULL,
+    contact_number VARCHAR(30) DEFAULT NULL,
+    security_question VARCHAR(255) DEFAULT NULL,
+    security_answer VARCHAR(255) DEFAULT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -23,6 +26,7 @@ CREATE TABLE IF NOT EXISTS hives (
     location VARCHAR(200),
     install_date DATE,
     status ENUM('active', 'inactive') DEFAULT 'active',
+    camera_index INT DEFAULT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -123,7 +127,7 @@ CREATE TABLE IF NOT EXISTS inspection_notes (
 
 -- Insert default admin user (password: beekeeper123)
 INSERT INTO users (full_name, username, password, email, role, account_status) VALUES
-('Administrator', 'admin', '$2y$10$8K1p/a0dL3LKzF5rTa9Au.oGskkwKEZQ9LmY7sWDy0RlFYMjMqE76', 'admin@beeguard.com', 'admin', 'active');
+('Administrator', 'admin', '$2y$10$pD3VhFtOTPpZoN12iPzt8uMvgQqxnGXMTBaGNLuv/R2OYxc98zolC', 'admin@beeguard.com', 'admin', 'active');
 
 -- Default hive
 INSERT INTO hives (name, hive_id, location, install_date, status) VALUES
@@ -171,7 +175,11 @@ CREATE TABLE IF NOT EXISTS sound_uploads (
 ALTER TABLE users
     ADD COLUMN IF NOT EXISTS full_name VARCHAR(100) DEFAULT NULL AFTER id,
     ADD COLUMN IF NOT EXISTS account_status ENUM('active','inactive') NOT NULL DEFAULT 'active' AFTER role,
-    ADD COLUMN IF NOT EXISTS assigned_hive_id INT DEFAULT NULL AFTER account_status;
+    ADD COLUMN IF NOT EXISTS assigned_hive_id INT DEFAULT NULL AFTER account_status,
+    ADD COLUMN IF NOT EXISTS contact_number VARCHAR(30) DEFAULT NULL,
+    ADD COLUMN IF NOT EXISTS security_question VARCHAR(255) DEFAULT NULL,
+    ADD COLUMN IF NOT EXISTS security_answer VARCHAR(255) DEFAULT NULL;
+ALTER TABLE users MODIFY COLUMN IF EXISTS role ENUM('admin','user','beekeeper') DEFAULT 'user';
 
 ALTER TABLE activity_log
     ADD COLUMN IF NOT EXISTS user_id INT DEFAULT NULL AFTER hive_id;
@@ -204,5 +212,7 @@ CREATE TABLE IF NOT EXISTS chat_reads (
 -- -------------------------------------------------------
 ALTER TABLE sound_uploads MODIFY classification ENUM('normal','queenless','swarming') NULL;
 ALTER TABLE audio_analysis ADD COLUMN IF NOT EXISTS inference_ms INT NULL;
+ALTER TABLE user_settings ADD COLUMN IF NOT EXISTS last_inspection_seen DATETIME DEFAULT NULL;
+ALTER TABLE user_settings ADD COLUMN IF NOT EXISTS last_alerts_seen DATETIME DEFAULT NULL;
 
 SELECT 'Database created successfully!' AS status;
