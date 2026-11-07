@@ -309,11 +309,11 @@ $avgCO2         = getAvgCO2($conn);
                                 <span class="text-xs font-semibold text-gray-500 flex items-center gap-1">
                                     <i class="fas fa-volume-up text-yellow-500"></i> Sound Activity
                                 </span>
-                                <span class="text-xs font-bold text-gray-700"><?php echo $sensor ? round($sensor['sound_level']) : 0; ?>%</span>
+                                <span class="text-xs font-bold text-gray-700"><?php echo $sensor ? round($sensor['sound_level'] ?? 0) : 0; ?>%</span>
                             </div>
                             <div class="progress-bar h-2">
                                 <div class="progress-fill h-full"
-                                     style="width:<?php echo $sensor ? round($sensor['sound_level']) : 0; ?>%;background:linear-gradient(90deg,#F59E0B,#F97316);"></div>
+                                     style="width:<?php echo $sensor ? round($sensor['sound_level'] ?? 0) : 0; ?>%;background:linear-gradient(90deg,#F59E0B,#F97316);"></div>
                             </div>
                         </div>
                         <?php endif; ?>
