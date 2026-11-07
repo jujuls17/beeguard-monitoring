@@ -149,12 +149,13 @@ function insertAlertIfNew(mysqli $db, int $hiveId, string $type, string $sev, st
 }
 
 function dismissAlertType(mysqli $db, int $hiveId, string $type): void {
-    $db->query("UPDATE alerts SET is_read = 1 WHERE hive_id = {$hiveId} AND alert_type = '{$type}' AND is_read = 0");
+    $stmt = $db->prepare("UPDATE alerts SET is_read = 1 WHERE hive_id = ? AND alert_type = ? AND is_read = 0");
+    if ($stmt) { $stmt->bind_param("is", $hiveId, $type); $stmt->execute(); $stmt->close(); }
 }
 
 // Fetch hive name for human-readable alert messages
 $hiveRow  = $conn->query("SELECT name FROM hives WHERE id = {$hiveId} LIMIT 1")->fetch_assoc();
-$hiveName = $hiveRow ? htmlspecialchars($hiveRow['name']) : "Hive #{$hiveId}";
+$hiveName = $hiveRow ? $hiveRow['name'] : "Hive #{$hiveId}";
 
 // ── Temperature alerts ────────────────────────────────────────────────────
 // Paper spec: Optimal 33–36°C. Warning <33 or >36. Critical <18 or >38.
@@ -217,9 +218,9 @@ if ($humidity === null) { /* DHT22 disconnected — skip */ } elseif ($humidity 
 //   Normal healthy colony: 1000–4000 ppm  — bees actively regulate ventilation
 //   Elevated (poor airflow): 4000–6000 ppm — needs attention
 //   Critical (severe issue): >6000 ppm     — immediate action required
-if ($co2 <= 4000) {
+if ($co2 !== null && $co2 <= 4000) {
     dismissAlertType($conn, $hiveId, 'co2');
-} else {
+} elseif ($co2 !== null) {
     if ($co2 > 6000) {
         insertAlertIfNew($conn, $hiveId, 'co2', 'critical',
             "CO₂ critically high at {$co2}ppm on {$hiveName}. Severe ventilation failure.",
@@ -233,10 +234,28 @@ if ($co2 <= 4000) {
     }
 }
 
-// ── Colony status is set by CNN inference in audio_service.py ────
-// sound_level and dominant_freq are stored as raw readings only.
-// detectColonyStatus() has been removed per Chapter 3 specification.
-// Colony status must NOT be set from rule-based heuristics here.
+// ── Colony status alerts — Hz-based classification ───────────────────────
+// dominant_freq from ESP32 zero-crossing calculation on MAX4466 mic:
+//   ≤450 Hz → Normal, 450–600 Hz → Queenless, >600 Hz → Swarming
+if ($dominantFreq > 0) {
+    if ($dominantFreq > 600) {
+        dismissAlertType($conn, $hiveId, 'queenless');
+        insertAlertIfNew($conn, $hiveId, 'swarming', 'critical',
+            "Swarming detected on {$hiveName}! Dominant frequency {$dominantFreq}Hz (>600Hz threshold).",
+            "Inspect the hive immediately for swarm cells (peanut-shaped queen cells). Add a super or split the colony to relieve overcrowding. Capturing the swarm within 24 hours prevents colony loss."
+        );
+    } elseif ($dominantFreq > 450) {
+        dismissAlertType($conn, $hiveId, 'swarming');
+        insertAlertIfNew($conn, $hiveId, 'queenless', 'warning',
+            "Queenless condition detected on {$hiveName}. Dominant frequency {$dominantFreq}Hz (450–600Hz range).",
+            "Open the hive and inspect for a laying queen, fresh eggs (< 3 days old), or emergency queen cells. If no eggs found, introduce a new mated queen within 2–3 days to prevent colony collapse."
+        );
+    } else {
+        // Normal — dismiss any active colony alerts
+        dismissAlertType($conn, $hiveId, 'queenless');
+        dismissAlertType($conn, $hiveId, 'swarming');
+    }
+}
 
 // Log to activity
 $logMsg = "ESP32 {$deviceId}: T={$temp}°C H={$humidity}% CO2={$co2}ppm Sound={$soundLevel}% Freq={$dominantFreq}Hz";

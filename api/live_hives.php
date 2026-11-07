@@ -40,7 +40,7 @@ foreach ($hives as $hive) {
             'co2'         => (int)$sensor['co2'],
             'elapsed'     => time_elapsed_string($sensor['timestamp']),
         ] : null,
-        'sound'         => $sensor ? round((float)$sensor['sound_level']) : null,
+        'sound'         => $sensor ? round((float)($sensor['sound_level'] ?? 0)) : null,
         'dominant_freq' => $sensor ? (float)($sensor['dominant_freq'] ?? 0) : null,
         'badge'         => [
             'bg'         => $badge['bg'],

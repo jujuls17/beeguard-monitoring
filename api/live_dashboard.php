@@ -35,7 +35,7 @@ if ($rh) { $row = $rh->fetch_assoc(); $avgHumidity = $row['avg'] !== null ? roun
 
 // Avg CO2
 $avgCO2 = null;
-$rc = $conn->query("SELECT AVG(s.co2_level) as avg FROM sensor_data s
+$rc = $conn->query("SELECT AVG(s.co2) as avg FROM sensor_data s
     INNER JOIN (SELECT hive_id, MAX(timestamp) as mt FROM sensor_data GROUP BY hive_id) lx
     ON s.hive_id = lx.hive_id AND s.timestamp = lx.mt");
 if ($rc) { $row = $rc->fetch_assoc(); $avgCO2 = $row['avg'] !== null ? round((float)$row['avg']) : null; }

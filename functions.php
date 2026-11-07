@@ -190,16 +190,14 @@ function countHealthyHives($conn) {
     $healthy = 0;
     foreach ($hives as $hive) {
         $sensor = getLatestSensorData($conn, $hive['id']);
-        $audio  = getLatestAudioAnalysis($conn, $hive['id']);
         if (!$sensor) continue;
 
-        // Same scoring as getHiveHealthScore — healthy = score >= 80
-        // Paper spec: Temp optimal 33–36°C, Humidity optimal 40–95%, CO2 normal ≤4000ppm
         $s = 100;
-        if ($sensor['temperature'] > 36 || $sensor['temperature'] < 33) $s -= 5;
-        if ($sensor['co2'] > 4000)     $s -= 5;
-        if ($sensor['humidity'] > 95 || $sensor['humidity'] < 40)  $s -= 3;
-        if ($audio && $audio['colony_status'] !== 'normal') $s -= 8;
+        if ($sensor['temperature'] !== null && ($sensor['temperature'] > 36 || $sensor['temperature'] < 33)) $s -= 5;
+        if ($sensor['co2']         !== null && $sensor['co2'] > 4000)                                        $s -= 5;
+        if ($sensor['humidity']    !== null && ($sensor['humidity'] > 95 || $sensor['humidity'] < 40))       $s -= 3;
+        $colonyStatus = classifyColonyByFreq($sensor['dominant_freq'] ?? null);
+        if ($colonyStatus !== 'normal') $s -= 8;
         if (max(0, $s) >= 80) $healthy++;
     }
     return $healthy;
@@ -244,17 +242,19 @@ function getHiveStatusBadge($status) {
 }
 
 function getHealthDistribution($conn) {
-    $sql = "SELECT colony_status, COUNT(*) as count
-            FROM audio_analysis a
-            JOIN (
-                SELECT hive_id, MAX(timestamp) as max_time
-                FROM audio_analysis
-                GROUP BY hive_id
-            ) latest ON a.hive_id = latest.hive_id AND a.timestamp = latest.max_time
-            GROUP BY colony_status";
-    $result = $conn->query($sql);
-    if (!$result) return [];
-    return $result->fetch_all(MYSQLI_ASSOC);
+    // Classify each hive by its latest dominant_freq from sensor_data
+    $hives = getAllHives($conn);
+    $counts = ['normal' => 0, 'queenless' => 0, 'swarming' => 0];
+    foreach ($hives as $hive) {
+        $sensor = getLatestSensorData($conn, $hive['id']);
+        $status = classifyColonyByFreq($sensor['dominant_freq'] ?? null);
+        $counts[$status]++;
+    }
+    $result = [];
+    foreach ($counts as $status => $count) {
+        if ($count > 0) $result[] = ['colony_status' => $status, 'count' => $count];
+    }
+    return $result;
 }
 
 function getHiveHealthScore($conn) {
@@ -267,15 +267,15 @@ function getHiveHealthScore($conn) {
 
     foreach ($hives as $hive) {
         $sensor = getLatestSensorData($conn, $hive['id']);
-        $audio  = getLatestAudioAnalysis($conn, $hive['id']);
         if (!$sensor) continue; // skip hives with no data
 
         // Paper spec: Temp optimal 33–36°C, Humidity optimal 40–95%, CO2 normal ≤4000ppm
         $s = 100;
-        if ($sensor['temperature'] > 36 || $sensor['temperature'] < 33) { $s -= 5; $issues++; }
-        if ($sensor['co2'] > 4000)     { $s -= 5; $issues++; }
-        if ($sensor['humidity'] > 95 || $sensor['humidity'] < 40)  { $s -= 3; $issues++; }
-        if ($audio && $audio['colony_status'] !== 'normal') { $s -= 8; $issues++; }
+        if ($sensor['temperature'] !== null && ($sensor['temperature'] > 36 || $sensor['temperature'] < 33)) { $s -= 5; $issues++; }
+        if ($sensor['co2']         !== null && $sensor['co2'] > 4000)                                        { $s -= 5; $issues++; }
+        if ($sensor['humidity']    !== null && ($sensor['humidity'] > 95 || $sensor['humidity'] < 40))       { $s -= 3; $issues++; }
+        $colonyStatus = classifyColonyByFreq($sensor['dominant_freq'] ?? null);
+        if ($colonyStatus !== 'normal') { $s -= 8; $issues++; }
         $hiveScores[] = max(0, $s);
     }
 

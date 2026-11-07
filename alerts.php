@@ -24,12 +24,12 @@ $totalHistory  = count($historyAlerts);
 
 // Predefined alert types (covers all possible sensor/colony events)
 $alertTypeLabels = [
-    'temperature'    => 'Temperature',
-    'humidity'       => 'Humidity',
-    'co2'            => 'CO₂ Level',
-    'swarming'       => 'Swarming',
-    'queenless'      => 'Queenless',
-    'camera_insect'  => 'Camera Insect',
+    'temperature'    => '🌡 Temperature',
+    'humidity'       => '💧 Humidity',
+    'co2'            => '☁ CO₂ Level',
+    'queenless'      => '👑 Queenless',
+    'swarming'       => '🌪 Swarming',
+    'camera_insect'  => '🐛 Camera Insect',
 ];
 $hiddenTypes = ['colony_status', 'device_offline', 'camera_insect_detected'];
 // Merge with any extra types that exist in DB but aren't predefined

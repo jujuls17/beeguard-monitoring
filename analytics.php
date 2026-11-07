@@ -986,17 +986,17 @@ $scoreColor = $healthScore['score'] >= 80 ? 'text-green-600' : ($healthScore['sc
         }
 
         function hiveHealthScore(h) {
-            // Must match PHP getHiveHealthScore() deduction rules exactly
+            // Thresholds must match PHP getHiveHealthScore() exactly
             if (!h.sensor) return null;
             const s = h.sensor;
             let score = 100;
             const t  = parseFloat(s.temperature);
             const hm = parseFloat(s.humidity);
             const c  = parseInt(s.co2);
-            if (t > 37 || t < 32)  score -= 5;   // PHP: temperature out of range
-            if (c > 3000)           score -= 5;   // PHP: co2 > 3000
-            if (hm > 75)            score -= 3;   // PHP: humidity > 75
-            if (h.badge && h.badge.text && h.badge.text !== 'Normal') score -= 8; // PHP: colony not normal
+            if (!isNaN(t)  && (t > 36 || t < 33))       score -= 5;  // optimal 33–36°C
+            if (!isNaN(c)  && c > 4000)                  score -= 5;  // normal ≤4000ppm
+            if (!isNaN(hm) && (hm > 95 || hm < 40))     score -= 3;  // optimal 40–95%
+            if (h.badge && h.badge.text && h.badge.text !== 'Normal') score -= 8;
             return Math.max(0, score);
         }
 

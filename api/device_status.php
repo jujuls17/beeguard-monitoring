@@ -21,7 +21,7 @@ $conn->query(
 );
 
 $result = $conn->query(
-    "SELECT d.*, h.name as hive_name,
+    "SELECT d.*, h.name as hive_name, h.camera_index,
             sd.temperature    AS latest_temp,
             sd.humidity       AS latest_humidity,
             sd.co2            AS latest_co2,
@@ -37,10 +37,17 @@ $result = $conn->query(
      ORDER BY d.status DESC, d.id ASC"
 );
 
-// Check camera once outside the loop — not per device
-$camSocket  = @fsockopen('127.0.0.1', 5050, $errno, $errstr, 0.3);
-$cameraLive = $camSocket !== false;
-if ($camSocket) fclose($camSocket);
+// Cache checked ports to avoid redundant socket calls
+$checkedPorts = [];
+function isCamPortLive(int $port): bool {
+    global $checkedPorts;
+    if (isset($checkedPorts[$port])) return $checkedPorts[$port];
+    $sock = @fsockopen('127.0.0.1', $port, $errno, $errstr, 0.3);
+    $live = $sock !== false;
+    if ($sock) fclose($sock);
+    $checkedPorts[$port] = $live;
+    return $live;
+}
 
 $devices = [];
 if ($result) {
@@ -49,6 +56,11 @@ if ($result) {
         $isOnline   = $row['status'] === 'online';
         $hasReading = $row['latest_ts'] !== null
             && (time() - strtotime($row['latest_ts'])) <= 300; // reading within last 5 min
+
+        // Derive camera port from camera_index (5049 + index), fallback 5050
+        $camIdx    = isset($row['camera_index']) ? (int)$row['camera_index'] : 1;
+        $camPort   = 5049 + max(1, $camIdx);
+        $cameraLive = isCamPortLive($camPort);
 
         $sensors = [
             'temperature' => $isOnline && $hasReading && $row['latest_temp']    !== null && (float)$row['latest_temp']    > 0,
