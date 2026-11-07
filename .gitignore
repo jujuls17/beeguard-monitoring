@@ -1,0 +1,17 @@
+# ── Credentials (NEVER commit these) ──────────────────────────────────────────
+config.php
+
+# ── Camera / local runtime files ──────────────────────────────────────────────
+*.pid
+camera_start_hive*.bat
+meta_hive_*.json
+
+# ── XAMPP / local dev leftovers ───────────────────────────────────────────────
+.env
+*.log
+*.tmp
+
+# ── OS junk ───────────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini

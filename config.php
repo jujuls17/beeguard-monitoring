@@ -61,7 +61,7 @@ try { $conn->query("CREATE TABLE IF NOT EXISTS password_resets (
 try { $conn->query("ALTER TABLE hives ADD COLUMN IF NOT EXISTS last_checked_at DATETIME DEFAULT NULL"); } catch (Throwable $e) {}
 try { $conn->query("ALTER TABLE hives ADD COLUMN IF NOT EXISTS last_checked_by INT DEFAULT NULL"); } catch (Throwable $e) {}
 
-// Error reporting
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+// Error reporting — off in production, on locally for dev
+error_reporting(0);
+ini_set('display_errors', 0);
 ?>
