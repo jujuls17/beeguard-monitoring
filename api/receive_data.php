@@ -107,10 +107,10 @@ if ($hiveId === 0) {
 
 // Insert sensor data
 $stmt = $conn->prepare(
-    "INSERT INTO sensor_data (hive_id, temperature, humidity, co2, sound_level)
-     VALUES (?, ?, ?, ?, ?)"
+    "INSERT INTO sensor_data (hive_id, temperature, humidity, co2, sound_level, dominant_freq)
+     VALUES (?, ?, ?, ?, ?, ?)"
 );
-$stmt->bind_param("iddid", $hiveId, $temp, $humidity, $co2, $soundLevel);
+$stmt->bind_param("iddidd", $hiveId, $temp, $humidity, $co2, $soundLevel, $dominantFreq);
 $inserted = $stmt->execute();
 $stmt->close();
 

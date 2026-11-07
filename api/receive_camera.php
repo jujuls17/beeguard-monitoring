@@ -60,7 +60,7 @@ $meta = [
     'total'        => count($detections),
     'detections'   => $detections,
 ];
-file_put_contents($camDir . '/meta.json', json_encode($meta));
+file_put_contents($camDir . "/meta_hive_{$hiveId}.json", json_encode($meta));
 
 // ── Alert: non-bee insects detected ───────────────────────────
 if ($insectCount > 0) {

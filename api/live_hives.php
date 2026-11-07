@@ -15,9 +15,10 @@ $hives = getAllHives($conn);
 $data  = [];
 
 foreach ($hives as $hive) {
-    $sensor = getLatestSensorData($conn, $hive['id']);
-    $audio  = getLatestAudioAnalysis($conn, $hive['id']);
-    $badge  = $audio ? getHiveStatusBadge($audio['colony_status']) : null;
+    $sensor       = getLatestSensorData($conn, $hive['id']);
+    $colonyStatus = classifyColonyByFreq($sensor['dominant_freq'] ?? null);
+    $audio        = ['colony_status' => $colonyStatus, 'confidence' => 100];
+    $badge        = getHiveStatusBadge($colonyStatus);
 
     $recommendations = getHiveRecommendations($sensor, $audio);
     $issues = 0;
@@ -39,14 +40,15 @@ foreach ($hives as $hive) {
             'co2'         => (int)$sensor['co2'],
             'elapsed'     => time_elapsed_string($sensor['timestamp']),
         ] : null,
-        'sound'       => $sensor ? round((float)$sensor['sound_level']) : null,
-        'badge'       => $badge ? [
+        'sound'         => $sensor ? round((float)$sensor['sound_level']) : null,
+        'dominant_freq' => $sensor ? (float)($sensor['dominant_freq'] ?? 0) : null,
+        'badge'         => [
             'bg'         => $badge['bg'],
             'color'      => $badge['color'],
             'icon'       => $badge['icon'],
             'text'       => $badge['text'],
-            'raw_status' => $audio['colony_status'] ?? 'normal',
-        ] : null,
+            'raw_status' => $colonyStatus,
+        ],
         'issues'      => $issues,
     ];
 }

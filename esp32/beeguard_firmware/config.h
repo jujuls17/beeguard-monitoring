@@ -14,15 +14,15 @@
 // --- Server Settings ---
 // Run ipconfig (Windows) or ifconfig (Linux/Mac) to get your PC IP
 // Example: "192.168.1.100"
-#define SERVER_HOST         "10.57.66.103"
+#define SERVER_HOST         "10.87.247.103"
 #define SERVER_PORT         80
 #define API_BASE            "/beemonitoring/api"
 #define API_KEY             "BEEGUARD_SECRET_2026"
 
 // --- Device Identity ---
 // Must match device_id in the edge_devices database table
-#define DEVICE_ID           "ESP32-001"
-#define HIVE_ID             1
+#define DEVICE_ID           "ESP32-002"
+#define HIVE_ID             3
 
 // --- Sensor Pins (Your 30-pin ESP32) ---
 //  LEFT SIDE:                RIGHT SIDE:

@@ -38,7 +38,9 @@ function sensorTileStyle($type, $value) {
 foreach ($hives as $_hive) {
     $_sensor = getLatestSensorData($conn, $_hive['id']);
     if (!$_sensor) { $noDataCount++; continue; }
-    $_audio = getLatestAudioAnalysis($conn, $_hive['id']);
+    // Use freq-based colony status directly from sensor_data
+    $_colonyStatus = classifyColonyByFreq($_sensor['dominant_freq'] ?? null);
+    $_audio = ['colony_status' => $_colonyStatus, 'confidence' => 100];
     $_recs = getHiveRecommendations($_sensor, $_audio);
     $_hasCritical = false; $_hasWarnings = false;
     foreach ($_recs as $_r) {
@@ -207,8 +209,11 @@ foreach ($hives as $_hive) {
                 <?php foreach ($hives as $hive): ?>
                     <?php
                         $sensor = getLatestSensorData($conn, $hive['id']);
-                        $audio = getLatestAudioAnalysis($conn, $hive['id']);
-                        $badge = $audio ? getHiveStatusBadge($audio['colony_status']) : null;
+                        // Classify colony status from live dominant_freq — instant, no CNN needed
+                        $colonyStatus = classifyColonyByFreq($sensor['dominant_freq'] ?? null);
+                        $audio = ['colony_status' => $colonyStatus, 'confidence' => 100,
+                                  'dominant_freq' => $sensor['dominant_freq'] ?? 0];
+                        $badge = getHiveStatusBadge($colonyStatus);
                         $recommendations = getHiveRecommendations($sensor, $audio);
                         $hasWarnings = false;
                         $hasCritical = false;
@@ -296,29 +301,29 @@ foreach ($hives as $_hive) {
                                 <div class="bg-gray-50 p-3 rounded-lg mb-3">
                                     <div class="flex justify-between items-center mb-2">
                                         <p class="text-xs text-gray-600">Sound Activity</p>
-                                        <p class="text-sm font-bold" id="sound-val-<?php echo $hive['id']; ?>"><?php echo $sensor ? round($sensor['sound_level']) : 0; ?>%</p>
+                                        <p class="text-sm font-bold" id="sound-val-<?php echo $hive['id']; ?>"><?php echo $sensor ? round($sensor['sound_level'] ?? 0) : 0; ?>%</p>
                                     </div>
                                     <div class="h-2 bg-gray-200 rounded-full overflow-hidden mb-2">
-                                        <div class="h-full bg-yellow-500" id="sound-bar-<?php echo $hive['id']; ?>" style="width:<?php echo $sensor ? round($sensor['sound_level']) : 0; ?>%"></div>
+                                        <div class="h-full bg-yellow-500" id="sound-bar-<?php echo $hive['id']; ?>" style="width:<?php echo $sensor ? round($sensor['sound_level'] ?? 0) : 0; ?>%"></div>
                                     </div>
-                                    <!-- Colony status conclusion — visible on card -->
+                                    <!-- Colony status — from live Hz, instant -->
                                     <?php
-                                        $colonyStatus = $audio['colony_status'] ?? 'normal';
                                         $conclusionMap = [
                                             'normal'    => ['🟢', 'Colony Normal',     '#16a34a', '#dcfce7'],
                                             'swarming'  => ['🟠', 'Swarming Detected', '#c2410c', '#ffedd5'],
                                             'queenless' => ['🔴', 'Queenless Detected','#dc2626', '#fee2e2'],
                                         ];
-                                        $c = $conclusionMap[$colonyStatus] ?? ['⚪', ucfirst(str_replace('_',' ',$colonyStatus)), '#6b7280', '#f3f4f6'];
+                                        $c = $conclusionMap[$colonyStatus];
+                                        $freqDisplay = $sensor['dominant_freq'] ? round($sensor['dominant_freq']) . ' Hz' : '— Hz';
                                     ?>
                                     <div id="colony-conclusion-<?php echo $hive['id']; ?>"
-                                         class="flex items-center gap-2 px-2 py-1.5 rounded-lg text-xs font-semibold"
-                                         style="background:<?php echo $audio ? $c[3] : '#f3f4f6'; ?>;color:<?php echo $audio ? $c[2] : '#9ca3af'; ?>;">
-                                        <span id="colony-icon-<?php echo $hive['id']; ?>"><?php echo $audio ? $c[0] : '⚪'; ?></span>
-                                        <span>
-                                            <span class="opacity-60 font-normal">Sound Analysis: </span>
-                                            <span id="colony-text-<?php echo $hive['id']; ?>"><?php echo $audio ? $c[1] : 'No analysis yet'; ?></span>
+                                         class="flex items-center justify-between px-2 py-1.5 rounded-lg text-xs font-semibold"
+                                         style="background:<?php echo $c[3]; ?>;color:<?php echo $c[2]; ?>;">
+                                        <span class="flex items-center gap-1.5">
+                                            <span id="colony-icon-<?php echo $hive['id']; ?>"><?php echo $c[0]; ?></span>
+                                            <span id="colony-text-<?php echo $hive['id']; ?>"><?php echo $c[1]; ?></span>
                                         </span>
+                                        <span id="colony-freq-<?php echo $hive['id']; ?>" class="opacity-60 font-normal"><?php echo $freqDisplay; ?></span>
                                     </div>
                                 </div>
                                 <div class="flex justify-between items-center text-xs text-gray-500">
@@ -424,7 +429,7 @@ foreach ($hives as $_hive) {
                                             <i class="fas fa-video-slash text-2xl mb-3" style="color:#334155;"></i>
                                             <p class="text-xs font-semibold mb-1" style="color:#475569;">Camera offline</p>
                                             <button onclick="startCamera(event, <?php echo $hive['id']; ?>)"
-                                                    id="btn-start-cam"
+                                                    id="btn-start-cam-<?php echo $hive['id']; ?>"
                                                     class="mt-2 flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold transition-all"
                                                     style="background:#F59E0B;color:#fff;border:none;cursor:pointer;">
                                                 <i class="fas fa-play"></i> Start Camera
@@ -446,8 +451,8 @@ foreach ($hives as $_hive) {
                                                 </span>
                                                 <div class="flex items-center gap-2">
                                                     <span id="modal-cam-time-<?php echo $hive['id']; ?>" style="font-size:11px;color:rgba(255,255,255,0.6);"></span>
-                                                    <button onclick="stopCamera(event)"
-                                                            id="btn-stop-cam"
+                                                    <button onclick="stopCamera(event, <?php echo $hive['id']; ?>)"
+                                                            id="btn-stop-cam-<?php echo $hive['id']; ?>"
                                                             style="background:rgba(239,68,68,0.85);color:#fff;border:none;border-radius:6px;padding:3px 9px;font-size:10px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:4px;">
                                                         <i class="fas fa-stop"></i> Stop
                                                     </button>
@@ -475,41 +480,39 @@ foreach ($hives as $_hive) {
                                     </div>
                                 </div>
 
-                                <?php if ($audio): ?>
                                 <!-- Audio Analysis -->
                                 <p class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 flex items-center gap-2">
                                     <i class="fas fa-volume-up text-yellow-500"></i> Audio Analysis & Colony Status
                                 </p>
-                                <div class="rounded-xl p-3 mb-4 flex gap-4" style="background:#FFFBEB;border:1px solid #FDE68A;">
+                                <div id="modal-audio-box-<?php echo $hive['id']; ?>"
+                                     class="rounded-xl p-3 mb-4 flex gap-4"
+                                     style="background:#FFFBEB;border:1px solid #FDE68A;">
                                     <div class="flex-1">
                                         <p class="text-xs text-gray-500 mb-2 font-semibold">Colony Status</p>
-                                        <?php if ($badge): ?>
                                         <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl text-sm font-bold"
                                               style="background:white;border:1.5px solid #FDE68A;color:#92400E;">
                                             <i class="<?php echo $badge['icon']; ?> text-yellow-600"></i>
-                                            <?php echo $badge['text']; ?>
+                                            <span id="modal-colony-label-<?php echo $hive['id']; ?>"><?php echo $badge['text']; ?></span>
                                         </span>
-                                        <?php endif; ?>
                                         <p class="text-xs text-gray-500 mt-2">
-                                            <i class="fas fa-brain text-yellow-500 mr-1"></i>
-                                            AI Confidence: <strong class="text-gray-700"><?php echo round($audio['confidence']); ?>%</strong>
+                                            <i class="fas fa-wave-square text-yellow-500 mr-1"></i>
+                                            Dominant: <strong id="modal-colony-freq-<?php echo $hive['id']; ?>" class="text-gray-700"><?php echo $sensor['dominant_freq'] ? round($sensor['dominant_freq']) . ' Hz' : '— Hz'; ?></strong>
                                         </p>
                                     </div>
                                     <div class="flex-1">
                                         <p class="text-xs text-gray-500 mb-2 font-semibold">Sound Activity</p>
                                         <div class="flex items-center gap-3 mb-1">
                                             <div class="flex-1 h-3 bg-yellow-100 rounded-full overflow-hidden">
-                                                <div class="h-full rounded-full" style="width:<?php echo $sensor ? round($sensor['sound_level']) : 0; ?>%;background:linear-gradient(90deg,#F59E0B,#F97316);"></div>
+                                                <div class="h-full rounded-full" style="width:<?php echo $sensor ? round($sensor['sound_level'] ?? 0) : 0; ?>%;background:linear-gradient(90deg,#F59E0B,#F97316);"></div>
                                             </div>
-                                            <span class="text-xl font-black text-yellow-600"><?php echo $sensor ? round($sensor['sound_level']) : 0; ?>%</span>
+                                            <span class="text-xl font-black text-yellow-600"><?php echo $sensor ? round($sensor['sound_level'] ?? 0) : 0; ?>%</span>
                                         </div>
                                         <p class="text-xs text-gray-500">
-                                            <i class="fas fa-microphone text-yellow-500 mr-1"></i>
-                                            <?php echo $audio['dominant_freq']; ?> Hz dominant
+                                            <i class="fas fa-ruler-horizontal text-yellow-500 mr-1"></i>
+                                            Normal &lt;450 Hz · Queenless 450–600 · Swarming &gt;600
                                         </p>
                                     </div>
                                 </div>
-                                <?php endif; ?>
 
                                 <!-- Recommendations -->
                                 <p class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 flex items-center gap-2">
@@ -663,19 +666,17 @@ foreach ($hives as $_hive) {
             modal.classList.add('active');
             modal.scrollTop = 0;
             document.body.style.overflow = 'hidden';
-            // Start camera stream only when modal is open
-            connectCameraImgs();
+            connectCameraImgs(hiveId);
         }
 
         function closeModal(hiveId) {
             const modal = document.getElementById('modal-' + hiveId);
             if (!modal) return;
-            // Stop camera stream to prevent browser from keeping tab in loading state
-            clearTimeout(_retryTimer);
-            document.querySelectorAll('[id^="modal-cam-"]').forEach(img => {
-                if (/^modal-cam-\d+$/.test(img.id)) { img.onload = null; img.onerror = null; img.src = ''; }
-            });
-            setCamOnline(false);
+            // Disconnect only this hive's camera
+            clearTimeout(_retryTimer[hiveId]);
+            const img = document.getElementById('modal-cam-' + hiveId);
+            if (img) { img.onload = null; img.onerror = null; img.src = ''; }
+            setCamOnline(hiveId, false);
             // Fade out
             modal.style.opacity = '0';
             modal.style.transition = 'opacity 0.2s ease';
@@ -720,59 +721,65 @@ foreach ($hives as $_hive) {
             const noMatch = document.getElementById('noMatchMsg');
             if (noMatch) noMatch.style.display = visible === 0 ? 'block' : 'none';
         }
-    // ── MJPEG Camera — zero delay live stream ────────────────
-    const STREAM_URL = 'http://<?php echo $_SERVER['SERVER_ADDR'] === '::1' ? '127.0.0.1' : $_SERVER['SERVER_ADDR']; ?>:5050/stream';
-    const META_URL   = 'http://<?php echo $_SERVER['SERVER_ADDR'] === '::1' ? '127.0.0.1' : $_SERVER['SERVER_ADDR']; ?>:5050/meta';
-    let _camOnline   = false;
-    let _retryTimer  = null;
+    // ── MJPEG Camera — per-hive streams ─────────────────────
+    <?php
+    $serverAddr = ($_SERVER['SERVER_ADDR'] === '::1') ? '127.0.0.1' : $_SERVER['SERVER_ADDR'];
+    $streamPorts = [];
+    foreach ($hives as $h) {
+        // Use stream_port if column exists, else derive from camera_index (5049 + index)
+        if (isset($h['stream_port']) && $h['stream_port']) {
+            $port = (int)$h['stream_port'];
+        } else {
+            $camIdx = isset($h['camera_index']) ? (int)$h['camera_index'] : 1;
+            $port = 5049 + $camIdx;
+        }
+        $streamPorts[$h['id']] = $port;
+    }
+    ?>
+    const _SERVER_ADDR = '<?php echo $serverAddr; ?>';
+    const STREAM_PORTS = <?php echo json_encode($streamPorts); ?>;
+    function streamUrl(hiveId)  { return 'http://' + _SERVER_ADDR + ':' + (STREAM_PORTS[hiveId] ?? 5050) + '/stream'; }
+    function metaUrl(hiveId)    { return 'http://' + _SERVER_ADDR + ':' + (STREAM_PORTS[hiveId] ?? 5050) + '/meta'; }
 
-    function setCamOnline(online) {
-        if (_camOnline === online) return;
-        _camOnline = online;
-        document.querySelectorAll('[id^="modal-cam-"]').forEach(el => {
-            if (!/^modal-cam-\d+$/.test(el.id)) return;
-            const hiveId = el.id.replace('modal-cam-', '');
-            const off  = document.getElementById('modal-cam-offline-' + hiveId);
-            const ov   = document.getElementById('modal-cam-overlay-' + hiveId);
-            const hint = document.getElementById('modal-cam-hint-'    + hiveId);
-            const tm   = document.getElementById('modal-cam-time-'    + hiveId);
-            if (online) {
-                el.style.display = 'block';
-                if (off)  off.style.display = 'none';
-                if (ov)   ov.classList.remove('hidden');
-                if (hint) hint.classList.remove('hidden');
-                if (tm)   tm.textContent = new Date().toLocaleTimeString();
-            } else {
-                el.style.display = 'none';
-                if (off)  off.style.display = '';
-                if (ov)   ov.classList.add('hidden');
-                if (hint) hint.classList.add('hidden');
-            }
-        });
+    const _camOnline  = {};  // {hiveId: bool}
+    const _retryTimer = {};  // {hiveId: timeoutId}
+
+    function setCamOnline(hiveId, online) {
+        if (_camOnline[hiveId] === online) return;
+        _camOnline[hiveId] = online;
+        const img  = document.getElementById('modal-cam-'         + hiveId);
+        const off  = document.getElementById('modal-cam-offline-' + hiveId);
+        const ov   = document.getElementById('modal-cam-overlay-' + hiveId);
+        const hint = document.getElementById('modal-cam-hint-'    + hiveId);
+        const tm   = document.getElementById('modal-cam-time-'    + hiveId);
+        if (!img) return;
+        if (online) {
+            img.style.display = 'block';
+            if (off)  off.style.display  = 'none';
+            if (ov)   ov.classList.remove('hidden');
+            if (hint) hint.classList.remove('hidden');
+            if (tm)   tm.textContent = new Date().toLocaleTimeString();
+        } else {
+            img.style.display = 'none';
+            if (off)  off.style.display = '';
+            if (ov)   ov.classList.add('hidden');
+            if (hint) hint.classList.add('hidden');
+        }
         const lbImg = document.getElementById('camLightboxImg');
-        if (lbImg && online && lbImg.src !== STREAM_URL) lbImg.src = STREAM_URL;
+        if (lbImg && online) lbImg.src = streamUrl(hiveId);
     }
 
-    // Connect img elements directly to MJPEG stream.
-    // img onload/onerror is more reliable than fetch/ping:
-    //   • img src loads cross-origin without CORS restrictions
-    //   • onload fires when the first frame arrives  → camera online
-    //   • onerror fires when connection refused/lost → camera offline
-    function connectCameraImgs() {
-        clearTimeout(_retryTimer);
-        document.querySelectorAll('[id^="modal-cam-"]').forEach(img => {
-            if (!/^modal-cam-\d+$/.test(img.id)) return;
-            img.onload = function() {
-                setCamOnline(true);
-            };
-            img.onerror = function() {
-                setCamOnline(false);
-                img.src = '';
-                _retryTimer = setTimeout(connectCameraImgs, 3000);
-            };
-            // Always (re)set src so browser re-tries the connection
-            img.src = STREAM_URL + '?t=' + Date.now();
-        });
+    function connectCameraImgs(hiveId) {
+        clearTimeout(_retryTimer[hiveId]);
+        const img = document.getElementById('modal-cam-' + hiveId);
+        if (!img) return;
+        img.onload = function() { setCamOnline(hiveId, true); };
+        img.onerror = function() {
+            setCamOnline(hiveId, false);
+            img.src = '';
+            _retryTimer[hiveId] = setTimeout(() => connectCameraImgs(hiveId), 3000);
+        };
+        img.src = streamUrl(hiveId) + '?t=' + Date.now();
     }
     function fetchWithTimeout(url, ms) {
         const ctrl = new AbortController();
@@ -780,36 +787,32 @@ foreach ($hives as $_hive) {
         return fetch(url, { signal: ctrl.signal }).finally(() => clearTimeout(tid));
     }
 
-    // ── Detection stats poller (every 3 seconds) ─────────────
+    // ── Detection stats poller — per hive ────────────────────
     function refreshDetectionStats() {
-        fetchWithTimeout(META_URL, 2000)
-            .then(r => r.json())
-            .then(data => {
-                // Update every hive modal's detection bar
-                document.querySelectorAll('[id^="modal-cam-stats-"]').forEach(bar => {
-                    const hiveId     = bar.id.replace('modal-cam-stats-', '');
-                    const beeEl      = document.getElementById('modal-bee-count-'    + hiveId);
-                    const insectEl   = document.getElementById('modal-insect-count-' + hiveId);
-                    const alertEl    = document.getElementById('modal-insect-alert-' + hiveId);
+        Object.keys(STREAM_PORTS).forEach(hiveId => {
+            fetchWithTimeout(metaUrl(hiveId), 2000)
+                .then(r => r.json())
+                .then(data => {
+                    const bar      = document.getElementById('modal-cam-stats-'   + hiveId);
+                    const beeEl    = document.getElementById('modal-bee-count-'   + hiveId);
+                    const insectEl = document.getElementById('modal-insect-count-'+ hiveId);
+                    const alertEl  = document.getElementById('modal-insect-alert-'+ hiveId);
+                    if (!bar) return;
 
                     if (!data.online) {
                         bar.style.display = 'none';
-                        // Hide insect rec when camera is offline
                         const recOff = document.getElementById('modal-insect-rec-' + hiveId);
                         if (recOff) recOff.style.display = 'none';
                         return;
                     }
 
                     bar.style.display = 'flex';
-                    if (beeEl)    beeEl.textContent    = data.bee_count    ?? 0;
-                    if (insectEl) insectEl.textContent  = data.insect_count ?? 0;
+                    if (beeEl)    beeEl.textContent   = data.bee_count    ?? 0;
+                    if (insectEl) insectEl.textContent = data.insect_count ?? 0;
 
                     const hasInsects = (data.insect_count ?? 0) > 0;
-                    if (alertEl) {
-                        alertEl.style.display = hasInsects ? 'flex' : 'none';
-                    }
+                    if (alertEl) alertEl.style.display = hasInsects ? 'flex' : 'none';
 
-                    // Show / update insect detection recommendation
                     const insectRec    = document.getElementById('modal-insect-rec-'     + hiveId);
                     const insectRecMsg = document.getElementById('modal-insect-rec-msg-' + hiveId);
                     if (insectRec) {
@@ -821,12 +824,10 @@ foreach ($hives as $_hive) {
                         }
                     }
 
-                });
-
-                // Update lightbox stats bar
-                if (data.online) updateLightboxStats(data.bee_count ?? 0, data.insect_count ?? 0, data.timestamp ?? '');
-            })
-            .catch(() => {});
+                    if (data.online) updateLightboxStats(data.bee_count ?? 0, data.insect_count ?? 0, data.timestamp ?? '');
+                })
+                .catch(() => {});
+        });
     }
     refreshDetectionStats();
     setInterval(refreshDetectionStats, 5000);
@@ -1029,6 +1030,8 @@ foreach ($hives as $_hive) {
                     set(`sound-val-${id}`, soundPct + '%');
                     const bar = document.getElementById(`sound-bar-${id}`);
                     if (bar) bar.style.width = soundPct + '%';
+                    // Update colony status from live Hz
+                    if (h.dominant_freq !== undefined) updateColonyDisplay(id, h.dominant_freq);
                     // Update colony conclusion badge
                     const conclusionEl = document.getElementById(`colony-conclusion-${id}`);
                     const conclusionIcon = document.getElementById(`colony-icon-${id}`);
@@ -1088,15 +1091,15 @@ foreach ($hives as $_hive) {
             })
             .catch(() => {});
     }
-    // ── Camera start / stop ──────────────────────────────────
+    // ── Camera start / stop — per hive ──────────────────────
     function startCamera(e, hiveId) {
         e.stopPropagation();
-        const btn = document.getElementById('btn-start-cam');
+        const btn = document.getElementById('btn-start-cam-' + hiveId);
         if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Starting…'; }
         fetch('api/camera_control.php', {
             method: 'POST',
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-            body: 'action=start&hive_id=' + (hiveId || 1)
+            body: 'action=start&hive_id=' + hiveId
         })
         .then(r => r.json())
         .then(d => {
@@ -1105,16 +1108,15 @@ foreach ($hives as $_hive) {
                 showToast('Failed to start camera: ' + (d.message || ''), 'critical');
                 return;
             }
-            // Keep spinner, retry stream every 2s for up to 15s
             let tries = 0;
             function tryConnect() {
-                connectCameraImgs();
+                connectCameraImgs(hiveId);
                 tries++;
-                if (!_camOnline && tries < 8) {
+                if (!_camOnline[hiveId] && tries < 8) {
                     setTimeout(tryConnect, 2000);
                 } else {
                     if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-play"></i> Start Camera'; }
-                    if (!_camOnline) showToast('Camera did not respond. Make sure camera_capture.py can run.', 'critical');
+                    if (!_camOnline[hiveId]) showToast('Camera did not respond. Make sure camera_capture.py can run.', 'critical');
                 }
             }
             showToast('Camera starting…', 'info');
@@ -1126,21 +1128,21 @@ foreach ($hives as $_hive) {
         });
     }
 
-    function stopCamera(e) {
+    function stopCamera(e, hiveId) {
         e.stopPropagation();
-        const btn = document.getElementById('btn-stop-cam');
+        const btn = document.getElementById('btn-stop-cam-' + hiveId);
         if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>'; }
         fetch('api/camera_control.php', {
             method: 'POST',
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-            body: 'action=stop'
+            body: 'action=stop&hive_id=' + hiveId
         })
         .then(r => r.json())
         .then(d => {
             if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-stop"></i> Stop'; }
             if (d.success) {
                 showToast('Camera stopped.', 'info');
-                setCamOnline(false);
+                setCamOnline(hiveId, false);
             } else {
                 showToast('Failed to stop camera: ' + (d.message || ''), 'critical');
             }
@@ -1188,6 +1190,40 @@ foreach ($hives as $_hive) {
             if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-check"></i> Mark as Checked'; }
             showToast('Could not reach server.', 'critical');
         });
+    }
+
+    // Colony status is now derived live from dominant_freq — no CNN/upload needed
+    const colonyStatusMap = {
+        'normal':    ['🟢', 'Colony Normal',     '#16a34a', '#dcfce7'],
+        'swarming':  ['🟠', 'Swarming Detected', '#c2410c', '#ffedd5'],
+        'queenless': ['🔴', 'Queenless Detected','#dc2626', '#fee2e2'],
+    };
+
+    function classifyByFreq(hz) {
+        if (!hz || hz <= 0) return 'normal';
+        if (hz > 600) return 'swarming';
+        if (hz > 450) return 'queenless';
+        return 'normal';
+    }
+
+    function updateColonyDisplay(hiveId, hz) {
+        const status = classifyByFreq(hz);
+        const c = colonyStatusMap[status] || colonyStatusMap['normal'];
+        const freqTxt = hz ? Math.round(hz) + ' Hz' : '— Hz';
+        // Card badge
+        const conc = document.getElementById('colony-conclusion-' + hiveId);
+        const icon = document.getElementById('colony-icon-' + hiveId);
+        const text = document.getElementById('colony-text-' + hiveId);
+        const freq = document.getElementById('colony-freq-' + hiveId);
+        if (conc) { conc.style.background = c[3]; conc.style.color = c[2]; }
+        if (icon) icon.textContent = c[0];
+        if (text) text.textContent = c[1];
+        if (freq) freq.textContent = freqTxt;
+        // Modal
+        const mLabel = document.getElementById('modal-colony-label-' + hiveId);
+        const mFreq  = document.getElementById('modal-colony-freq-'  + hiveId);
+        if (mLabel) mLabel.textContent = c[1];
+        if (mFreq)  mFreq.textContent  = freqTxt;
     }
 
     // ── Camera expand / minimize ─────────────────────────────

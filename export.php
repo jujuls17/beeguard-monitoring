@@ -90,9 +90,11 @@ $totalAll         = $countSensor + $countAudio + $countAlerts + $countLog + $cou
                         <select id="dateRange" onchange="updatePreview()"
                             class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-yellow-500 focus:outline-none">
                             <option value="7">Last 7 Days</option>
+                            <option value="14">Last 14 Days</option>
                             <option value="30">Last 30 Days</option>
                             <option value="90">Last 3 Months</option>
                             <option value="180">Last 6 Months</option>
+                            <option value="0">All Time</option>
                             <option value="365">Last Year</option>
                             <option value="0">All Time</option>
                         </select>

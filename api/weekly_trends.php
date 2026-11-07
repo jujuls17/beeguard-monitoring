@@ -28,6 +28,9 @@ for ($i = 0; $i <= 6; $i++) {
 $startDate = $weekDates[0];
 $endDate   = $weekDates[6];
 
+$hiveId = (int)($_GET['hive_id'] ?? 0);
+$hiveWhere = $hiveId > 0 ? "AND hive_id = $hiveId" : '';
+
 $stmt = $conn->prepare(
     "SELECT DATE(timestamp) AS day_date,
             ROUND(AVG(temperature),1) AS avg_temp,
@@ -36,6 +39,7 @@ $stmt = $conn->prepare(
      FROM sensor_data
      WHERE DATE(timestamp) BETWEEN ? AND ?
        AND (temperature IS NOT NULL OR humidity IS NOT NULL OR co2 IS NOT NULL)
+       $hiveWhere
      GROUP BY day_date"
 );
 $stmt->bind_param('ss', $startDate, $endDate);

@@ -84,6 +84,15 @@ function getLatestSensorData($conn, $hive_id) {
     return $stmt->get_result()->fetch_assoc();
 }
 
+// Classify colony status from dominant frequency (Hz) sent by ESP32
+function classifyColonyByFreq($freq) {
+    if ($freq === null || $freq <= 0) return 'normal';
+    $f = (float)$freq;
+    if ($f > 600) return 'swarming';
+    if ($f > 450) return 'queenless';
+    return 'normal';
+}
+
 function getLatestAudioAnalysis($conn, $hive_id) {
     $sql = "SELECT * FROM audio_analysis WHERE hive_id = ? ORDER BY timestamp DESC LIMIT 1";
     $stmt = $conn->prepare($sql);

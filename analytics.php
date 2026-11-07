@@ -293,17 +293,26 @@ $scoreColor = $healthScore['score'] >= 80 ? 'text-green-600' : ($healthScore['sc
                 <div class="bg-white rounded-xl p-5 shadow-sm">
                     <div class="flex items-center justify-between mb-1 gap-2 flex-wrap">
                         <h3 class="font-bold">Weekly Environmental Trends</h3>
-                        <select id="weeklyWeekOffset"
-                            class="text-xs border border-gray-200 rounded-lg px-3 py-1.5 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-300 cursor-pointer">
-                            <option value="0">This Week</option>
-                            <option value="1">Last Week</option>
-                            <option value="2">2 Weeks Ago</option>
-                            <option value="3">3 Weeks Ago</option>
-                            <option value="4">4 Weeks Ago</option>
-                            <option value="5">5 Weeks Ago</option>
-                            <option value="6">6 Weeks Ago</option>
-                            <option value="7">7 Weeks Ago</option>
-                        </select>
+                        <div class="flex items-center gap-2 flex-wrap">
+                            <select id="weeklyHiveFilter"
+                                class="text-xs border border-gray-200 rounded-lg px-2 py-1.5 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-300 cursor-pointer">
+                                <option value="0">All Hives</option>
+                                <?php foreach (getAllHives($conn) as $h): ?>
+                                <option value="<?php echo $h['id']; ?>"><?php echo htmlspecialchars($h['name']); ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                            <select id="weeklyWeekOffset"
+                                class="text-xs border border-gray-200 rounded-lg px-3 py-1.5 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-300 cursor-pointer">
+                                <option value="0">This Week</option>
+                                <option value="1">Last Week</option>
+                                <option value="2">2 Weeks Ago</option>
+                                <option value="3">3 Weeks Ago</option>
+                                <option value="4">4 Weeks Ago</option>
+                                <option value="5">5 Weeks Ago</option>
+                                <option value="6">6 Weeks Ago</option>
+                                <option value="7">7 Weeks Ago</option>
+                            </select>
+                        </div>
                     </div>
                     <p class="text-xs text-gray-500 mb-4" id="weeklyDateRange">7-day average temperature, humidity &amp; CO₂</p>
                     <div style="height:250px;">
@@ -500,7 +509,8 @@ $scoreColor = $healthScore['score'] >= 80 ? 'text-green-600' : ($healthScore['sc
 
         // Single source-of-truth fetch — always reads both controls directly
         function updateHealthPie() {
-            const today     = new Date().toISOString().slice(0, 10);
+            const _now      = new Date();
+            const today     = _now.getFullYear() + '-' + String(_now.getMonth()+1).padStart(2,'0') + '-' + String(_now.getDate()).padStart(2,'0');
             const picked    = document.getElementById('pieDatePicker').value;   // '' or 'YYYY-MM-DD'
             const hiveId    = document.getElementById('pieHiveFilter').value;   // '0' or hive id
             const dateParam = picked || today;
@@ -579,7 +589,8 @@ $scoreColor = $healthScore['score'] >= 80 ? 'text-green-600' : ($healthScore['sc
         let weeklyChartInstance = null;
 
         function loadWeeklyChart(offset) {
-            fetch(`api/weekly_trends.php?week_offset=${offset}`)
+            const hiveId = document.getElementById('weeklyHiveFilter').value;
+            fetch(`api/weekly_trends.php?week_offset=${offset}&hive_id=${hiveId}`)
                 .then(r => r.json())
                 .then(d => {
                     if (!d.success) return;
@@ -638,6 +649,9 @@ $scoreColor = $healthScore['score'] >= 80 ? 'text-green-600' : ($healthScore['sc
 
         document.getElementById('weeklyWeekOffset').addEventListener('change', function () {
             loadWeeklyChart(parseInt(this.value));
+        });
+        document.getElementById('weeklyHiveFilter').addEventListener('change', function () {
+            loadWeeklyChart(parseInt(document.getElementById('weeklyWeekOffset').value));
         });
 
         loadWeeklyChart(0);

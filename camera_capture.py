@@ -29,6 +29,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 _ap = argparse.ArgumentParser()
 _ap.add_argument('--hive-id',      type=int, default=1)
 _ap.add_argument('--camera-index', type=int, default=1)
+_ap.add_argument('--stream-port',  type=int, default=5050)
 _args = _ap.parse_args()
 
 # ── Configuration ─────────────────────────────────────────────
@@ -36,7 +37,7 @@ SERVER_URL       = "http://localhost/beemonitoring/api/receive_camera.php"
 API_KEY          = "BEEGUARD_SECRET_2026"
 HIVE_ID          = _args.hive_id
 CAMERA_INDEX     = _args.camera_index  # passed by camera_control.php per hive
-STREAM_PORT      = 5050        # MJPEG stream port → http://localhost:5050/stream
+STREAM_PORT      = _args.stream_port   # unique port per hive (5050=Alpha, 5051=Beta)
 STATS_INTERVAL   = 3.0         # seconds between detection stats sent to PHP
 FRAME_WIDTH      = 960         # wider frame = more bee detail for YOLO
 FRAME_HEIGHT     = 540         # 16:9 ratio, matches most USB webcams natively

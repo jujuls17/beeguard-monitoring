@@ -1,0 +1,1 @@
+{"timestamp":"2026-11-07 14:52:19","hive_id":1,"bee_count":1,"insect_count":0,"human_count":0,"object_count":0,"total":1,"detections":[{"x1":548,"y1":0,"x2":640,"y2":137,"label":"bee","conf":0.5,"source":"motion"}]}
