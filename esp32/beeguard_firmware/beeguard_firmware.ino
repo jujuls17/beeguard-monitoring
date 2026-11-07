@@ -18,6 +18,7 @@
 
 #include <WiFi.h>
 #include <HTTPClient.h>
+#include <WiFiClientSecure.h>
 #include <ArduinoJson.h>
 #include <DHT.h>
 #include <math.h>
@@ -292,12 +293,14 @@ void connectWiFi() {
 void fetchServerConfig() {
     if (WiFi.status() != WL_CONNECTED) return;
 
-    String url = String("http://") + SERVER_HOST + ":" + SERVER_PORT +
+    String url = String("https://") + SERVER_HOST +
                  API_BASE + "/get_config.php?api_key=" + API_KEY +
                  "&device_id=" + DEVICE_ID;
 
+    WiFiClientSecure client;
+    client.setInsecure(); // skip SSL cert verification for Hostinger free SSL
     HTTPClient http;
-    http.begin(url);
+    http.begin(client, url);
     int code = http.GET();
 
     if (code == 200) {
@@ -395,11 +398,13 @@ void sendToServer(float temp, float hum, int co2, float sound, float freq) {
     String payload;
     serializeJson(doc, payload);
 
-    String url = String("http://") + SERVER_HOST + ":" + SERVER_PORT +
+    String url = String("https://") + SERVER_HOST +
                  API_BASE + "/receive_data.php";
 
+    WiFiClientSecure client;
+    client.setInsecure(); // skip SSL cert verification for Hostinger free SSL
     HTTPClient http;
-    http.begin(url);
+    http.begin(client, url);
     http.addHeader("Content-Type", "application/json");
     http.setTimeout(10000);
 

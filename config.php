@@ -1,9 +1,9 @@
 <?php
 // config.php - Database Configuration
 define('DB_HOST', 'localhost');
-define('DB_USER', 'root');
-define('DB_PASS', '');
-define('DB_NAME', 'bee_monitoring');
+define('DB_USER', 'u344370922_beeguard');
+define('DB_PASS', 'BeeGuard2026!');
+define('DB_NAME', 'u344370922_beeguard');
 
 // Create connection
 $conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
@@ -15,6 +15,9 @@ if ($conn->connect_error) {
 
 // Set charset
 $conn->set_charset("utf8");
+
+// Sync MySQL session timezone with PHP — Hostinger MySQL runs UTC by default
+$conn->query("SET time_zone = '+08:00'");
 
 // Timezone
 date_default_timezone_set('Asia/Manila');
@@ -60,8 +63,9 @@ try { $conn->query("CREATE TABLE IF NOT EXISTS password_resets (
 
 try { $conn->query("ALTER TABLE hives ADD COLUMN IF NOT EXISTS last_checked_at DATETIME DEFAULT NULL"); } catch (Throwable $e) {}
 try { $conn->query("ALTER TABLE hives ADD COLUMN IF NOT EXISTS last_checked_by INT DEFAULT NULL"); } catch (Throwable $e) {}
+try { $conn->query("ALTER TABLE hives ADD COLUMN IF NOT EXISTS camera_url VARCHAR(255) DEFAULT NULL"); } catch (Throwable $e) {}
 
-// Error reporting — off in production, on locally for dev
+// Error reporting — off in production
 error_reporting(0);
 ini_set('display_errors', 0);
 ?>

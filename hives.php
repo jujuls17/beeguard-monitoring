@@ -725,8 +725,8 @@ foreach ($hives as $_hive) {
     <?php
     $serverAddr = ($_SERVER['SERVER_ADDR'] === '::1') ? '127.0.0.1' : $_SERVER['SERVER_ADDR'];
     $streamPorts = [];
+    $cameraUrls  = [];
     foreach ($hives as $h) {
-        // Use stream_port if column exists, else derive from camera_index (5049 + index)
         if (isset($h['stream_port']) && $h['stream_port']) {
             $port = (int)$h['stream_port'];
         } else {
@@ -734,12 +734,22 @@ foreach ($hives as $_hive) {
             $port = 5049 + $camIdx;
         }
         $streamPorts[$h['id']] = $port;
+        if (!empty($h['camera_url'])) {
+            $cameraUrls[$h['id']] = rtrim($h['camera_url'], '/');
+        }
     }
     ?>
     const _SERVER_ADDR = '<?php echo $serverAddr; ?>';
     const STREAM_PORTS = <?php echo json_encode($streamPorts); ?>;
-    function streamUrl(hiveId)  { return 'http://' + _SERVER_ADDR + ':' + (STREAM_PORTS[hiveId] ?? 5050) + '/stream'; }
-    function metaUrl(hiveId)    { return 'http://' + _SERVER_ADDR + ':' + (STREAM_PORTS[hiveId] ?? 5050) + '/meta'; }
+    const CAMERA_URLS  = <?php echo json_encode($cameraUrls); ?>;
+    function streamUrl(hiveId)  {
+        if (CAMERA_URLS[hiveId]) return CAMERA_URLS[hiveId] + '/stream';
+        return 'http://' + _SERVER_ADDR + ':' + (STREAM_PORTS[hiveId] ?? 5050) + '/stream';
+    }
+    function metaUrl(hiveId)    {
+        if (CAMERA_URLS[hiveId]) return CAMERA_URLS[hiveId] + '/meta';
+        return 'http://' + _SERVER_ADDR + ':' + (STREAM_PORTS[hiveId] ?? 5050) + '/meta';
+    }
 
     const _camOnline  = {};  // {hiveId: bool}
     const _retryTimer = {};  // {hiveId: timeoutId}
