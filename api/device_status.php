@@ -9,6 +9,8 @@ checkAuth();
 session_write_close();
 
 header('Content-Type: application/json');
+header('Cache-Control: no-store, no-cache, must-revalidate');
+header('Pragma: no-cache');
 ob_clean();
 
 // Mark devices offline if no sync in last 5 minutes

@@ -315,12 +315,11 @@ if (_isMobile()) _clearInlineLayout();
         const modalOpen = document.querySelector('.modal.active');
         const typing    = document.activeElement && ['INPUT','TEXTAREA','SELECT'].includes(document.activeElement.tagName);
         if (modalOpen || typing) return;
-        // If the current page provides its own refresh function, use it instead of a hard reload
-        // so scroll position, open panels, and filter state are preserved
+        // Only refresh if the page provides an AJAX refresh function.
+        // Pages without one don't need auto-refresh (static content).
+        // Never do a hard location.reload() — it interrupts the user.
         if (typeof window.__refreshPage === 'function') {
             window.__refreshPage();
-        } else {
-            location.reload();
         }
     }
     // Wait until the next 15s boundary, then tick every 15s

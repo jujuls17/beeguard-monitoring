@@ -242,7 +242,7 @@ $warningCount = count(array_filter($devices, fn($d) => $d['status'] == 'warning'
 
         function fetchDevices() {
             const savedScroll = window.scrollY;
-            fetch('api/device_status.php')
+            fetch('api/device_status.php', {cache: 'no-store'})
                 .then(r => r.json())
                 .then(data => {
                     if (!data.success) return;
@@ -438,7 +438,7 @@ $warningCount = count(array_filter($devices, fn($d) => $d['status'] == 'warning'
         <?php if (isAdmin()): ?>
         // Hive management
         function loadHives() {
-            fetch('api/get_hives.php')
+            fetch('api/get_hives.php', {cache: 'no-store'})
                 .then(r => r.json())
                 .then(data => {
                     const container = document.getElementById('hiveList');
@@ -469,7 +469,7 @@ $warningCount = count(array_filter($devices, fn($d) => $d['status'] == 'warning'
         }
 
         function loadDetectedDevices() {
-            fetch('api/get_hives.php?action=detected')
+            fetch('api/get_hives.php?action=detected', {cache: 'no-store'})
                 .then(r => r.json())
                 .then(data => {
                     const container = document.getElementById('detectedDevices');

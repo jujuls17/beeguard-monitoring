@@ -392,7 +392,7 @@ $avgCO2         = getAvgCO2($conn);
     let _lastRefresh = Date.now();
 
     function refreshStats() {
-        fetch('api/dashboard_stats.php')
+        fetch('api/dashboard_stats.php', {cache: 'no-store'})
             .then(r => r.json())
             .then(d => {
                 if (!d.success) return;

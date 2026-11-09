@@ -284,7 +284,7 @@ while ($tr = $typesRes->fetch_assoc()) {
                 window.scrollTo({ top: savedScroll, behavior: 'instant' })));
         };
 
-        fetch('api/alerts_filter.php?' + p)
+        fetch('api/alerts_filter.php?' + p, {cache: 'no-store'})
             .then(r => r.json())
             .then(data => {
                 if (!data.success) { restore(); return; }
@@ -549,7 +549,7 @@ while ($tr = $typesRes->fetch_assoc()) {
     setInterval(() => {
         fetchAlerts(true);
         // Also refresh stat cards
-        fetch('api/alerts_filter.php?tab=active&page=1')
+        fetch('api/alerts_filter.php?tab=active&page=1', {cache: 'no-store'})
             .then(r => r.json())
             .then(d => {
                 if (!d.success) return;

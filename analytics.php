@@ -920,7 +920,7 @@ $scoreColor = $healthScore['score'] >= 80 ? 'text-green-600' : ($healthScore['sc
 
         // ── Auto-refresh top stat cards every 60 s ──────────────────
         function refreshStats() {
-            fetch('api/analytics_stats.php')
+            fetch('api/analytics_stats.php', {cache: 'no-store'})
                 .then(r => r.json())
                 .then(d => {
                     if (!d.success) return;

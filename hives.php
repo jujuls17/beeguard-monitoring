@@ -896,7 +896,7 @@ foreach ($hives as $_hive) {
 
     // ── Sparkline charts ─────────────────────────────────────
     function loadHiveCharts() {
-        fetch('api/hive_trends.php')
+        fetch('api/hive_trends.php', {cache: 'no-store'})
             .then(r => r.json())
             .then(data => {
                 if (!data.success) return;
@@ -999,7 +999,7 @@ foreach ($hives as $_hive) {
     let _prevCritCount = <?php echo $warnCount; ?>;
     // Override refresh to detect critical changes
     function refreshHiveCards() {
-        fetch('api/live_hives.php')
+        fetch('api/live_hives.php', {cache: 'no-store'})
             .then(r => r.json())
             .then(data => {
                 if (!data.success) return;
