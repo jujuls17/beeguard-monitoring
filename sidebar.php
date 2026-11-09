@@ -166,10 +166,6 @@ function navLink($page, $current, $href, $icon, $label, $badge = null) {
                 <p class="text-sm font-semibold text-white truncate"><?php echo htmlspecialchars($displayName); ?></p>
                 <p class="text-xs text-yellow-400/60"><?php echo $roleLabel; ?></p>
             </div>
-            <a href="logout.php" title="Logout"
-               class="w-8 h-8 flex items-center justify-center rounded-lg text-yellow-400/50 hover:text-red-400 hover:bg-red-900/20 transition-all">
-                <i class="fas fa-sign-out-alt text-sm"></i>
-            </a>
         </div>
     </div>
 </aside>

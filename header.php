@@ -206,12 +206,6 @@ $total_notif = $alert_count + $chat_count + $notes_count;
                 </div>
             </div>
 
-            <!-- Logout -->
-            <a href="logout.php"
-               class="header-action-btn w-10 h-10 bg-black/15 rounded-xl flex items-center justify-center hover:bg-red-500 transition-all"
-               title="Logout">
-                <i class="fas fa-sign-out-alt text-lg"></i>
-            </a>
         </div>
     </div>
 </header>
