@@ -84,7 +84,7 @@ $avgCO2         = getAvgCO2($conn);
         <div class="p-4 sm:p-6 space-y-5 sm:space-y-6">
 
             <!-- Stat Cards -->
-            <div id="statCardsGrid" class="grid grid-cols-4 gap-3">
+            <div id="statCardsGrid" class="grid gap-3" style="grid-template-columns: repeat(4, 1fr) !important;">
                 <a href="hives.php" class="block stat-card rounded-2xl p-4 text-white relative overflow-hidden transition hover:brightness-105"
                      style="background:linear-gradient(135deg,#F59E0B 0%,#F97316 100%);box-shadow:0 2px 12px rgba(245,158,11,0.25);">
                     <div class="flex flex-col h-full">
