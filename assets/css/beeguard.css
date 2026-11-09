@@ -117,9 +117,9 @@ main > .p-8 > *:nth-child(5) { animation-delay:0.20s; }
 .stat-card:nth-child(3) { animation-delay:0.12s; }
 .stat-card:nth-child(4) { animation-delay:0.16s; }
 
-/* ── Stat cards: always 2×2 grid, equal height ── */
+/* ── Stat cards: always 4-column single row ── */
 #statCardsGrid {
-  grid-template-columns: repeat(2, 1fr) !important;
+  grid-template-columns: repeat(4, 1fr) !important;
 }
 #statCardsGrid .stat-card {
   min-height: 110px;
