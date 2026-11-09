@@ -37,16 +37,9 @@ $result = $conn->query(
      ORDER BY d.status DESC, d.id ASC"
 );
 
-// Cache checked ports to avoid redundant socket calls
-$checkedPorts = [];
+// Camera liveness check is not applicable on cloud hosting (no local camera process)
 function isCamPortLive(int $port): bool {
-    global $checkedPorts;
-    if (isset($checkedPorts[$port])) return $checkedPorts[$port];
-    $sock = @fsockopen('127.0.0.1', $port, $errno, $errstr, 0.3);
-    $live = $sock !== false;
-    if ($sock) fclose($sock);
-    $checkedPorts[$port] = $live;
-    return $live;
+    return false;
 }
 
 $devices = [];
