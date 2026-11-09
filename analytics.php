@@ -101,6 +101,11 @@ $scoreColor = $healthScore['score'] >= 80 ? 'text-green-600' : ($healthScore['sc
 <body class="bg-gray-50">
     <?php include 'sidebar.php'; ?>
     <?php include 'header.php'; ?>
+    <style>
+        @media (min-width: 1024px) {
+            #statCardsGrid { grid-template-columns: repeat(4, 1fr) !important; }
+        }
+    </style>
     <main class="min-h-screen">
         <div class="page-header px-6 py-4 pl-8">
             <h1 class="text-xl font-bold text-gray-900 flex items-center gap-2.5">
