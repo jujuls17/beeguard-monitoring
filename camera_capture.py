@@ -33,7 +33,7 @@ _ap.add_argument('--stream-port',  type=int, default=5050)
 _args = _ap.parse_args()
 
 # ── Configuration ─────────────────────────────────────────────
-SERVER_URL       = "http://localhost/beemonitoring/api/receive_camera.php"
+SERVER_URL       = "https://darkturquoise-loris-483393.hostingersite.com/api/receive_camera.php"
 API_KEY          = "BEEGUARD_SECRET_2026"
 HIVE_ID          = _args.hive_id
 CAMERA_INDEX     = _args.camera_index  # passed by camera_control.php per hive
@@ -125,6 +125,13 @@ class StreamHandler(BaseHTTPRequestHandler):
         except (BrokenPipeError, ConnectionResetError):
             pass
 
+    def do_OPTIONS(self):
+        self.send_response(204)
+        self.send_header('Access-Control-Allow-Origin', '*')
+        self.send_header('Access-Control-Allow-Headers', 'ngrok-skip-browser-warning')
+        self.send_header('Access-Control-Allow-Methods', 'GET, OPTIONS')
+        self.end_headers()
+
     def _json(self, data):
         body = json.dumps(data).encode()
         self.send_response(200)
@@ -132,6 +139,7 @@ class StreamHandler(BaseHTTPRequestHandler):
         self.send_header('Content-Length', str(len(body)))
         self.send_header('Cache-Control', 'no-cache')
         self.send_header('Access-Control-Allow-Origin', '*')
+        self.send_header('Access-Control-Allow-Headers', 'ngrok-skip-browser-warning')
         self.end_headers()
         self.wfile.write(body)
 
