@@ -117,10 +117,15 @@ main > .p-8 > *:nth-child(5) { animation-delay:0.20s; }
 .stat-card:nth-child(3) { animation-delay:0.12s; }
 .stat-card:nth-child(4) { animation-delay:0.16s; }
 
-/* ── Stat cards: always 4-column single row ── */
+/* ── Stat cards: 2-col on mobile, 4-col on desktop ── */
 #statCardsGrid {
-  grid-template-columns: repeat(4, 1fr) !important;
+  grid-template-columns: repeat(2, 1fr) !important;
   display: grid !important;
+}
+@media (min-width: 1024px) {
+  #statCardsGrid {
+    grid-template-columns: repeat(4, 1fr) !important;
+  }
 }
 #statCardsGrid .stat-card {
   min-height: 110px;
