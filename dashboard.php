@@ -53,6 +53,14 @@ $avgCO2         = getAvgCO2($conn);
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Mobile: 2 columns */
+        #statCardsGrid { grid-template-columns: repeat(2, 1fr) !important; }
+        /* Desktop (1024px+): 4 columns in one row */
+        @media (min-width: 1024px) {
+            #statCardsGrid { grid-template-columns: repeat(4, 1fr) !important; }
+        }
+    </style>
 </head>
 <body class="bg-gray-50">
     <?php include 'sidebar.php'; ?>
