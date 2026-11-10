@@ -267,7 +267,7 @@ $showForgot = ($_SESSION['login_attempts'] >= 3);
             <!-- Footer -->
             <div class="border-t border-gray-100 px-8 py-4 flex items-center justify-between"
                  style="background:#FAFAFA;">
-                <p class="text-xs text-gray-400">BeeGuard IoT Monitor v1.0</p>
+                <p class="text-xs text-gray-400">BeeGuard IoT Monitor v<?php require_once __DIR__ . '/version.php'; echo BEEGUARD_VERSION; ?></p>
                 <span class="flex items-center gap-1.5 text-xs text-gray-400">
                     <span class="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse"></span>
                     System Online

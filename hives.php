@@ -1079,7 +1079,7 @@ foreach ($hives as $_hive) {
                     set(`humid-${id}`, s.humidity + '%');
                     set(`co2-${id}`, s.co2 + 'ppm');
                     const timeEl = document.getElementById(`time-${id}`);
-                    setAgeLabel(timeEl, s.age_sec, 'Sensors updated ');
+                    if (s.age_sec !== undefined) setAgeLabel(timeEl, s.age_sec, 'Sensors updated ');
                     if (timeEl) timeEl.style.color = h.is_online ? '' : '#dc2626';   // red = no new reading for 2+ min
                     // Dim the readings when the sensor is offline, so old values don't look current
                     ['sensor-tiles-', 'live-sound-'].forEach(p => {

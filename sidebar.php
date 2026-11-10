@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . '/version.php';
 $current_page = basename($_SERVER['PHP_SELF']);
 
 $_unreadAlerts       = 0;
@@ -78,7 +79,7 @@ function navLink($page, $current, $href, $icon, $label, $badge = null) {
             </div>
             <div class="flex-1 min-w-0">
                 <h1 class="text-white font-bold text-lg leading-tight tracking-wide">BeeGuard</h1>
-                <p class="text-yellow-400/70 text-xs font-medium">IoT Monitor</p>
+                <p class="text-yellow-400/70 text-xs font-medium">IoT Monitor <span class="text-white/40" title="Version date: <?php echo BEEGUARD_VERSION_DATE; ?>">· v<?php echo BEEGUARD_VERSION; ?></span></p>
             </div>
             <!-- Close button (visible on mobile only) -->
             <button onclick="toggleSidebar()"
