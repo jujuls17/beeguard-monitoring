@@ -780,8 +780,6 @@ foreach ($hives as $_hive) {
         if (lbImg && online) lbImg.src = streamUrl(hiveId);
     }
 
-    const _NGROK_HDR = {'ngrok-skip-browser-warning': 'skip'};
-
     function connectCameraImgs(hiveId) {
         clearTimeout(_retryTimer[hiveId]);
         const img = document.getElementById('modal-cam-' + hiveId);
@@ -792,16 +790,12 @@ foreach ($hives as $_hive) {
             img.src = '';
             _retryTimer[hiveId] = setTimeout(() => connectCameraImgs(hiveId), 3000);
         };
-        // Prime the ngrok tunnel with the bypass header before loading the MJPEG img
-        const ping = streamUrl(hiveId).replace('/stream', '/ping');
-        fetch(ping, {headers: _NGROK_HDR, mode: 'cors'})
-            .catch(() => {})
-            .finally(() => { img.src = streamUrl(hiveId) + '?t=' + Date.now(); });
+        img.src = streamUrl(hiveId) + '?t=' + Date.now();
     }
     function fetchWithTimeout(url, ms) {
         const ctrl = new AbortController();
         const tid  = setTimeout(() => ctrl.abort(), ms);
-        return fetch(url, { signal: ctrl.signal, headers: _NGROK_HDR }).finally(() => clearTimeout(tid));
+        return fetch(url, { signal: ctrl.signal }).finally(() => clearTimeout(tid));
     }
 
     // ── Detection stats poller — per hive ────────────────────
