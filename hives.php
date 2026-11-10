@@ -353,11 +353,6 @@ foreach ($hives as $_hive) {
                                         <span id="colony-icon-<?php echo $hive['id']; ?>"><?php echo $c[0]; ?></span>
                                         <span id="colony-text-<?php echo $hive['id']; ?>"><?php echo $c[1]; ?></span>
                                     </p>
-                                    <?php if ($audio): ?>
-                                    <p id="colony-cnn-time-<?php echo $hive['id']; ?>" class="opacity-70 mt-0.5">Normal &lt;450 Hz · Queenless 450–600 · Swarming &gt;600</p>
-                                    <?php else: ?>
-                                    <p id="colony-cnn-time-<?php echo $hive['id']; ?>" class="opacity-70 mt-0.5">Normal &lt;450 Hz · Queenless 450–600 · Swarming &gt;600</p>
-                                    <?php endif; ?>
                                 </div>
                                 <div class="flex justify-between items-center text-xs text-gray-500">
                                     <span><i class="fas fa-clock mr-1"></i><span id="time-<?php echo $hive['id']; ?>" data-age="<?php echo $sensorAge; ?>" data-prefix="Sensors updated " style="<?php echo $sensorLive ? '' : 'color:#dc2626;'; ?>"><?php echo time_elapsed_string($sensor['timestamp']); ?></span></span>
@@ -1176,7 +1171,6 @@ foreach ($hives as $_hive) {
                         if (timeStr) {
                             setAgeLabel(conclusionTime, null);
                             setAgeLabel(mCnnTime,       h.badge.cnn_age_sec, `Buzz pitch ${h.badge.freq} Hz · `);
-                            if (conclusionTime) conclusionTime.textContent = 'Normal <450 Hz · Queenless 450–600 · Swarming >600';
                         } else {
                             setAgeLabel(conclusionTime, null);
                             setAgeLabel(mCnnTime, null);
@@ -1191,7 +1185,6 @@ foreach ($hives as $_hive) {
                         if (conclusionIcon) conclusionIcon.textContent = '⚪';
                         if (conclusionText) conclusionText.textContent = 'No buzz pitch reading yet';
                         if (mLabel)         mLabel.textContent = 'No buzz pitch reading yet';
-                        if (conclusionTime) conclusionTime.textContent = 'Normal <450 Hz · Queenless 450–600 · Swarming >600';
                         if (mCnnTime)       mCnnTime.textContent = 'The hive was too quiet to measure a pitch, or the hive mic is not sending.';
                     }
                     const badgeEl = document.getElementById(`badge-${id}`);

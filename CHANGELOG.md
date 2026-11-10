@@ -4,6 +4,9 @@ The version number is in `version.php` and shows in the sidebar (under "IoT Moni
 **Every update:** bump the number in `version.php`, add a section here, then push.
 If the sidebar on the hosted site shows an older number than this file, the server is not running the latest push.
 
+## v1.6 — 2026-11-11
+- Hive cards: removed the "Normal <450 Hz · Queenless 450–600 · Swarming >600" line under the colony status. The ranges are still in the hive window, the card tooltip and the Help page.
+
 ## v1.5 — 2026-11-11
 - **Colony status on Live Hives is based on the buzz pitch (Hz) again**, as before: Normal below 450 Hz · Queenless 450–600 Hz · Swarming above 600 Hz. It follows the live hive mic reading and updates every 5 s with the other readings. The guide is shown under the status on each card and in the hive window.
 - Hive cards, hive window, summary counts and recommendations all use the same Hz rule. With no pitch reading (hive too quiet or mic not sending) the card shows "No buzz pitch reading yet".
