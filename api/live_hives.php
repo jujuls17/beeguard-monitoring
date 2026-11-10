@@ -38,9 +38,16 @@ foreach ($hives as $hive) {
     // CNN clip time for display
     $cnnTimestamp = $audio ? $audio['timestamp'] : null;
     $cnnElapsed   = $cnnTimestamp ? time_elapsed_string($cnnTimestamp) : null;
-    $cnnTimeFormatted = $cnnTimestamp
-        ? date('M d, H:i', strtotime($cnnTimestamp))
-        : null;
+    // Clip time: "H:i" if the clip is from today, otherwise "M d, H:i"
+    $cnnTimeFormatted = null;
+    $cnnAgeSec = null;
+    if ($cnnTimestamp) {
+        $cnnTs = strtotime($cnnTimestamp);
+        $cnnTimeFormatted = (date('Y-m-d', $cnnTs) === date('Y-m-d')) ? date('H:i', $cnnTs) : date('M d, H:i', $cnnTs);
+        $cnnAgeSec = max(0, time() - $cnnTs);
+    }
+    $sensorAgeSec = ($sensor && !empty($sensor['timestamp']))
+        ? max(0, time() - strtotime($sensor['timestamp'])) : null;
 
     $data[] = [
         'id'          => $hive['id'],
@@ -50,6 +57,7 @@ foreach ($hives as $hive) {
             'humidity'    => number_format((float)$sensor['humidity'], 1),
             'co2'         => (int)$sensor['co2'],
             'elapsed'     => time_elapsed_string($sensor['timestamp']),
+            'age_sec'     => $sensorAgeSec,
         ] : null,
         'sound'         => $sensor ? round((float)($sensor['sound_level'] ?? 0)) : null,
         'dominant_freq' => $sensor ? (float)($sensor['dominant_freq'] ?? 0) : null,
@@ -61,6 +69,7 @@ foreach ($hives as $hive) {
             'raw_status' => $audio['colony_status'],
             'cnn_time'   => $cnnTimeFormatted,
             'cnn_elapsed'=> $cnnElapsed,
+            'cnn_age_sec'=> $cnnAgeSec,
         ] : null,
         'issues'      => $issues,
     ];

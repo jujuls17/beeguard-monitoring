@@ -270,7 +270,7 @@ foreach ($hives as $_hive) {
                                     [$hBg,$hLc,$hVc] = sensorTileStyle('humidity', $sensor['humidity']);
                                     [$cBg,$cLc,$cVc] = sensorTileStyle('co2',      $sensor['co2']);
                                 ?>
-                                <div class="grid grid-cols-3 gap-2 mb-3">
+                                <div class="grid grid-cols-3 gap-2 mb-3" id="sensor-tiles-<?php echo $hive['id']; ?>" style="<?php echo (time() - strtotime($sensor['timestamp'])) <= 120 ? '' : 'opacity:.55;'; ?>">
                                     <!-- Temperature -->
                                     <div class="rounded-xl p-2.5" id="tile-temp-<?php echo $hive['id']; ?>" style="background:<?php echo $tBg; ?>;">
                                         <p class="text-xs font-bold mb-0.5" id="tile-label-temp-<?php echo $hive['id']; ?>" style="color:<?php echo $tLc; ?>;">Temp</p>
@@ -296,58 +296,59 @@ foreach ($hives as $_hive) {
                                         </div>
                                     </div>
                                 </div>
-                                <div class="bg-gray-50 p-3 rounded-lg mb-3">
+                                <?php
+                                    $sensorAge  = max(0, time() - strtotime($sensor['timestamp']));
+                                    $sensorLive = $sensorAge <= 120;   // same 2-minute rule as the Online/Offline badge
+                                    $freqDisplay = $sensor && $sensor['dominant_freq']
+                                        ? round($sensor['dominant_freq']) . ' Hz' . ($sensorLive ? '' : ' (old reading)')
+                                        : '— Hz';
+                                    // Colony check — from the latest CNN result on a recorded sound clip (not the live mic)
+                                    $colonyMap = [
+                                        'normal'    => ['🟢', 'Colony sounds normal',     '#16a34a', '#dcfce7'],
+                                        'swarming'  => ['🟠', 'Signs of swarming',        '#c2410c', '#ffedd5'],
+                                        'queenless' => ['🔴', 'Signs of a missing queen', '#dc2626', '#fee2e2'],
+                                    ];
+                                    if ($audio) {
+                                        $cs = $audio['colony_status'] ?? 'normal';
+                                        $c  = $colonyMap[$cs] ?? $colonyMap['normal'];
+                                        $cnnTs   = strtotime($audio['timestamp']);
+                                        $cnnTime = (date('Y-m-d', $cnnTs) === date('Y-m-d')) ? date('H:i', $cnnTs) : date('M d, H:i', $cnnTs);
+                                        $cnnAge  = max(0, time() - $cnnTs);
+                                    } else {
+                                        $c = ['⚪', 'Colony not checked yet', '#6b7280', '#f3f4f6'];
+                                    }
+                                ?>
+                                <!-- Live hive sound — straight from the microphone inside the hive (ESP32) -->
+                                <div class="bg-gray-50 p-3 rounded-lg mb-2" id="live-sound-<?php echo $hive['id']; ?>" style="<?php echo $sensorLive ? '' : 'opacity:.55;'; ?>">
                                     <div class="flex justify-between items-center mb-2">
-                                        <p class="text-xs text-gray-600">Sound Activity</p>
-                                        <p class="text-sm font-bold" id="sound-val-<?php echo $hive['id']; ?>"><?php echo $sensor ? round($sensor['sound_level'] ?? 0) : 0; ?>%</p>
+                                        <p class="text-xs text-gray-600" title="Measured by the microphone inside the hive">Hive sound level <span class="text-gray-400">· from hive mic</span></p>
+                                        <p class="text-sm font-bold" id="sound-val-<?php echo $hive['id']; ?>"><?php echo round($sensor['sound_level'] ?? 0); ?>%</p>
                                     </div>
                                     <div class="h-2 bg-gray-200 rounded-full overflow-hidden mb-2">
-                                        <div class="h-full bg-yellow-500" id="sound-bar-<?php echo $hive['id']; ?>" style="width:<?php echo $sensor ? round($sensor['sound_level'] ?? 0) : 0; ?>%"></div>
+                                        <div class="h-full bg-yellow-500" id="sound-bar-<?php echo $hive['id']; ?>" style="width:<?php echo round($sensor['sound_level'] ?? 0); ?>%"></div>
                                     </div>
-                                    <!-- Colony status — from CNN only -->
-                                    <?php
-                                        $freqDisplay = $sensor && $sensor['dominant_freq']
-                                            ? round($sensor['dominant_freq']) . ' Hz'
-                                            : '— Hz';
-                                        if ($audio) {
-                                            $conclusionMap = [
-                                                'normal'    => ['🟢', 'Colony Normal',     '#16a34a', '#dcfce7'],
-                                                'swarming'  => ['🟠', 'Swarming Detected', '#c2410c', '#ffedd5'],
-                                                'queenless' => ['🔴', 'Queenless Detected','#dc2626', '#fee2e2'],
-                                            ];
-                                            $cs = $audio['colony_status'] ?? 'normal';
-                                            $c  = $conclusionMap[$cs] ?? $conclusionMap['normal'];
-                                            $cnnTime = date('H:i', strtotime($audio['timestamp']));
-                                        }
-                                    ?>
-                                    <?php if ($audio): ?>
-                                    <div id="colony-conclusion-<?php echo $hive['id']; ?>"
-                                         class="flex items-center justify-between px-2 py-1.5 rounded-lg text-xs font-semibold"
-                                         style="background:<?php echo $c[3]; ?>;color:<?php echo $c[2]; ?>;">
-                                        <span class="flex items-center gap-1.5">
-                                            <span id="colony-icon-<?php echo $hive['id']; ?>"><?php echo $c[0]; ?></span>
-                                            <span id="colony-text-<?php echo $hive['id']; ?>"><?php echo $c[1]; ?></span>
-                                        </span>
-                                        <span id="colony-cnn-time-<?php echo $hive['id']; ?>" class="opacity-60 font-normal text-xs">from audio clip <?php echo $cnnTime; ?></span>
-                                    </div>
-                                    <?php else: ?>
-                                    <div id="colony-conclusion-<?php echo $hive['id']; ?>"
-                                         class="flex items-center justify-between px-2 py-1.5 rounded-lg text-xs font-semibold"
-                                         style="background:#f3f4f6;color:#6b7280;">
-                                        <span class="flex items-center gap-1.5">
-                                            <span id="colony-icon-<?php echo $hive['id']; ?>">⚪</span>
-                                            <span id="colony-text-<?php echo $hive['id']; ?>">No CNN result</span>
-                                        </span>
-                                        <span id="colony-cnn-time-<?php echo $hive['id']; ?>" class="opacity-60 font-normal text-xs">upload a clip to classify</span>
-                                    </div>
-                                    <?php endif; ?>
-                                    <!-- Dominant frequency — sensor reading only, no classification label -->
-                                    <p class="text-xs text-gray-400 mt-1 pl-1">
-                                        Dominant frequency (sensor reading): <span id="colony-freq-<?php echo $hive['id']; ?>" class="font-mono text-gray-600"><?php echo $freqDisplay; ?></span>
+                                    <p class="text-xs text-gray-500" title="Dominant frequency measured by the hive microphone. Shown as a reading only; it is not used for the colony check.">
+                                        Buzz pitch: <span id="colony-freq-<?php echo $hive['id']; ?>" class="font-mono text-gray-700"><?php echo $freqDisplay; ?></span>
                                     </p>
                                 </div>
+                                <!-- Colony check — from a recorded sound clip checked by the AI model -->
+                                <div id="colony-conclusion-<?php echo $hive['id']; ?>"
+                                     class="px-3 py-2 rounded-lg text-xs mb-3"
+                                     style="background:<?php echo $c[3]; ?>;color:<?php echo $c[2]; ?>;"
+                                     title="The colony check comes from a sound recording of the hive that was analysed by the system's AI model. It is not the live microphone.">
+                                    <p class="font-semibold opacity-70 mb-0.5">Colony check · from a sound recording</p>
+                                    <p class="flex items-center gap-1.5 font-bold text-sm">
+                                        <span id="colony-icon-<?php echo $hive['id']; ?>"><?php echo $c[0]; ?></span>
+                                        <span id="colony-text-<?php echo $hive['id']; ?>"><?php echo $c[1]; ?></span>
+                                    </p>
+                                    <?php if ($audio): ?>
+                                    <p id="colony-cnn-time-<?php echo $hive['id']; ?>" class="opacity-70 mt-0.5" data-age="<?php echo $cnnAge; ?>" data-prefix="Recording checked at <?php echo htmlspecialchars($cnnTime); ?> · ">Recording checked at <?php echo $cnnTime; ?></p>
+                                    <?php else: ?>
+                                    <p id="colony-cnn-time-<?php echo $hive['id']; ?>" class="opacity-70 mt-0.5">No sound recording has been checked for this hive</p>
+                                    <?php endif; ?>
+                                </div>
                                 <div class="flex justify-between items-center text-xs text-gray-500">
-                                    <span><i class="fas fa-clock mr-1"></i><span id="time-<?php echo $hive['id']; ?>"><?php echo time_elapsed_string($sensor['timestamp']); ?></span></span>
+                                    <span><i class="fas fa-clock mr-1"></i><span id="time-<?php echo $hive['id']; ?>" data-age="<?php echo $sensorAge; ?>" data-prefix="Sensors updated " style="<?php echo $sensorLive ? '' : 'color:#dc2626;'; ?>"><?php echo time_elapsed_string($sensor['timestamp']); ?></span></span>
                                     <span class="text-yellow-600 font-semibold cursor-pointer hover:underline" onclick="openHiveModal(<?php echo $hive['id']; ?>)">Click for details →</span>
                                 </div>
                             <?php else: ?>
@@ -497,45 +498,55 @@ foreach ($hives as $_hive) {
 
                                 <!-- Audio Analysis -->
                                 <p class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 flex items-center gap-2">
-                                    <i class="fas fa-volume-up text-yellow-500"></i> Audio Analysis & Colony Status
+                                    <i class="fas fa-volume-up text-yellow-500"></i> Hive Sound & Colony Check
                                 </p>
+                                <?php
+                                    $mColonyText = [
+                                        'normal'    => 'Colony sounds normal',
+                                        'swarming'  => 'Signs of swarming',
+                                        'queenless' => 'Signs of a missing queen',
+                                    ];
+                                ?>
                                 <div id="modal-audio-box-<?php echo $hive['id']; ?>"
                                      class="rounded-xl p-3 mb-4 flex gap-4"
                                      style="background:#FFFBEB;border:1px solid #FDE68A;">
+                                    <!-- Live: from the microphone inside the hive -->
                                     <div class="flex-1">
-                                        <p class="text-xs text-gray-500 mb-2 font-semibold">Colony Status (CNN)</p>
+                                        <p class="text-xs text-gray-500 mb-2 font-semibold">Hive sound · live from hive mic</p>
+                                        <div class="flex items-center gap-3 mb-1">
+                                            <div class="flex-1 h-3 bg-yellow-100 rounded-full overflow-hidden">
+                                                <div class="h-full rounded-full" id="modal-sound-bar-<?php echo $hive['id']; ?>" style="width:<?php echo $sensor ? round($sensor['sound_level'] ?? 0) : 0; ?>%;background:linear-gradient(90deg,#F59E0B,#F97316);"></div>
+                                            </div>
+                                            <span class="text-xl font-black text-yellow-600" id="modal-sound-val-<?php echo $hive['id']; ?>"><?php echo $sensor ? round($sensor['sound_level'] ?? 0) : 0; ?>%</span>
+                                        </div>
+                                        <p class="text-xs text-gray-500 mt-2" title="Dominant frequency measured by the hive microphone. Shown as a reading only; it is not used for the colony check.">
+                                            <i class="fas fa-wave-square text-yellow-500 mr-1"></i>
+                                            Buzz pitch: <strong id="modal-colony-freq-<?php echo $hive['id']; ?>" class="font-mono text-gray-700"><?php echo $sensor && $sensor['dominant_freq'] ? round($sensor['dominant_freq']) . ' Hz' : '— Hz'; ?></strong>
+                                        </p>
+                                    </div>
+                                    <!-- Colony check: latest AI result on a recorded sound clip (not live) -->
+                                    <div class="flex-1">
+                                        <p class="text-xs text-gray-500 mb-2 font-semibold">Colony check · from a sound recording</p>
                                         <?php if ($audio): ?>
                                         <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl text-sm font-bold"
                                               style="background:white;border:1.5px solid #FDE68A;color:#92400E;">
                                             <i class="<?php echo $badge['icon']; ?> text-yellow-600"></i>
-                                            <span id="modal-colony-label-<?php echo $hive['id']; ?>"><?php echo $badge['text']; ?></span>
+                                            <span id="modal-colony-label-<?php echo $hive['id']; ?>"><?php echo $mColonyText[$audio['colony_status']] ?? $badge['text']; ?></span>
                                         </span>
-                                        <p class="text-xs text-gray-400 mt-1" id="modal-colony-cnn-time-<?php echo $hive['id']; ?>">
-                                            from audio clip · <?php echo date('M d, H:i', strtotime($audio['timestamp'])); ?> (<?php echo time_elapsed_string($audio['timestamp']); ?>)
+                                        <p class="text-xs text-gray-400 mt-1" id="modal-colony-cnn-time-<?php echo $hive['id']; ?>" data-age="<?php echo max(0, time() - strtotime($audio['timestamp'])); ?>" data-prefix="Recording checked at <?php echo date('M d, H:i', strtotime($audio['timestamp'])); ?> · ">
+                                            Recording checked at <?php echo date('M d, H:i', strtotime($audio['timestamp'])); ?>
                                         </p>
                                         <?php else: ?>
                                         <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl text-sm font-bold"
                                               style="background:white;border:1.5px solid #e5e7eb;color:#6b7280;">
                                             <i class="fas fa-circle-question text-gray-400"></i>
-                                            <span id="modal-colony-label-<?php echo $hive['id']; ?>">No CNN result</span>
+                                            <span id="modal-colony-label-<?php echo $hive['id']; ?>">Not checked yet</span>
                                         </span>
                                         <p class="text-xs text-gray-400 mt-1" id="modal-colony-cnn-time-<?php echo $hive['id']; ?>">
-                                            Upload an audio clip to classify this hive
+                                            No sound recording has been checked for this hive
                                         </p>
                                         <?php endif; ?>
-                                        <p class="text-xs text-gray-500 mt-2">
-                                            <i class="fas fa-wave-square text-yellow-500 mr-1"></i>
-                                            Dominant frequency (sensor reading): <strong id="modal-colony-freq-<?php echo $hive['id']; ?>" class="font-mono text-gray-700"><?php echo $sensor && $sensor['dominant_freq'] ? round($sensor['dominant_freq']) . ' Hz' : '— Hz'; ?></strong>
-                                        </p>
-                                    </div>
-                                    <div class="flex-1">
-                                        <p class="text-xs text-gray-500 mb-2 font-semibold">Sound Activity</p>
-                                        <div class="flex items-center gap-3 mb-1">
-                                            <div class="flex-1 h-3 bg-yellow-100 rounded-full overflow-hidden">
-                                                <div class="h-full rounded-full" style="width:<?php echo $sensor ? round($sensor['sound_level'] ?? 0) : 0; ?>%;background:linear-gradient(90deg,#F59E0B,#F97316);"></div>
-                                            </div>
-                                            <span class="text-xl font-black text-yellow-600"><?php echo $sensor ? round($sensor['sound_level'] ?? 0) : 0; ?>%</span>
-                                        </div>
+                                        <p class="text-xs text-gray-400 mt-2">The colony check is not live. It updates when a new recording of this hive is checked.</p>
                                     </div>
                                 </div>
 
@@ -913,8 +924,40 @@ foreach ($hives as $_hive) {
         if (val)   val.style.color = vc;
     }
 
-    setInterval(() => { if (!document.querySelector('.modal.active')) refreshHiveCards(); }, 15000);
+    // Sensor cards poll every 5 s (ESP32 posts every 15 s, so data shows up within ~20 s at worst).
+    // Still paused while a hive window is open (documented in the paper).
+    setInterval(() => { if (!document.querySelector('.modal.active')) refreshHiveCards(); }, 5000);
     window.__refreshPage = function() { refreshHiveCards(); };
+
+    // ── "Last updated X ago" labels ────────────────────────────
+    // Any element with data-age (seconds old when fetched) is kept ticking every second.
+    // This only re-writes the label text; it does NOT fetch data, so it is safe while a window is open.
+    function fmtAgo(sec) {
+        sec = Math.max(0, Math.floor(sec));
+        if (sec < 5)     return 'just now';
+        if (sec < 60)    return sec + ' sec ago';
+        if (sec < 3600)  return Math.floor(sec / 60) + ' min ago';
+        if (sec < 86400) return Math.floor(sec / 3600) + ' h ago';
+        return Math.floor(sec / 86400) + ' d ago';
+    }
+    function setAgeLabel(el, ageSec, prefix) {
+        if (!el) return;
+        if (ageSec === null || ageSec === undefined) { delete el.dataset.age; return; }
+        el.dataset.age = ageSec;
+        el.dataset.at  = Date.now();
+        if (prefix !== undefined) el.dataset.prefix = prefix;
+        el.textContent = (el.dataset.prefix || '') + fmtAgo(ageSec);
+    }
+    function tickAgeLabels() {
+        const now = Date.now();
+        document.querySelectorAll('[data-age]').forEach(el => {
+            if (!el.dataset.at) el.dataset.at = now;
+            const age = parseFloat(el.dataset.age) + (now - parseFloat(el.dataset.at)) / 1000;
+            el.textContent = (el.dataset.prefix || '') + fmtAgo(age);
+        });
+    }
+    tickAgeLabels();
+    setInterval(tickAgeLabels, 1000);
 
     // ── Sparkline charts ─────────────────────────────────────
     function loadHiveCharts() {
@@ -1035,7 +1078,14 @@ foreach ($hives as $_hive) {
                     set(`temp-${id}`, s.temperature + '°C');
                     set(`humid-${id}`, s.humidity + '%');
                     set(`co2-${id}`, s.co2 + 'ppm');
-                    set(`time-${id}`, s.elapsed);
+                    const timeEl = document.getElementById(`time-${id}`);
+                    setAgeLabel(timeEl, s.age_sec, 'Sensors updated ');
+                    if (timeEl) timeEl.style.color = h.is_online ? '' : '#dc2626';   // red = no new reading for 2+ min
+                    // Dim the readings when the sensor is offline, so old values don't look current
+                    ['sensor-tiles-', 'live-sound-'].forEach(p => {
+                        const el = document.getElementById(p + id);
+                        if (el) el.style.opacity = h.is_online ? '' : '.55';
+                    });
                     // Update modal sensor pills too
                     const tVal = parseFloat(s.temperature);
                     const hVal = parseFloat(s.humidity);
@@ -1063,11 +1113,14 @@ foreach ($hives as $_hive) {
                     set(`sound-val-${id}`, soundPct + '%');
                     const bar = document.getElementById(`sound-bar-${id}`);
                     if (bar) bar.style.width = soundPct + '%';
+                    set(`modal-sound-val-${id}`, soundPct + '%');
+                    const mBar = document.getElementById(`modal-sound-bar-${id}`);
+                    if (mBar) mBar.style.width = soundPct + '%';
                     // Update dominant freq display (plain number, no classification)
                     const freqEl = document.getElementById(`colony-freq-${id}`);
                     const mFreqEl = document.getElementById(`modal-colony-freq-${id}`);
                     const freqTxt = (h.dominant_freq && h.dominant_freq > 0)
-                        ? Math.round(h.dominant_freq) + ' Hz' : '— Hz';
+                        ? Math.round(h.dominant_freq) + ' Hz' + (h.is_online ? '' : ' (old reading)') : '— Hz';
                     if (freqEl) freqEl.textContent = freqTxt;
                     if (mFreqEl) mFreqEl.textContent = freqTxt;
 
@@ -1079,9 +1132,9 @@ foreach ($hives as $_hive) {
                     const mLabel         = document.getElementById(`modal-colony-label-${id}`);
                     const mCnnTime       = document.getElementById(`modal-colony-cnn-time-${id}`);
                     const conclusionMap  = {
-                        'normal':    ['🟢', 'Colony Normal',     '#16a34a', '#dcfce7'],
-                        'swarming':  ['🟠', 'Swarming Detected', '#c2410c', '#ffedd5'],
-                        'queenless': ['🔴', 'Queenless Detected','#dc2626', '#fee2e2'],
+                        'normal':    ['🟢', 'Colony sounds normal',     '#16a34a', '#dcfce7'],
+                        'swarming':  ['🟠', 'Signs of swarming',        '#c2410c', '#ffedd5'],
+                        'queenless': ['🔴', 'Signs of a missing queen', '#dc2626', '#fee2e2'],
                     };
                     if (h.badge && h.badge.raw_status) {
                         const raw = h.badge.raw_status;
@@ -1091,17 +1144,25 @@ foreach ($hives as $_hive) {
                         if (conclusionText) conclusionText.textContent = c[1];
                         if (mLabel)         mLabel.textContent = c[1];
                         const timeStr = h.badge.cnn_time || '';
-                        const agoStr  = h.badge.cnn_elapsed || '';
-                        if (conclusionTime) conclusionTime.textContent = timeStr ? `from audio clip ${timeStr}` : '';
-                        if (mCnnTime)       mCnnTime.textContent = timeStr ? `from audio clip · ${timeStr} (${agoStr})` : '';
+                        if (timeStr) {
+                            setAgeLabel(conclusionTime, h.badge.cnn_age_sec, `Recording checked at ${timeStr} · `);
+                            setAgeLabel(mCnnTime,       h.badge.cnn_age_sec, `Recording checked at ${timeStr} · `);
+                        } else {
+                            setAgeLabel(conclusionTime, null);
+                            setAgeLabel(mCnnTime, null);
+                            if (conclusionTime) conclusionTime.textContent = '';
+                            if (mCnnTime)       mCnnTime.textContent = '';
+                        }
                     } else {
+                        setAgeLabel(conclusionTime, null);   // stop the ticker from overwriting the "no result" text
+                        setAgeLabel(mCnnTime, null);
                         // No CNN result
                         if (conclusionEl)   { conclusionEl.style.background = '#f3f4f6'; conclusionEl.style.color = '#6b7280'; }
                         if (conclusionIcon) conclusionIcon.textContent = '⚪';
-                        if (conclusionText) conclusionText.textContent = 'No CNN result';
-                        if (mLabel)         mLabel.textContent = 'No CNN result';
-                        if (conclusionTime) conclusionTime.textContent = 'upload a clip to classify';
-                        if (mCnnTime)       mCnnTime.textContent = 'Upload an audio clip to classify this hive';
+                        if (conclusionText) conclusionText.textContent = 'Colony not checked yet';
+                        if (mLabel)         mLabel.textContent = 'Not checked yet';
+                        if (conclusionTime) conclusionTime.textContent = 'No sound recording has been checked for this hive';
+                        if (mCnnTime)       mCnnTime.textContent = 'No sound recording has been checked for this hive';
                     }
                     const badgeEl = document.getElementById(`badge-${id}`);
                     const badgeIcon = document.getElementById(`badge-icon-${id}`);
