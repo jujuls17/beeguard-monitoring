@@ -916,7 +916,7 @@ if (!$s) {
         }
 
         function retrainModel() {
-            if (!confirm('Start retraining the CNN model? This may take a few minutes.')) return;
+            if (!confirm('Start retraining the CNN model?\n\nThis will OVERWRITE beeguard_cnn.keras with a newly trained model. Training takes about 2–3 minutes.\n\nBackup is saved at: ml/models/beeguard_cnn.keras.bak\n\nClick Cancel to abort, OK to proceed.')) return;
             const btn = document.getElementById('retrainBtn');
             btn.disabled = true;
             btn.innerHTML = '<i class="fas fa-circle-notch fa-spin mr-1"></i>Starting…';
