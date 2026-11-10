@@ -554,7 +554,6 @@ foreach ($hives as $_hive) {
                                             The hive was too quiet to measure a pitch, or the hive mic is not sending.
                                         </p>
                                         <?php endif; ?>
-                                        <p class="text-xs text-gray-400 mt-2"><span style="display:inline-block;width:10px;height:4px;background:#F59E0B;border-radius:2px;vertical-align:middle;margin-right:4px;"></span>Normal &lt;450 Hz · Queenless 450–600 · Swarming &gt;600</p>
                                     </div>
                                 </div>
 

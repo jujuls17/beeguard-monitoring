@@ -4,6 +4,9 @@ The version number is in `version.php` and shows in the sidebar (under "IoT Moni
 **Every update:** bump the number in `version.php`, add a section here, then push.
 If the sidebar on the hosted site shows an older number than this file, the server is not running the latest push.
 
+## v1.7 — 2026-11-11
+- Hive window: removed the "Normal <450 Hz · Queenless 450–600 · Swarming >600" guide line under the colony status. The ranges are still on the Help page and in the card tooltip.
+
 ## v1.6 — 2026-11-11
 - Hive cards: removed the "Normal <450 Hz · Queenless 450–600 · Swarming >600" line under the colony status. The ranges are still in the hive window, the card tooltip and the Help page.
 
