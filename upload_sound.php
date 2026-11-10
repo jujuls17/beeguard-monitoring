@@ -37,6 +37,20 @@ $labelMap = [
     'swarming'  => 'Swarming',
 ];
 
+// PREDICTION action — result for an uploaded sound classified by the BeeGuard computer (ml_worker.py)
+if ($_SERVER['REQUEST_METHOD'] === 'GET' && ($_GET['action'] ?? '') === 'prediction') {
+    $name = basename($_GET['name'] ?? '');
+    $predFile = $uploadDir . $name . '.pred.json';
+    if ($name !== '' && file_exists($predFile)) {
+        $pred = json_decode(file_get_contents($predFile), true);
+        echo json_encode(['success' => true, 'ready' => true, 'prediction' => $pred]);
+    } else {
+        echo json_encode(['success' => true, 'ready' => false,
+                          'pending' => $name !== '' && file_exists($uploadDir . $name . '.pending')]);
+    }
+    exit;
+}
+
 // LIST action
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && ($_GET['action'] ?? '') === 'list') {
     $sql = "SELECT id, original_filename, stored_filename, classification, file_size_kb, uploaded_at
@@ -83,6 +97,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && ($_GET['action'] ?? '') === 'delete'
         exit;
     }
     if (file_exists($filePath)) @unlink($filePath);
+    @unlink($filePath . '.pending');
+    @unlink($filePath . '.pred.json');
     foreach (glob(__DIR__ . '/ml/data/audio/*/' . basename($row['stored_filename'])) ?: [] as $copy) @unlink($copy);
     $uname = $_SESSION['username'] ?? 'user';
     logActivity($conn, null, 'Sound Deleted',
@@ -170,7 +186,9 @@ $modelPathH5 = __DIR__ . '/ml/models/beeguard_cnn.h5';
 $scriptPath = __DIR__ . '/ml/predict.py';
 $activeModel = file_exists($modelPath) ? $modelPath : (file_exists($modelPathH5) ? $modelPathH5 : null);
 
-if ($activeModel && file_exists($scriptPath)) {
+$canExec = function_exists('exec') && !in_array('exec', array_map('trim', explode(',', (string)ini_get('disable_functions'))), true);
+$hostedMode = PHP_OS_FAMILY !== 'Windows' && !file_exists(__DIR__ . '/ml/LOCAL_TRAINING');
+if ($activeModel && file_exists($scriptPath) && $canExec && !$hostedMode) {
     $python = PHP_OS_FAMILY === 'Windows' ? 'python' : 'python3';
     $out    = [];
     exec(
@@ -194,6 +212,13 @@ if ($activeModel && file_exists($scriptPath)) {
         ];
         $response['message'] = 'Sound uploaded and classified by the CNN model!';
     }
+}
+
+// Hosted server: the BeeGuard computer (ml_worker.py) classifies it and the page picks up the result
+if ($response['prediction'] === null && $hostedMode && $activeModel) {
+    @touch($destPath . '.pending');
+    $response['pending_prediction'] = $storedName;
+    $response['message'] = 'Sound uploaded. The BeeGuard computer is classifying it with the CNN model...';
 }
 
 echo json_encode($response);

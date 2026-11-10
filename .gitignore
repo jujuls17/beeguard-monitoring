@@ -17,3 +17,12 @@ ml/data/hive_mic_clips/
 .DS_Store
 Thumbs.db
 desktop.ini
+
+# ── ML helper (ml_worker.py) runtime files ───────────────────────────────────
+ml/worker_seen.txt
+ml/data/panel_uploads/
+ml/data/.synced_from_site.txt
+ml/models/backup_*/
+uploads/sounds/*.pending
+uploads/sounds/*.pred.json
+__pycache__/

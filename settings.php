@@ -225,7 +225,7 @@ if (!$s) {
                         <span id="trainingStatusBadge" class="inline-flex items-center gap-2 text-sm px-3 py-1.5 rounded-full font-bold bg-yellow-100 text-yellow-700">
                             <i class="fas fa-circle-notch fa-spin"></i>Training in progress…
                         </span>
-                        <span class="text-xs text-gray-400">Model will be ready when complete</span>
+                        <span id="trainingProgressText" class="text-xs text-gray-400">Model will be ready when complete</span>
                     </div>
                     <!-- Error detail — only visible on failure -->
                     <div id="trainingErrorBox" class="hidden bg-red-50 px-4 py-3">
@@ -568,6 +568,7 @@ if (!$s) {
                     if (res.success) {
                         showUploadResult('success', res.message);
                         if (res.prediction) showPrediction(res.prediction);
+                        else if (res.pending_prediction) waitForPrediction(res.pending_prediction);
                         loadRecentUploads();
                         loadModelStatus();
                         document.getElementById('audioFile').value = '';
@@ -603,6 +604,29 @@ if (!$s) {
                 el.innerHTML = '<i class="fas fa-times-circle mr-2"></i>' + msg;
             }
             el.classList.remove('hidden');
+        }
+
+        // Hosted server: the BeeGuard computer classifies the upload; check every 3 s for up to 2 minutes
+        function waitForPrediction(name) {
+            const el = document.getElementById('predictionResult');
+            el.style.cssText = '';
+            el.className = 'mt-4 p-4 rounded-xl border-2 border-yellow-200 bg-yellow-50 text-yellow-800 text-sm';
+            el.innerHTML = '<i class="fas fa-circle-notch fa-spin mr-2"></i>The BeeGuard computer is classifying this sound…';
+            el.classList.remove('hidden');
+            let tries = 0;
+            const t = setInterval(() => {
+                tries++;
+                fetch('upload_sound.php?action=prediction&name=' + encodeURIComponent(name))
+                    .then(r => r.json())
+                    .then(d => {
+                        if (d.ready && d.prediction) { clearInterval(t); showPrediction(d.prediction); }
+                        else if (tries >= 40) {
+                            clearInterval(t);
+                            el.innerHTML = '<i class="fas fa-exclamation-circle mr-2"></i>No answer from the BeeGuard computer. The sound is saved; make sure ml_worker.py is running on the laptop.';
+                        }
+                    })
+                    .catch(() => {});
+            }, 3000);
         }
 
         function showPrediction(pred) {
@@ -806,7 +830,7 @@ if (!$s) {
                 .then(data => {
                     if (!data.success) return;
                     updateModelStatusUI(data);
-                    if (data.status === 'running') startTrainingPoll();
+                    if (data.status === 'running' || data.status === 'queued') startTrainingPoll();
                 })
                 .catch(() => {});
         }
@@ -841,11 +865,18 @@ if (!$s) {
             const modelPart  = data.model_exists
                 ? `<i class="fas fa-brain mr-1 text-yellow-600 ml-3"></i>Last trained: ${data.model_time}`
                 : `<i class="fas fa-brain mr-1 text-gray-400 ml-3"></i>No trained model`;
-            infoText.innerHTML = samplePart + modelPart;
+            const workerPart = data.hosted_mode
+                ? (data.worker_online
+                    ? `<span class="ml-3 text-green-700"><i class="fas fa-laptop mr-1"></i>BeeGuard computer connected</span>`
+                    : `<span class="ml-3 text-red-600"><i class="fas fa-laptop mr-1"></i>BeeGuard computer not connected (start ml_worker.py)</span>`)
+                : '';
+            infoText.innerHTML = samplePart + modelPart + workerPart;
 
-            if (data.status === 'running') {
+            if (data.status === 'running' || data.status === 'queued') {
                 retrainBtn.disabled = true;
-                retrainBtn.innerHTML = '<i class="fas fa-circle-notch fa-spin mr-1"></i>Training…';
+                retrainBtn.innerHTML = data.status === 'queued'
+                    ? '<i class="fas fa-circle-notch fa-spin mr-1"></i>Sending…'
+                    : '<i class="fas fa-circle-notch fa-spin mr-1"></i>Training…';
                 retrainBtn.className = 'flex-shrink-0 px-4 py-2 bg-gray-300 text-gray-500 text-sm font-bold rounded-lg flex items-center gap-2 cursor-not-allowed';
             } else {
                 retrainBtn.disabled = false;
@@ -916,7 +947,7 @@ if (!$s) {
         }
 
         function retrainModel() {
-            if (!confirm('Start retraining the CNN model?\n\nThis will OVERWRITE beeguard_cnn.keras with a newly trained model. Training takes about 2–3 minutes.\n\nBackup is saved at: ml/models/beeguard_cnn.keras.bak\n\nClick Cancel to abort, OK to proceed.')) return;
+            if (!confirm('Start retraining the CNN model?\n\nThe model is retrained on the BeeGuard computer with all the sound samples in the dataset, including new uploads. It takes about 2 minutes.\n\nThe current model is backed up first (ml/models/beeguard_cnn.keras.bak).\n\nClick Cancel to abort, OK to proceed.')) return;
             const btn = document.getElementById('retrainBtn');
             btn.disabled = true;
             btn.innerHTML = '<i class="fas fa-circle-notch fa-spin mr-1"></i>Starting…';
@@ -943,6 +974,7 @@ if (!$s) {
             panel.classList.remove('hidden');
 
             const cfg = {
+                queued:  ['bg-yellow-100 text-yellow-700', '<i class="fas fa-circle-notch fa-spin"></i>Sending to the BeeGuard computer…'],
                 running: ['bg-yellow-100 text-yellow-700', '<i class="fas fa-circle-notch fa-spin"></i>Training in progress…'],
                 done:    ['bg-green-100 text-green-700',   '<i class="fas fa-check-circle"></i>Complete!'],
                 error:   ['bg-red-100 text-red-700',       '<i class="fas fa-times-circle"></i>Training Failed'],
@@ -950,6 +982,19 @@ if (!$s) {
             const [cls, html] = cfg[status] || cfg.running;
             badge.className = `inline-flex items-center gap-2 text-sm px-3 py-1.5 rounded-full font-bold ${cls}`;
             badge.innerHTML = html;
+
+            // One plain progress line under the badge (latest step from the training log)
+            const prog = document.getElementById('trainingProgressText');
+            if (prog) {
+                if (status === 'running' || status === 'queued') {
+                    const last = [...logLines].reverse().find(l => /^\[|^Epoch/.test(l));
+                    prog.textContent = last || 'Model will be ready when complete';
+                } else if (status === 'done') {
+                    prog.textContent = 'New model is in use';
+                } else {
+                    prog.textContent = '';
+                }
+            }
 
             // Show error detail box only on failure
             if (status === 'error' && logLines.length > 0) {
@@ -972,7 +1017,7 @@ if (!$s) {
                     .then(data => {
                         if (!data.success) return;
                         updateModelStatusUI(data);
-                        if (data.status !== 'running') {
+                        if (data.status !== 'running' && data.status !== 'queued') {
                             clearInterval(_trainingPollTimer);
                             _trainingPollTimer = null;
                         }

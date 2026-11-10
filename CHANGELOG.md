@@ -4,6 +4,16 @@ The version number is in `version.php` and shows in the sidebar (under "IoT Moni
 **Every update:** bump the number in `version.php`, add a section here, then push.
 If the sidebar on the hosted site shows an older number than this file, the server is not running the latest push.
 
+## v1.8 — 2026-11-11
+- **Retrain Model and sound-sample classification now work from the hosted site.** The hosted server cannot run Python/TensorFlow, so the work runs on the BeeGuard computer (laptop) with the new `ml_worker.py`:
+  - Retrain Model: the site sends the job to the laptop. The laptop downloads the dataset (including new uploads), backs up the current model, trains (about 1.5 min), then sends the new model, accuracy and charts back. The Settings page shows the progress and the new accuracy.
+  - Upload Sound Sample: the laptop classifies the upload and the page shows "ML Prediction: ..." a few seconds later.
+  - Settings shows "BeeGuard computer connected / not connected". If the laptop is not running `ml_worker.py`, Retrain says so right away instead of getting stuck on "Training...".
+- Retrain no longer gets stuck: a request nobody picks up fails after 90 s, a run with no updates fails after 15 min, both with a plain message.
+- If training fails, the previous model is put back automatically.
+- The confirm message no longer claims a backup that was not made; a backup is now really made before every retrain.
+- New `api/ml_worker.php` (protected by the device key). No database change.
+
 ## v1.7 — 2026-11-11
 - Hive window: removed the "Normal <450 Hz · Queenless 450–600 · Swarming >600" guide line under the colony status. The ranges are still on the Help page and in the card tooltip.
 
