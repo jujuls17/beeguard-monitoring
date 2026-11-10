@@ -23,7 +23,7 @@ $conn->query(
 );
 
 $result = $conn->query(
-    "SELECT d.*, h.name as hive_name, h.camera_index,
+    "SELECT d.*, h.name as hive_name, h.camera_index, h.id as hive_db_id,
             sd.temperature    AS latest_temp,
             sd.humidity       AS latest_humidity,
             sd.co2            AS latest_co2,
@@ -39,9 +39,11 @@ $result = $conn->query(
      ORDER BY d.status DESC, d.id ASC"
 );
 
-// Camera liveness check is not applicable on cloud hosting (no local camera process)
-function isCamPortLive(int $port): bool {
-    return false;
+// Camera is "live" if the meta JSON written by camera_capture.py was updated within last 5 minutes
+function isCamLive(int $hiveDbId): bool {
+    $file = __DIR__ . '/../uploads/camera/meta_hive_' . $hiveDbId . '.json';
+    if (!file_exists($file)) return false;
+    return (time() - filemtime($file)) <= 300;
 }
 
 $devices = [];
@@ -52,10 +54,7 @@ if ($result) {
         $hasReading = $row['latest_ts'] !== null
             && (time() - strtotime($row['latest_ts'])) <= 300; // reading within last 5 min
 
-        // Derive camera port from camera_index (5049 + index), fallback 5050
-        $camIdx    = isset($row['camera_index']) ? (int)$row['camera_index'] : 1;
-        $camPort   = 5049 + max(1, $camIdx);
-        $cameraLive = isCamPortLive($camPort);
+        $cameraLive = isCamLive((int)($row['hive_db_id'] ?? 0));
 
         $sensors = [
             'temperature' => $isOnline && $hasReading && $row['latest_temp']    !== null && (float)$row['latest_temp']    > 0,
