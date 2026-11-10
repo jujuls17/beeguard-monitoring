@@ -17,10 +17,12 @@ $hives = getAllHives($conn);
 $data  = [];
 
 foreach ($hives as $hive) {
-    $sensor       = getLatestSensorData($conn, $hive['id']);
-    $colonyStatus = classifyColonyByFreq($sensor['dominant_freq'] ?? null);
-    $audio        = ['colony_status' => $colonyStatus, 'confidence' => 100];
-    $badge        = getHiveStatusBadge($colonyStatus);
+    $sensor = getLatestSensorData($conn, $hive['id']);
+    $audio  = getLatestAudioAnalysis($conn, $hive['id']);
+
+    // Colony status comes exclusively from the CNN (audio_analysis table).
+    // If no CNN result exists, badge is null and the UI shows "No CNN result".
+    $badge = $audio ? getHiveStatusBadge($audio['colony_status']) : null;
 
     $recommendations = getHiveRecommendations($sensor, $audio);
     $issues = 0;
@@ -33,6 +35,13 @@ foreach ($hives as $hive) {
         $isOnline = (time() - strtotime($sensor['timestamp'])) <= 120;
     }
 
+    // CNN clip time for display
+    $cnnTimestamp = $audio ? $audio['timestamp'] : null;
+    $cnnElapsed   = $cnnTimestamp ? time_elapsed_string($cnnTimestamp) : null;
+    $cnnTimeFormatted = $cnnTimestamp
+        ? date('M d, H:i', strtotime($cnnTimestamp))
+        : null;
+
     $data[] = [
         'id'          => $hive['id'],
         'is_online'   => $isOnline,
@@ -44,13 +53,15 @@ foreach ($hives as $hive) {
         ] : null,
         'sound'         => $sensor ? round((float)($sensor['sound_level'] ?? 0)) : null,
         'dominant_freq' => $sensor ? (float)($sensor['dominant_freq'] ?? 0) : null,
-        'badge'         => [
+        'badge'         => $badge ? [
             'bg'         => $badge['bg'],
             'color'      => $badge['color'],
             'icon'       => $badge['icon'],
             'text'       => $badge['text'],
-            'raw_status' => $colonyStatus,
-        ],
+            'raw_status' => $audio['colony_status'],
+            'cnn_time'   => $cnnTimeFormatted,
+            'cnn_elapsed'=> $cnnElapsed,
+        ] : null,
         'issues'      => $issues,
     ];
 }

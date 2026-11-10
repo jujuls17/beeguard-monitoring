@@ -208,7 +208,6 @@ checkAuth();
                             <thead>
                                 <tr class="bg-gray-50 text-gray-500 text-xs uppercase tracking-wide">
                                     <th class="text-left px-4 py-2.5 font-semibold rounded-tl-lg">Colony State</th>
-                                    <th class="text-left px-4 py-2.5 font-semibold">Typical Frequency</th>
                                     <th class="text-left px-4 py-2.5 font-semibold">Alert Level</th>
                                     <th class="text-left px-4 py-2.5 font-semibold rounded-tr-lg">What to Do</th>
                                 </tr>
@@ -216,19 +215,16 @@ checkAuth();
                             <tbody class="divide-y divide-gray-100">
                                 <tr>
                                     <td class="px-4 py-3 font-semibold text-green-700">Normal</td>
-                                    <td class="px-4 py-3 font-mono text-gray-600">200 – 500 Hz</td>
                                     <td class="px-4 py-3"><span class="range-cell range-ok">✓ Healthy</span></td>
                                     <td class="px-4 py-3 text-gray-600">No action needed. Colony is working normally.</td>
                                 </tr>
                                 <tr>
                                     <td class="px-4 py-3 font-semibold text-red-700">Queenless</td>
-                                    <td class="px-4 py-3 font-mono text-gray-600">400 – 600 Hz</td>
                                     <td class="px-4 py-3"><span class="range-cell range-crit">✕ Critical</span></td>
                                     <td class="px-4 py-3 text-gray-600">Inspect for queen cells or eggs. Re-queen if absent for more than 5 days.</td>
                                 </tr>
                                 <tr>
                                     <td class="px-4 py-3 font-semibold text-orange-700">Swarming</td>
-                                    <td class="px-4 py-3 font-mono text-gray-600">500 – 800 Hz</td>
                                     <td class="px-4 py-3"><span class="range-cell range-warn">⚠ Warning</span></td>
                                     <td class="px-4 py-3 text-gray-600">Look for queen cells. Consider splitting the colony to prevent swarm loss.</td>
                                 </tr>

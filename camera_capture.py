@@ -44,8 +44,9 @@ FRAME_HEIGHT     = 540         # 16:9 ratio, matches most USB webcams natively
 JPEG_QUALITY     = 75          # smaller JPEG = faster MJPEG stream
 DETECT_EVERY_N   = 4           # YOLO runs at ~7 fps — good balance CPU vs accuracy
 
-YOLO_CONF        = 0.90        # high confidence — minimal false positives, catches real insects
+YOLO_CONF        = 0.35        # validated threshold — good recall/precision balance (see paper §4.x)
 MAX_INSECT_AREA  = 0.05        # reject any bee/insect box > 5% of frame (too large to be an insect)
+MOTION_FALLBACK  = False       # set True to re-enable OpenCV motion fallback alongside YOLO
 YOLO_IOU         = 0.40
 CUSTOM_MODEL     = 'models/bee_insect.pt'
 BEE_MODEL_ID     = 'hf-hub:keremberke/yolov8n-bee-detection'
@@ -274,13 +275,14 @@ def detect(frame):
                 dets.append({'x1':x1,'y1':y1,'x2':x2,'y2':y2,
                              'label':label, 'conf':conf, 'source':'bee_model'})
 
-        # Motion fallback for missed insects
-        for (mx1,my1,mx2,my2) in find_moving_regions(frame):
-            if (mx2-mx1)*(my2-my1)/fa > 0.20: continue
-            if any(boxes_overlap((mx1,my1,mx2,my2), b) for b in bee_boxes): continue
-            label = 'bee' if color_is_bee(frame, mx1, my1, mx2, my2) else 'insect'
-            dets.append({'x1':mx1,'y1':my1,'x2':mx2,'y2':my2,
-                         'label':label, 'conf':0.50, 'source':'motion'})
+        # Motion fallback — disabled by default; enable via MOTION_FALLBACK = True
+        if MOTION_FALLBACK:
+            for (mx1,my1,mx2,my2) in find_moving_regions(frame):
+                if (mx2-mx1)*(my2-my1)/fa > 0.20: continue
+                if any(boxes_overlap((mx1,my1,mx2,my2), b) for b in bee_boxes): continue
+                label = 'bee' if color_is_bee(frame, mx1, my1, mx2, my2) else 'insect'
+                dets.append({'x1':mx1,'y1':my1,'x2':mx2,'y2':my2,
+                             'label':label, 'conf':0.50, 'source':'motion'})
 
     elif MODEL_MODE == 'general':
         for r in general_model(frame, verbose=False, conf=YOLO_CONF, iou=YOLO_IOU):
