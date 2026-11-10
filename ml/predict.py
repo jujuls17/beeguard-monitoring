@@ -26,6 +26,7 @@ TARGET_FRAMES = 216
 MODELS_DIR   = Path(__file__).parent / 'models'
 MODEL_PATH   = MODELS_DIR / 'beeguard_cnn.keras'
 MODEL_PATH_H5 = MODELS_DIR / 'beeguard_cnn.h5'
+_MODEL_CACHE = {}
 
 
 def _get_model_path():
@@ -125,10 +126,17 @@ def predict(file_path: str) -> dict:
     except ImportError:
         return {'error': 'TensorFlow is not installed. Run: pip install tensorflow==2.17.0'}
 
-    try:
-        model = tf.keras.models.load_model(str(model_path), compile=False)
-    except Exception as e:
-        return {'error': f'Failed to load model: {e}'}
+    # Keep the loaded model in memory for long-running callers (cnn_worker.py).
+    # Keyed on the file's modified time, so a retrained model is picked up automatically.
+    cache_key = (str(model_path), model_path.stat().st_mtime)
+    model = _MODEL_CACHE.get(cache_key)
+    if model is None:
+        try:
+            model = tf.keras.models.load_model(str(model_path), compile=False)
+        except Exception as e:
+            return {'error': f'Failed to load model: {e}'}
+        _MODEL_CACHE.clear()
+        _MODEL_CACHE[cache_key] = model
 
     try:
         y, _ = librosa.load(file_path, sr=SAMPLE_RATE, mono=True)

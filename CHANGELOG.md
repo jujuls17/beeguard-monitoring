@@ -4,6 +4,15 @@ The version number is in `version.php` and shows in the sidebar (under "IoT Moni
 **Every update:** bump the number in `version.php`, add a section here, then push.
 If the sidebar on the hosted site shows an older number than this file, the server is not running the latest push.
 
+## v1.4 — 2026-11-11
+- **Colony check now listens to the hive mic.** Each ESP32 records a 5-second clip from its MAX4466 mic (22,050 Hz) about every 2 minutes, with the first one 20 s after it starts, and uploads it to `api/upload_hive_clip.php`. The site keeps the newest 5 clips per hive in `uploads/hive_clips/`, which cannot be opened from a browser.
+- New `cnn_worker.py` (runs on the BeeGuard laptop next to `camera_capture.py`). It fetches new clips through `api/hive_clips.php`, runs the CNN locally, sends the result to `api/update_colony_status.php`, then removes the clip from the site. It keeps a local copy in `ml/data/hive_mic_clips/` and skips silent clips (mic not hearing anything).
+- Alerts: a repeated colony finding (for example "queenless" every 2 minutes) no longer creates a new alert each time. A new alert appears only when the finding changes.
+- `ml/predict.py`: keeps the model in memory between clips, so each check takes milliseconds instead of reloading the model.
+- Hive cards, hive window, Help page: the colony check wording now explains that it comes from the hive mic's clips ("Waiting for the first recording from the hive mic"). The Help page also says 5-second clips, not 3-second.
+- ESP32 firmware v1.3: records and uploads the mic clips (OLED shows "Recording clip..." / "Sending clip..." for about 6 s). **Re-flash both boards.**
+- No database change.
+
 ## v1.3 — 2026-11-11
 - Live Hives: "Live · page updates by itself · checked 3 sec ago" indicator in the page header. It turns yellow while a hive window is open (updates paused), and red with a plain message if updates stop ("Can't reach the server" / "Signed out · reload the page"). Before, a failed update was silent and the page just looked frozen.
 - Live Hives: a reading that changes glows briefly, so you can see it update without reloading.

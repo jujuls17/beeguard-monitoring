@@ -314,7 +314,7 @@ foreach ($hives as $_hive) {
                                     $freqDisplay = $sensor && $sensor['dominant_freq']
                                         ? round($sensor['dominant_freq']) . ' Hz' . ($sensorLive ? '' : ' (old reading)')
                                         : '— Hz';
-                                    // Colony check — from the latest CNN result on a recorded sound clip (not the live mic)
+                                    // Colony check — latest CNN result on a 5 s clip recorded by the hive mic (cnn_worker.py)
                                     $colonyMap = [
                                         'normal'    => ['🟢', 'Colony sounds normal',     '#16a34a', '#dcfce7'],
                                         'swarming'  => ['🟠', 'Signs of swarming',        '#c2410c', '#ffedd5'],
@@ -327,7 +327,7 @@ foreach ($hives as $_hive) {
                                         $cnnTime = (date('Y-m-d', $cnnTs) === date('Y-m-d')) ? date('H:i', $cnnTs) : date('M d, H:i', $cnnTs);
                                         $cnnAge  = max(0, time() - $cnnTs);
                                     } else {
-                                        $c = ['⚪', 'Waiting for a sound recording', '#6b7280', '#f3f4f6'];
+                                        $c = ['⚪', 'Waiting for the first recording from the hive mic', '#6b7280', '#f3f4f6'];
                                     }
                                 ?>
                                 <!-- Live hive sound — straight from the microphone inside the hive (ESP32) -->
@@ -347,8 +347,8 @@ foreach ($hives as $_hive) {
                                 <div id="colony-conclusion-<?php echo $hive['id']; ?>"
                                      class="px-3 py-2 rounded-lg text-xs mb-3"
                                      style="background:<?php echo $c[3]; ?>;color:<?php echo $c[2]; ?>;"
-                                     title="The colony check comes from a sound recording of the hive that was analysed by the system's AI model. It is not the live microphone.">
-                                    <p class="font-semibold opacity-70 mb-0.5">Colony check · from a sound recording</p>
+                                     title="About every 2 minutes the hive mic records a 5-second clip. The BeeGuard computer checks each clip with the AI model and the result shows here.">
+                                    <p class="font-semibold opacity-70 mb-0.5">Colony check · from a hive mic recording</p>
                                     <p class="flex items-center gap-1.5 font-bold text-sm">
                                         <span id="colony-icon-<?php echo $hive['id']; ?>"><?php echo $c[0]; ?></span>
                                         <span id="colony-text-<?php echo $hive['id']; ?>"><?php echo $c[1]; ?></span>
@@ -356,7 +356,7 @@ foreach ($hives as $_hive) {
                                     <?php if ($audio): ?>
                                     <p id="colony-cnn-time-<?php echo $hive['id']; ?>" class="opacity-70 mt-0.5" data-age="<?php echo $cnnAge; ?>" data-prefix="Recording checked at <?php echo htmlspecialchars($cnnTime); ?> · ">Recording checked at <?php echo $cnnTime; ?></p>
                                     <?php else: ?>
-                                    <p id="colony-cnn-time-<?php echo $hive['id']; ?>" class="opacity-70 mt-0.5">The live sensors don't run this check. It needs a sound recording of this hive.</p>
+                                    <p id="colony-cnn-time-<?php echo $hive['id']; ?>" class="opacity-70 mt-0.5">The hive mic records a 5-second clip every 2 minutes. The result appears here after the BeeGuard computer checks it.</p>
                                     <?php endif; ?>
                                 </div>
                                 <div class="flex justify-between items-center text-xs text-gray-500">
@@ -553,13 +553,13 @@ foreach ($hives as $_hive) {
                                         <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl text-sm font-bold"
                                               style="background:white;border:1.5px solid #e5e7eb;color:#6b7280;">
                                             <i class="fas fa-circle-question text-gray-400"></i>
-                                            <span id="modal-colony-label-<?php echo $hive['id']; ?>">Waiting for a sound recording</span>
+                                            <span id="modal-colony-label-<?php echo $hive['id']; ?>">Waiting for the first recording from the hive mic</span>
                                         </span>
                                         <p class="text-xs text-gray-400 mt-1" id="modal-colony-cnn-time-<?php echo $hive['id']; ?>">
-                                            The live sensors don't run this check. It needs a sound recording of this hive.
+                                            The hive mic records a 5-second clip every 2 minutes. The result appears here after the BeeGuard computer checks it.
                                         </p>
                                         <?php endif; ?>
-                                        <p class="text-xs text-gray-400 mt-2">The colony check is not live. It updates when a new recording of this hive is checked.</p>
+                                        <p class="text-xs text-gray-400 mt-2">The hive mic records a 5-second clip about every 2 minutes. Each clip is checked by the AI model, and this result updates by itself.</p>
                                     </div>
                                 </div>
 
@@ -1188,10 +1188,10 @@ foreach ($hives as $_hive) {
                         // No CNN result
                         if (conclusionEl)   { conclusionEl.style.background = '#f3f4f6'; conclusionEl.style.color = '#6b7280'; }
                         if (conclusionIcon) conclusionIcon.textContent = '⚪';
-                        if (conclusionText) conclusionText.textContent = 'Waiting for a sound recording';
-                        if (mLabel)         mLabel.textContent = 'Waiting for a sound recording';
-                        if (conclusionTime) conclusionTime.textContent = "The live sensors don't run this check. It needs a sound recording of this hive.";
-                        if (mCnnTime)       mCnnTime.textContent = "The live sensors don't run this check. It needs a sound recording of this hive.";
+                        if (conclusionText) conclusionText.textContent = 'Waiting for the first recording from the hive mic';
+                        if (mLabel)         mLabel.textContent = 'Waiting for the first recording from the hive mic';
+                        if (conclusionTime) conclusionTime.textContent = 'The hive mic records a 5-second clip every 2 minutes. The result appears here after the BeeGuard computer checks it.';
+                        if (mCnnTime)       mCnnTime.textContent = 'The hive mic records a 5-second clip every 2 minutes. The result appears here after the BeeGuard computer checks it.';
                     }
                     const badgeEl = document.getElementById(`badge-${id}`);
                     const badgeIcon = document.getElementById(`badge-icon-${id}`);

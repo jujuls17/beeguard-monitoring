@@ -5,6 +5,8 @@ config.php
 *.pid
 camera_start_hive*.bat
 meta_hive_*.json
+uploads/hive_clips/
+ml/data/hive_mic_clips/
 
 # ── XAMPP / local dev leftovers ───────────────────────────────────────────────
 .env

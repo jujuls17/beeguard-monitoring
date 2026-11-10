@@ -28,7 +28,26 @@
 
 // Firmware version — shown on the OLED boot screen, the OLED header and the Serial Monitor,
 // so you can tell whether a board actually has the latest code flashed.
-#define FIRMWARE_VERSION "1.2"
+#define FIRMWARE_VERSION "1.3"
+
+// ── Hive mic clips for the colony check (CNN) ────────────────
+// Every CLIP_INTERVAL_MS the node records a CLIP_SECONDS clip from the MAX4466 at the
+// CNN's sample rate and uploads it as a .wav. The CNN runs on the local server
+// (cnn_worker.py), not on the ESP32. Override any of these in config.h if needed.
+#ifndef CLIP_INTERVAL_MS
+#define CLIP_INTERVAL_MS     120000UL  // 2 minutes between clips
+#endif
+#ifndef CLIP_FIRST_DELAY_MS
+#define CLIP_FIRST_DELAY_MS  20000UL   // first clip 20 s after boot
+#endif
+#ifndef CLIP_SAMPLE_RATE
+#define CLIP_SAMPLE_RATE     22050     // same as the CNN (ml/predict.py)
+#endif
+#ifndef CLIP_SECONDS
+#define CLIP_SECONDS         5         // same clip length the CNN was trained on
+#endif
+#define CLIP_CHUNK_BYTES  (CLIP_SAMPLE_RATE / 2)   // 0.5 s per block (8-bit samples)
+#define CLIP_MAX_CHUNKS   (CLIP_SECONDS * 2)
 
 // ── OLED: 1.3" SH1106 128x64 via I2C ────────────────────────
 // If screen is blank after flashing, swap to the SSD1306 line:
@@ -51,7 +70,10 @@ float g_dominantFreq = 0;
 bool  g_wifiOk       = false;
 bool  g_dhtOk        = false;  // true only when DHT22 gives a valid reading
 bool  g_co2Ok        = false;  // true only when MQ-135 raw ADC > 10
-bool  g_soundOk      = false;  // true only when MAX4466 raw ADC > 0
+bool  g_soundOk      = false;  // true only when MAX4466 rests mid-range (powered + connected)
+float g_micRest      = 2048;   // the mic's own resting level, measured in readMicrophone()
+unsigned long lastClipTime  = 0;
+bool          firstClipDone = false;
 
 // =============================================================
 //  SETUP
@@ -107,6 +129,14 @@ void loop() {
     if (now - lastSendTime >= (unsigned long)syncIntervalMs) {
         lastSendTime = now;
         sendToServer(g_temperature, g_humidity, g_co2, g_soundLevel, g_dominantFreq);
+    }
+
+    // Hive mic clip for the colony check (first one shortly after boot, then every 2 min)
+    unsigned long clipDue = firstClipDone ? CLIP_INTERVAL_MS : CLIP_FIRST_DELAY_MS;
+    if (g_wifiOk && millis() - lastClipTime >= clipDue) {
+        firstClipDone = true;
+        recordAndUploadClip();
+        lastClipTime = millis();
     }
 }
 
@@ -377,6 +407,7 @@ void readMicrophone(float &soundLevel, float &dominantFreq) {
     // Resting near 0 or near 4095 means it is not powered, not connected, or wired wrong.
     g_soundOk  = mean > 100 && mean < 3995;
     soundLevel = g_soundOk ? constrain(rms / MIC_RMS_MAX * 100.0f, 0, 100) : 0;
+    if (g_soundOk) g_micRest = mean;   // used to centre the recorded clips
     if (!g_soundOk) {
         dominantFreq = 0;
         Serial.printf("[MIC] PROBLEM: rest level %.0f is at the edge of the range — check the MAX4466 power, GND and OUT wire (GPIO %d)\n",
@@ -457,4 +488,112 @@ void sendToServer(float temp, float hum, int co2, float sound, float freq) {
         Serial.printf("[HTTP] ❌ Failed (%d) — check SERVER_HOST\n", code);
     }
     http.end();
+}
+
+// =============================================================
+//  HIVE MIC CLIP → server (for the CNN colony check)
+// =============================================================
+static void put16(uint8_t* p, uint16_t v) { p[0] = v & 0xFF; p[1] = v >> 8; }
+static void put32(uint8_t* p, uint32_t v) { for (int i = 0; i < 4; i++) p[i] = (v >> (8 * i)) & 0xFF; }
+
+// Uploads the clip as an 8-bit mono .wav. Written straight to the TLS socket in
+// small pieces, so the whole file never has to sit in one big block of memory.
+bool uploadClip(uint8_t** chunks, int nChunks, uint32_t total, uint32_t rate) {
+    uint8_t h[44];
+    memcpy(h, "RIFF", 4);        put32(h + 4, 36 + total);
+    memcpy(h + 8, "WAVEfmt ", 8); put32(h + 16, 16);
+    put16(h + 20, 1);  /* PCM */  put16(h + 22, 1);  /* mono */
+    put32(h + 24, rate);          put32(h + 28, rate);   // bytes/s = rate × 1 byte
+    put16(h + 32, 1);             put16(h + 34, 8);      // 8-bit samples
+    memcpy(h + 36, "data", 4);    put32(h + 40, total);
+
+    WiFiClientSecure client;
+    client.setInsecure();   // same as sendToServer()
+    client.setTimeout(20);
+    if (!client.connect(SERVER_HOST, 443)) {
+        Serial.println(F("[CLIP] ❌ Could not connect to the server"));
+        return false;
+    }
+    String path = String(API_BASE) + "/upload_hive_clip.php?device_id=" + DEVICE_ID + "&hive_id=" + String(HIVE_ID);
+    client.print(String("POST ") + path + " HTTP/1.1\r\n" +
+                 "Host: " + SERVER_HOST + "\r\n" +
+                 "X-Api-Key: " + API_KEY + "\r\n" +
+                 "Content-Type: audio/wav\r\n" +
+                 "Content-Length: " + String(44 + total) + "\r\n" +
+                 "Connection: close\r\n\r\n");
+    client.write(h, sizeof(h));
+    uint32_t left = total;
+    for (int c = 0; c < nChunks && left > 0; c++) {
+        uint32_t len = min((uint32_t)CLIP_CHUNK_BYTES, left);
+        for (uint32_t off = 0; off < len; off += 1024) {
+            size_t piece = min((uint32_t)1024, len - off);
+            if (client.write(chunks[c] + off, piece) != piece) {
+                Serial.println(F("[CLIP] ❌ Upload interrupted"));
+                client.stop();
+                return false;
+            }
+        }
+        left -= len;
+    }
+
+    unsigned long t = millis();
+    while (client.connected() && !client.available() && millis() - t < 15000) delay(10);
+    String status = client.readStringUntil('\n');
+    status.trim();
+    Serial.printf("[CLIP] Server answered: %s\n", status.c_str());
+    client.stop();
+    return status.indexOf(" 200") > 0;
+}
+
+void recordAndUploadClip() {
+    if (!g_soundOk) {
+        Serial.println(F("[CLIP] Skipped — the hive mic is not working (see [MIC] PROBLEM)"));
+        return;
+    }
+
+    // Grab memory in 0.5 s blocks (small blocks are easy to find next to Wi-Fi/TLS)
+    uint8_t* chunks[CLIP_MAX_CHUNKS] = { nullptr };
+    int n = 0;
+    while (n < CLIP_MAX_CHUNKS && (chunks[n] = (uint8_t*)malloc(CLIP_CHUNK_BYTES)) != nullptr) n++;
+    if (n < 2) {
+        Serial.printf("[CLIP] ❌ Not enough memory for a clip (free: %u bytes)\n", ESP.getFreeHeap());
+        for (int i = 0; i < n; i++) free(chunks[i]);
+        return;
+    }
+    const uint32_t total = (uint32_t)n * CLIP_CHUNK_BYTES;
+
+    showBootScreen("Hive mic", "Recording clip...");
+    Serial.printf("[CLIP] Recording %.1f s from the hive mic...\n", total / (float)CLIP_SAMPLE_RATE);
+
+    // Sample at CLIP_SAMPLE_RATE, centred on the mic's own resting level, 12-bit → 8-bit
+    const int rest = (int)g_micRest;
+    long sum = 0;
+    uint32_t t0 = micros();
+    for (uint32_t i = 0; i < total; i++) {
+        uint32_t due = t0 + (uint32_t)(((uint64_t)i * 1000000ULL) / CLIP_SAMPLE_RATE);
+        while ((int32_t)(micros() - due) < 0) { }
+        int v = (analogRead(MIC_PIN) - rest) / 16 + 128;
+        v = constrain(v, 0, 255);
+        chunks[i / CLIP_CHUNK_BYTES][i % CLIP_CHUNK_BYTES] = (uint8_t)v;
+        sum += v;
+    }
+    uint32_t durUs = micros() - t0;
+    // If analogRead couldn't keep up, store the rate actually achieved; the server resamples.
+    uint32_t rate = (uint32_t)((uint64_t)total * 1000000ULL / durUs);
+
+    // Remove any leftover offset so the clip is centred exactly
+    int shift = 128 - (int)(sum / (long)total);
+    if (shift != 0) {
+        for (uint32_t i = 0; i < total; i++) {
+            uint8_t* p = &chunks[i / CLIP_CHUNK_BYTES][i % CLIP_CHUNK_BYTES];
+            *p = (uint8_t)constrain((int)*p + shift, 0, 255);
+        }
+    }
+    Serial.printf("[CLIP] Recorded %u samples in %.2f s (rate %u Hz). Uploading...\n", total, durUs / 1e6, rate);
+
+    showBootScreen("Hive mic", "Sending clip...");
+    bool ok = uploadClip(chunks, n, total, rate);
+    Serial.println(ok ? F("[CLIP] ✅ Clip uploaded — the laptop will check it")
+                      : F("[CLIP] ❌ Clip upload failed — will try again next time"));
+    for (int i = 0; i < n; i++) free(chunks[i]);
 }

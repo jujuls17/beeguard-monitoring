@@ -78,13 +78,29 @@ $alertMessages = [
 
 if (isset($alertMessages[$status])) {
     [$severity, $msg, $action] = $alertMessages[$status];
-    $alertStmt = $conn->prepare(
-        "INSERT INTO alerts (hive_id, alert_type, severity, message, recommended_action)
-         VALUES (?, 'colony_status', ?, ?, ?)"
+    // The hive mic now sends a clip every few minutes. Only raise a new alert when the
+    // finding changes; repeating the same finding must not flood the Alerts page.
+    $chk = $conn->prepare(
+        "SELECT id FROM alerts WHERE hive_id = ? AND alert_type = 'colony_status' AND is_read = 0 AND message = ? LIMIT 1"
     );
-    $alertStmt->bind_param("isss", $hiveId, $severity, $msg, $action);
-    $alertStmt->execute();
-    $alertStmt->close();
+    $chk->bind_param("is", $hiveId, $msg);
+    $chk->execute();
+    $alreadyOpen = $chk->get_result()->num_rows > 0;
+    $chk->close();
+    if (!$alreadyOpen) {
+        // A different colony finding replaces the older one
+        $conn->query(
+            "UPDATE alerts SET is_read = 1
+             WHERE hive_id = {$hiveId} AND alert_type = 'colony_status' AND is_read = 0"
+        );
+        $alertStmt = $conn->prepare(
+            "INSERT INTO alerts (hive_id, alert_type, severity, message, recommended_action)
+             VALUES (?, 'colony_status', ?, ?, ?)"
+        );
+        $alertStmt->bind_param("isss", $hiveId, $severity, $msg, $action);
+        $alertStmt->execute();
+        $alertStmt->close();
+    }
 } elseif ($status === 'normal') {
     // Auto-dismiss colony_status alerts when CNN reports normal
     $conn->query(
