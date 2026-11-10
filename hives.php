@@ -142,6 +142,13 @@ foreach ($hives as $_hive) {
         @media (max-width: 480px) {
             .modal-content > div:not(:first-child) { padding: 12px 14px !important; }
         }
+        /* Live updates: a value that just changed glows briefly; the header dot pulses */
+        @keyframes valFlash { 0% { background: rgba(250,204,21,.55); } 100% { background: transparent; } }
+        .val-changed { animation: valFlash 1.6s ease-out; border-radius: 4px; }
+        .live-dot { width: 7px; height: 7px; border-radius: 50%; background: currentColor; display: inline-block; }
+        #live-indicator[data-state="ok"] .live-dot { animation: livePulse 1.6s ease-in-out infinite; }
+        @keyframes livePulse { 0%,100% { opacity: 1; } 50% { opacity: .25; } }
+        @media (prefers-reduced-motion: reduce) { .val-changed, #live-indicator .live-dot { animation: none !important; } }
     </style>
 </head>
 <body class="bg-gray-50">
@@ -156,7 +163,12 @@ foreach ($hives as $_hive) {
                 </span>
                 Live Hives Monitor
             </h1>
-            <p class="text-gray-500 text-xs mt-0.5">Real-time sensor readings from all connected hives</p>
+            <div class="flex flex-wrap items-center gap-2 mt-1">
+                <p class="text-gray-500 text-xs">Real-time sensor readings from all connected hives</p>
+                <span id="live-indicator" data-state="ok" class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-xs font-semibold" style="background:#dcfce7;color:#15803d;" title="The hive cards check for new readings every 5 seconds. Each hive box sends new readings every 15 seconds. No need to reload the page.">
+                    <span class="live-dot"></span><span id="live-indicator-text">Live · page updates by itself</span>
+                </span>
+            </div>
         </div>
         <div class="p-4 sm:p-6">
             <!-- Hive Summary Stats -->
@@ -175,8 +187,8 @@ foreach ($hives as $_hive) {
                         <i class="fas fa-check-circle text-green-500 text-xs"></i>
                     </div>
                     <div>
-                        <p class="text-xl font-bold text-green-600"><?php echo $normalCount; ?></p>
-                        <p class="text-xs text-gray-400">Normal</p>
+                        <p class="text-xl font-bold text-green-600" id="summary-ok-count"><?php echo $normalCount; ?></p>
+                        <p class="text-xs text-gray-400" title="Hives with no warning or critical reading right now">No issues</p>
                     </div>
                 </div>
                 <div class="bg-white rounded-xl p-3 flex items-center gap-3 border border-gray-100">
@@ -184,7 +196,7 @@ foreach ($hives as $_hive) {
                         <i class="fas fa-exclamation-triangle text-red-400 text-xs"></i>
                     </div>
                     <div>
-                        <p class="text-xl font-bold text-red-500"><?php echo $warnCount; ?></p>
+                        <p class="text-xl font-bold text-red-500" id="summary-attention-count"><?php echo $warnCount; ?></p>
                         <p class="text-xs text-gray-400">Need Attention</p>
                     </div>
                 </div>
@@ -290,7 +302,7 @@ foreach ($hives as $_hive) {
                                     <!-- CO₂ -->
                                     <div class="rounded-xl p-2.5" id="tile-co2-<?php echo $hive['id']; ?>" style="background:<?php echo $cBg; ?>;">
                                         <p class="text-xs font-bold mb-0.5" id="tile-label-co2-<?php echo $hive['id']; ?>" style="color:<?php echo $cLc; ?>;">CO₂</p>
-                                        <p class="font-black leading-tight" style="font-size:15px;color:<?php echo $cVc; ?>;" id="co2-<?php echo $hive['id']; ?>"><?php echo $sensor['co2']; ?>ppm</p>
+                                        <p class="font-black leading-tight" style="font-size:15px;color:<?php echo $cVc; ?>;" id="co2-<?php echo $hive['id']; ?>"><?php echo ($sensor['co2'] !== null && (int)$sensor['co2'] > 0) ? (int)$sensor['co2'] . 'ppm' : 'No reading'; ?></p>
                                         <div style="height:42px;position:relative;margin-top:3px;">
                                             <canvas id="chart-co2-<?php echo $hive['id']; ?>"></canvas>
                                         </div>
@@ -402,7 +414,8 @@ foreach ($hives as $_hive) {
                                     <?php
                                     $tOk = $sensor['temperature'] >= 33 && $sensor['temperature'] <= 36;
                                     $hOk = $sensor['humidity'] >= 40 && $sensor['humidity'] <= 95;
-                                    $cOk = $sensor['co2'] <= 4000;
+                                    $cHas = $sensor['co2'] !== null && (int)$sensor['co2'] > 0;   // null/0 = CO₂ sensor sent nothing
+                                    $cOk = !$cHas || $sensor['co2'] <= 4000;
                                     ?>
                                     <div class="sensor-pill text-white" id="modal-pill-temp-<?php echo $hive['id']; ?>" style="background:linear-gradient(135deg,<?php echo $tOk?'#F97316,#EA580C':'#EF4444,#DC2626';?>);box-shadow:0 2px 10px rgba(<?php echo $tOk?'249,115,22':'239,68,68';?>,0.25);">
                                         <span class="text-xs opacity-80 font-medium">Temperature</span>
@@ -422,8 +435,8 @@ foreach ($hives as $_hive) {
                                     </div>
                                     <div class="sensor-pill text-white" id="modal-pill-co2-<?php echo $hive['id']; ?>" style="background:linear-gradient(135deg,<?php echo $cOk?'#8B5CF6,#7C3AED':'#EF4444,#DC2626';?>);box-shadow:0 2px 10px rgba(<?php echo $cOk?'139,92,246':'239,68,68';?>,0.25);">
                                         <span class="text-xs opacity-80 font-medium">CO₂</span>
-                                        <span class="text-xl font-bold" id="modal-co2-<?php echo $hive['id']; ?>"><?php echo $sensor['co2']; ?> <span style="font-size:12px;font-weight:500;">ppm</span></span>
-                                        <span class="text-xs opacity-70" id="modal-co2-status-<?php echo $hive['id']; ?>"><?php echo $cOk?'✓ Good':'⚠ Elevated'; ?></span>
+                                        <span class="text-xl font-bold" id="modal-co2-<?php echo $hive['id']; ?>"><?php echo $cHas ? (int)$sensor['co2'] . ' ppm' : 'No reading'; ?></span>
+                                        <span class="text-xs opacity-70" id="modal-co2-status-<?php echo $hive['id']; ?>"><?php echo !$cHas ? 'CO₂ sensor not sending' : ($cOk?'✓ Good':'⚠ Elevated'); ?></span>
                                         <div style="height:40px;position:relative;margin-top:4px;">
                                             <canvas id="modal-chart-co2-<?php echo $hive['id']; ?>"></canvas>
                                         </div>
@@ -1040,9 +1053,10 @@ foreach ($hives as $_hive) {
         });
     }
 
-    // Initial load + refresh every 60 s (charts don't need 5-second cadence)
+    // Initial load + refresh every 15 s (= how often the ESP32 sends), so the small
+    // trend lines gain their newest point without a page reload
     loadHiveCharts();
-    setInterval(loadHiveCharts, 60000);
+    setInterval(() => { if (!document.querySelector('.modal.active')) loadHiveCharts(); }, 15000);
 
     // ── Toast notification ─────────────────────────────────
     function showToast(msg, type = 'warning') {
@@ -1065,19 +1079,33 @@ foreach ($hives as $_hive) {
     // Override refresh to detect critical changes
     function refreshHiveCards() {
         fetch('api/live_hives.php', {cache: 'no-store'})
-            .then(r => r.json())
+            .then(r => {
+                // A logged-out session gets redirected to the login page (HTML, not JSON)
+                if (!r.ok) throw new Error('http ' + r.status);
+                if (r.redirected || !(r.headers.get('content-type') || '').includes('json')) throw new Error('signed-out');
+                return r.json();
+            })
             .then(data => {
-                if (!data.success) return;
+                if (!data.success) throw new Error('bad response');
+                setLiveState('ok');
                 let newCrit = 0;
                 data.hives.forEach(h => {
                     if (h.issues > 0) newCrit++;
                     const id = h.id;
                     if (!h.sensor) return;
                     const s = h.sensor;
-                    const set = (elId, val) => { const el = document.getElementById(elId); if (el) el.textContent = val; };
+                    // Write the value and briefly highlight it when it changed, so people can see it is live
+                    const set = (elId, val) => {
+                        const el = document.getElementById(elId);
+                        if (!el) return;
+                        if (el.textContent !== String(val)) {
+                            el.textContent = val;
+                            el.classList.remove('val-changed'); void el.offsetWidth; el.classList.add('val-changed');
+                        }
+                    };
                     set(`temp-${id}`, s.temperature + '°C');
                     set(`humid-${id}`, s.humidity + '%');
-                    set(`co2-${id}`, s.co2 + 'ppm');
+                    set(`co2-${id}`, s.co2 === null ? 'No reading' : s.co2 + 'ppm');
                     const timeEl = document.getElementById(`time-${id}`);
                     if (s.age_sec !== undefined) setAgeLabel(timeEl, s.age_sec, 'Sensors updated ');
                     if (timeEl) timeEl.style.color = h.is_online ? '' : '#dc2626';   // red = no new reading for 2+ min
@@ -1089,7 +1117,8 @@ foreach ($hives as $_hive) {
                     // Update modal sensor pills too
                     const tVal = parseFloat(s.temperature);
                     const hVal = parseFloat(s.humidity);
-                    const cVal = parseInt(s.co2);
+                    const cHas = s.co2 !== null;
+                    const cVal = cHas ? parseInt(s.co2) : 0;
                     const tOk  = tVal >= 33 && tVal <= 36;
                     const hOk  = hVal >= 40 && hVal <= 95;
                     const cOk  = cVal <= 4000;
@@ -1099,10 +1128,10 @@ foreach ($hives as $_hive) {
                     applyTileColor('co2',      cVal, id);
                     set(`modal-temp-${id}`,   s.temperature + '°C');
                     set(`modal-humid-${id}`,  s.humidity + '%');
-                    set(`modal-co2-${id}`,    s.co2 + ' ppm');
+                    set(`modal-co2-${id}`,    cHas ? s.co2 + ' ppm' : 'No reading');
                     set(`modal-temp-status-${id}`,  tOk ? '✓ Optimal (33–36°C)' : (tVal > 38 || tVal < 18 ? '✗ Critical' : '⚠ Off range'));
                     set(`modal-humid-status-${id}`, hOk ? '✓ Normal (40–95%)'   : (hVal > 98 || hVal < 30 ? '✗ Critical' : '⚠ Off range'));
-                    set(`modal-co2-status-${id}`,   cOk ? '✓ Good (≤4000 ppm)'  : (cVal > 6000            ? '✗ Critical' : '⚠ Elevated'));
+                    set(`modal-co2-status-${id}`,   !cHas ? 'CO₂ sensor not sending' : (cOk ? '✓ Good (≤4000 ppm)' : (cVal > 6000 ? '✗ Critical' : '⚠ Elevated')));
                     const pillT = document.getElementById(`modal-pill-temp-${id}`);
                     if (pillT) pillT.style.background = `linear-gradient(135deg,${tOk?'#F97316,#EA580C':(tVal > 38||tVal < 18?'#EF4444,#DC2626':'#F97316,#EA580C')})`;
                     const pillH = document.getElementById(`modal-pill-humid-${id}`);
@@ -1197,13 +1226,51 @@ foreach ($hives as $_hive) {
                         if (onlineBadgeText) onlineBadgeText.textContent = isOnline ? 'Online' : 'Offline';
                     }
                 });
+                // Summary row at the top updates too (it used to change only on reload)
+                const okEl = document.getElementById('summary-ok-count');
+                const attEl = document.getElementById('summary-attention-count');
+                if (okEl)  okEl.textContent  = data.hives.length - newCrit;
+                if (attEl) attEl.textContent = newCrit;
                 if (newCrit > _prevCritCount) {
                     showToast(`⚠ ${newCrit - _prevCritCount} new hive issue(s) detected!`, 'critical');
                 }
                 _prevCritCount = newCrit;
             })
-            .catch(() => {});
+            .catch(err => {
+                console.error('[BeeGuard] live update failed:', err);
+                setLiveState(err && err.message === 'signed-out' ? 'signed-out' : 'error');
+            });
     }
+
+    // ── "Live" indicator in the page header ────────────────────
+    // Shows that the page is updating by itself, when it last got new data,
+    // and says so plainly if updates stop (no connection, or signed out).
+    let _lastLiveOk = Date.now();
+    let _liveState  = 'ok';
+    function setLiveState(state) {
+        _liveState = state;
+        if (state === 'ok') _lastLiveOk = Date.now();
+        renderLiveIndicator();
+    }
+    function renderLiveIndicator() {
+        const box = document.getElementById('live-indicator');
+        const txt = document.getElementById('live-indicator-text');
+        if (!box || !txt) return;
+        let state = _liveState;
+        if (state === 'ok' && document.querySelector('.modal.active')) state = 'paused';
+        const ago = fmtAgo((Date.now() - _lastLiveOk) / 1000);
+        const look = {
+            'ok':         ['#dcfce7', '#15803d', 'Live · page updates by itself · checked ' + ago],
+            'paused':     ['#fef9c3', '#a16207', 'Paused while a hive window is open'],
+            'error':      ['#fee2e2', '#b91c1c', "Can't reach the server · retrying · last update " + ago],
+            'signed-out': ['#fee2e2', '#b91c1c', 'Signed out · reload the page to log in again'],
+        }[state];
+        box.style.background = look[0];
+        box.style.color      = look[1];
+        box.dataset.state    = state;
+        txt.textContent      = look[2];
+    }
+    setInterval(renderLiveIndicator, 1000);
     // ── Camera start / stop — per hive ──────────────────────
     function startCamera(e, hiveId) {
         e.stopPropagation();

@@ -4,6 +4,14 @@ The version number is in `version.php` and shows in the sidebar (under "IoT Moni
 **Every update:** bump the number in `version.php`, add a section here, then push.
 If the sidebar on the hosted site shows an older number than this file, the server is not running the latest push.
 
+## v1.3 — 2026-11-11
+- Live Hives: "Live · page updates by itself · checked 3 sec ago" indicator in the page header. It turns yellow while a hive window is open (updates paused), and red with a plain message if updates stop ("Can't reach the server" / "Signed out · reload the page"). Before, a failed update was silent and the page just looked frozen.
+- Live Hives: a reading that changes glows briefly, so you can see it update without reloading.
+- Live Hives: the summary counts at the top now update live. "Normal" renamed to "No issues", so it isn't confused with the colony check's "Colony sounds normal".
+- Live Hives: small trend lines refresh every 15 s (was 60 s).
+- CO₂: a hive whose CO₂ sensor sends nothing now shows "No reading" / "CO₂ sensor not sending" instead of "0 ppm".
+- ESP32 firmware v1.2: version shown on the OLED ("BeeGuard v1.2") and the Serial Monitor. A mic resting at 0 or at full scale is reported as a wiring problem and sends no sound/pitch instead of a fake value. **Re-flash both boards.**
+
 ## v1.2 — 2026-11-11
 - Fix: hive cards never updated without a page reload. The live update request (`api/live_hives.php`) crashed on every call because a required file was not loaded. Cards now really update every 5 s.
 - ESP32 firmware: the microphone now measures its own resting level instead of assuming a fixed value. Before, a board whose mic rested at a different level read a false 50 Hz and a raised sound %. When the hive is too quiet to measure, the pitch shows "— Hz". **Re-flash both ESP32 boards.**

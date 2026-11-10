@@ -26,6 +26,10 @@
 #include <Wire.h>
 #include "config.h"
 
+// Firmware version — shown on the OLED boot screen, the OLED header and the Serial Monitor,
+// so you can tell whether a board actually has the latest code flashed.
+#define FIRMWARE_VERSION "1.2"
+
 // ── OLED: 1.3" SH1106 128x64 via I2C ────────────────────────
 // If screen is blank after flashing, swap to the SSD1306 line:
 U8G2_SH1106_128X64_NONAME_F_HW_I2C  u8g2(U8G2_R0, U8X8_PIN_NONE);
@@ -63,6 +67,7 @@ void setup() {
 
     Serial.println(F("\n========================================"));
     Serial.println(F("       BeeGuard IoT - ESP32 Node"));
+    Serial.println(F("       Firmware v" FIRMWARE_VERSION));
     Serial.println(F("========================================"));
 
     printPinConfig();
@@ -74,7 +79,7 @@ void setup() {
     connectWiFi();
     fetchServerConfig();
 
-    showBootScreen("BeeGuard IoT", "System Ready!");
+    showBootScreen("BeeGuard IoT", "Ready! FW v" FIRMWARE_VERSION);
     delay(1000);
 }
 
@@ -163,7 +168,7 @@ void updateOLED() {
 
     // --- Header ---
     u8g2.setFont(u8g2_font_5x7_tr);
-    u8g2.drawStr(0, 8, "BeeGuard");
+    u8g2.drawStr(0, 8, "BeeGuard v" FIRMWARE_VERSION);
     u8g2.drawStr(g_wifiOk ? 80 : 78, 8, g_wifiOk ? "WiFi:OK" : "No WiFi");
     u8g2.drawHLine(0, 10, 128);
 
@@ -368,8 +373,16 @@ void readMicrophone(float &soundLevel, float &dominantFreq) {
         sumSq  += (double)d * d;
     }
     float rms  = sqrt(sumSq / MIC_FREQ_SAMPLES);
-    g_soundOk  = mean > 10;   // pin stuck near 0 → mic not powered / disconnected
-    soundLevel = constrain(rms / MIC_RMS_MAX * 100.0f, 0, 100);
+    // A powered MAX4466 rests near the middle of the range (~1500–2300 on 3.3 V).
+    // Resting near 0 or near 4095 means it is not powered, not connected, or wired wrong.
+    g_soundOk  = mean > 100 && mean < 3995;
+    soundLevel = g_soundOk ? constrain(rms / MIC_RMS_MAX * 100.0f, 0, 100) : 0;
+    if (!g_soundOk) {
+        dominantFreq = 0;
+        Serial.printf("[MIC] PROBLEM: rest level %.0f is at the edge of the range — check the MAX4466 power, GND and OUT wire (GPIO %d)\n",
+                      mean, MIC_PIN);
+        return;
+    }
 
     // Dominant frequency: count full cycles around the resting level, with a small
     // dead band (hysteresis) so ADC noise is not counted as sound.
@@ -386,8 +399,8 @@ void readMicrophone(float &soundLevel, float &dominantFreq) {
         dominantFreq = constrain(cycles / dur, 50, 800);
     }
 
-    Serial.printf("[MIC] Rest level: %.0f (old code assumed %d) | RMS: %.1f → Sound: %.1f%% | Pitch: %.0f Hz\n",
-                  mean, MIC_BASELINE, rms, soundLevel, dominantFreq);
+    Serial.printf("[MIC] FW v" FIRMWARE_VERSION " | Rest level: %.0f (healthy ~1500-2300) | RMS: %.1f -> Sound: %.1f%% | Pitch: %.0f Hz\n",
+                  mean, rms, soundLevel, dominantFreq);
 }
 
 // =============================================================

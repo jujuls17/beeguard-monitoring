@@ -56,7 +56,8 @@ foreach ($hives as $hive) {
         'sensor'      => $sensor ? [
             'temperature' => number_format((float)$sensor['temperature'], 1),
             'humidity'    => number_format((float)$sensor['humidity'], 1),
-            'co2'         => (int)$sensor['co2'],
+            // null = the CO₂ sensor sent nothing (stored as NULL); don't show it as "0 ppm"
+            'co2'         => ($sensor['co2'] !== null && (int)$sensor['co2'] > 0) ? (int)$sensor['co2'] : null,
             'elapsed'     => time_elapsed_string($sensor['timestamp']),
             'age_sec'     => $sensorAgeSec,
         ] : null,
