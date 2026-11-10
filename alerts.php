@@ -519,7 +519,7 @@ while ($tr = $typesRes->fetch_assoc()) {
             .catch(()=>alert('Network error.'));
         };
         if (typeof adminDelete === 'function') {
-            adminDelete('Dismiss all ' + cards.length + ' active alert(s)?', doAction);
+            adminDelete('Dismiss all ' + cards.length + ' active alert(s)?', doAction, 'Dismiss All');
         } else {
             if (confirm('Dismiss all '+cards.length+' active alert(s)?')) doAction();
         }
