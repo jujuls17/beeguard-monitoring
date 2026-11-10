@@ -452,11 +452,6 @@ foreach ($hives as $_hive) {
                                                 </span>
                                                 <div class="flex items-center gap-2">
                                                     <span id="modal-cam-time-<?php echo $hive['id']; ?>" style="font-size:11px;color:rgba(255,255,255,0.6);"></span>
-                                                    <button onclick="stopCamera(event, <?php echo $hive['id']; ?>)"
-                                                            id="btn-stop-cam-<?php echo $hive['id']; ?>"
-                                                            style="background:rgba(239,68,68,0.85);color:#fff;border:none;border-radius:6px;padding:3px 9px;font-size:10px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:4px;">
-                                                        <i class="fas fa-stop"></i> Stop
-                                                    </button>
                                                 </div>
                                             </div>
                                         </div>
