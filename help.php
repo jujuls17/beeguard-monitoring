@@ -202,7 +202,7 @@ checkAuth();
                         </span>
                         <h4 class="font-semibold text-gray-800">Sound / Colony Status (MAX4466 · GPIO 35 + CNN)</h4>
                     </div>
-                    <p class="text-xs text-gray-400 mb-3">The ESP32 reports raw <strong>sound level (0–100%)</strong> and <strong>dominant frequency (Hz)</strong>. Colony status (normal/queenless/swarming) is classified by uploading a WAV recording to the CNN model — it is <em>not</em> inferred automatically from the live level.</p>
+                    <p class="text-xs text-gray-400 mb-3">The ESP32 reports raw <strong>sound level (0–100%)</strong> and <strong>dominant frequency (Hz)</strong>. On the Live Hives page, the colony status is based on the live dominant frequency: Normal &lt;450 Hz · Queenless 450–600 Hz · Swarming &gt;600 Hz.</p>
                     <div class="overflow-x-auto">
                         <table class="w-full text-sm border-collapse">
                             <thead>
@@ -251,7 +251,7 @@ checkAuth();
                         ['ppm (parts per million)', 'The unit for CO₂. 1,000 ppm means 1,000 parts of CO₂ in every million parts of air. Outdoor air is about 400 ppm. BeeGuard warns above <b>4,000 ppm</b> and marks it critical above <b>6,000 ppm</b>. These CO₂ numbers are estimates from a low-cost sensor, so use them to spot trends rather than as exact values.'],
                         ['Hive sound level (%)', 'How loud the hive is right now, from 0% (silent) to 100% (very loud), measured by the microphone inside the hive.'],
                         ['Hz (hertz)', 'How many times something vibrates each second. Bees buzz by beating their wings, and that hum has a pitch measured in Hz. A higher number means a higher-pitched hum.'],
-                        ['Buzz pitch', 'The main pitch of the hive hum, in Hz, heard by the hive microphone. It is shown as a live reading only. It does not decide the colony status. If it shows "— Hz", the hive was too quiet to measure a pitch.'],
+                        ['Buzz pitch', 'The main pitch of the hive hum, in Hz, heard by the hive microphone. The colony status is based on it: <b>Normal</b> below 450 Hz, <b>Queenless</b> 450–600 Hz, <b>Swarming</b> above 600 Hz. If it shows "— Hz", the hive was too quiet to measure a pitch.'],
                     ]],
                     ['The hardware in the hive', 'fa-microchip', 'text-blue-500', [
                         ['ESP32', 'The small computer board in each hive box. It reads all the sensors and sends the readings to this website over Wi-Fi every <b>15 seconds</b>.'],
@@ -265,7 +265,7 @@ checkAuth();
                         ['AI model', 'A computer program that learned to recognise patterns from many examples. BeeGuard uses two: one listens to hive sound recordings, and one looks at the camera picture.'],
                         ['CNN (sound AI)', 'The AI that listens to a <b>sound recording</b> of a hive and decides if the colony sounds normal, queenless or about to swarm. It learned from labelled hive recordings.'],
                         ['Sound recording', 'A 5-second audio clip recorded by the hive mic about every 2 minutes and sent to BeeGuard. The colony check listens to these clips. The clip is checked a little after it is recorded, so the colony check can be a minute or two older than the live readings.'],
-                        ['Colony check', 'The CNN result for a hive: <b>Colony sounds normal</b>, <b>Signs of swarming</b>, or <b>Signs of a missing queen</b>. "Waiting for the first recording from the hive mic" means no clip from that hive has been checked yet. If it stays that way, make sure the hive node is on and the BeeGuard computer is running the colony check.'],
+                        ['Colony status', 'What the hive sound says about the colony, based on the buzz pitch: <b>Colony sounds normal</b> (below 450 Hz), <b>Signs of a missing queen</b> (450–600 Hz), or <b>Signs of swarming</b> (above 600 Hz). "No buzz pitch reading yet" means the hive was too quiet to measure a pitch or the hive mic is not sending.'],
                         ['Queenless', 'The colony has lost its queen. Without her no new eggs are laid, so look for eggs, young larvae or queen cells.'],
                         ['Swarming', 'Part of the colony is getting ready to leave with the old queen to start a new nest. Look for capped queen cells.'],
                         ['YOLO (camera AI)', 'The AI that looks at the camera picture and draws a box around each insect it finds: green for bees, red for other insects such as wasps or hornets.'],

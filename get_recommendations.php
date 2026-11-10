@@ -156,14 +156,18 @@ function getHiveRecommendations($sensor_data, $audio_analysis) {
     if ($audio_analysis) {
         $status = $audio_analysis['colony_status'];
         $confidence = $audio_analysis['confidence'];
-        
+        $fromPitch  = ($audio_analysis['source'] ?? '') === 'pitch';
+        $pitchHz    = $audio_analysis['freq'] ?? 0;
+
         switch ($status) {
             case 'queenless':
                 $recommendations[] = [
                     'type' => 'critical',
                     'icon' => 'fa-crown',
                     'title' => 'QUEENLESS COLONY DETECTED',
-                    'message' => "Audio analysis shows queenless behavior ({$confidence}% confidence)",
+                    'message' => $fromPitch
+                        ? "Buzz pitch is {$pitchHz} Hz, in the queenless range (450–600 Hz)"
+                        : "Audio analysis shows queenless behavior ({$confidence}% confidence)",
                     'actions' => [
                         'URGENT: Verify by visual inspection within 24 hours',
                         'Look for eggs and young larvae (confirms queen present)',
@@ -181,7 +185,9 @@ function getHiveRecommendations($sensor_data, $audio_analysis) {
                     'type' => 'warning',
                     'icon' => 'fa-exclamation-triangle',
                     'title' => 'Swarming Preparation Detected',
-                    'message' => "Colony showing pre-swarm behavior ({$confidence}% confidence)",
+                    'message' => $fromPitch
+                        ? "Buzz pitch is {$pitchHz} Hz, in the swarming range (above 600 Hz)"
+                        : "Colony showing pre-swarm behavior ({$confidence}% confidence)",
                     'actions' => [
                         'Inspect for queen cells within 48 hours',
                         'Add honey super to give bees more space',

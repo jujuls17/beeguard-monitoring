@@ -4,6 +4,13 @@ The version number is in `version.php` and shows in the sidebar (under "IoT Moni
 **Every update:** bump the number in `version.php`, add a section here, then push.
 If the sidebar on the hosted site shows an older number than this file, the server is not running the latest push.
 
+## v1.5 — 2026-11-11
+- **Colony status on Live Hives is based on the buzz pitch (Hz) again**, as before: Normal below 450 Hz · Queenless 450–600 Hz · Swarming above 600 Hz. It follows the live hive mic reading and updates every 5 s with the other readings. The guide is shown under the status on each card and in the hive window.
+- Hive cards, hive window, summary counts and recommendations all use the same Hz rule. With no pitch reading (hive too quiet or mic not sending) the card shows "No buzz pitch reading yet".
+- Help page updated to the Hz ranges.
+- The v1.4 mic-clip / CNN pipeline is still in the code but no longer decides the colony status on Live Hives; `cnn_worker.py` does not need to run.
+- No database change.
+
 ## v1.4 — 2026-11-11
 - **Colony check now listens to the hive mic.** Each ESP32 records a 5-second clip from its MAX4466 mic (22,050 Hz) about every 2 minutes, with the first one 20 s after it starts, and uploads it to `api/upload_hive_clip.php`. The site keeps the newest 5 clips per hive in `uploads/hive_clips/`, which cannot be opened from a browser.
 - New `cnn_worker.py` (runs on the BeeGuard laptop next to `camera_capture.py`). It fetches new clips through `api/hive_clips.php`, runs the CNN locally, sends the result to `api/update_colony_status.php`, then removes the clip from the site. It keeps a local copy in `ml/data/hive_mic_clips/` and skips silent clips (mic not hearing anything).

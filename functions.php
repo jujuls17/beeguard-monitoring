@@ -93,6 +93,23 @@ function classifyColonyByFreq($freq) {
     return 'normal';
 }
 
+// Colony status for the Live Hives page, from the hive mic's live buzz pitch (Hz).
+// Ranges: Normal < 450 Hz · Queenless 450–600 Hz · Swarming > 600 Hz.
+// Returns a row shaped like audio_analysis so the cards/recommendations can use it.
+// null = no pitch reading yet (no sensor data, or the hive was too quiet / mic problem).
+function getColonyFromPitch($sensor) {
+    if (!$sensor) return null;
+    $f = (float)($sensor['dominant_freq'] ?? 0);
+    if ($f <= 0) return null;
+    return [
+        'colony_status' => classifyColonyByFreq($f),
+        'timestamp'     => $sensor['timestamp'],
+        'confidence'    => null,
+        'source'        => 'pitch',
+        'freq'          => round($f),
+    ];
+}
+
 function getLatestAudioAnalysis($conn, $hive_id) {
     $sql = "SELECT * FROM audio_analysis WHERE hive_id = ? ORDER BY timestamp DESC LIMIT 1";
     $stmt = $conn->prepare($sql);

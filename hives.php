@@ -38,8 +38,8 @@ function sensorTileStyle($type, $value) {
 foreach ($hives as $_hive) {
     $_sensor = getLatestSensorData($conn, $_hive['id']);
     if (!$_sensor) { $noDataCount++; continue; }
-    // Colony status from CNN only
-    $_audio = getLatestAudioAnalysis($conn, $_hive['id']);
+    // Colony status from the live buzz pitch (Hz)
+    $_audio = getColonyFromPitch($_sensor);
     $_recs = getHiveRecommendations($_sensor, $_audio);
     $_hasCritical = false; $_hasWarnings = false;
     foreach ($_recs as $_r) {
@@ -221,8 +221,8 @@ foreach ($hives as $_hive) {
                 <?php foreach ($hives as $hive): ?>
                     <?php
                         $sensor = getLatestSensorData($conn, $hive['id']);
-                        // Colony status from CNN only
-                        $audio  = getLatestAudioAnalysis($conn, $hive['id']);
+                        // Colony status from the live buzz pitch (Hz): <450 normal · 450–600 queenless · >600 swarming
+                        $audio  = getColonyFromPitch($sensor);
                         $badge  = $audio ? getHiveStatusBadge($audio['colony_status']) : null;
                         $recommendations = getHiveRecommendations($sensor, $audio);
                         $hasWarnings = false;
@@ -314,7 +314,7 @@ foreach ($hives as $_hive) {
                                     $freqDisplay = $sensor && $sensor['dominant_freq']
                                         ? round($sensor['dominant_freq']) . ' Hz' . ($sensorLive ? '' : ' (old reading)')
                                         : '— Hz';
-                                    // Colony check — latest CNN result on a 5 s clip recorded by the hive mic (cnn_worker.py)
+                                    // Colony status — from the live buzz pitch (Hz) of the hive mic
                                     $colonyMap = [
                                         'normal'    => ['🟢', 'Colony sounds normal',     '#16a34a', '#dcfce7'],
                                         'swarming'  => ['🟠', 'Signs of swarming',        '#c2410c', '#ffedd5'],
@@ -327,7 +327,7 @@ foreach ($hives as $_hive) {
                                         $cnnTime = (date('Y-m-d', $cnnTs) === date('Y-m-d')) ? date('H:i', $cnnTs) : date('M d, H:i', $cnnTs);
                                         $cnnAge  = max(0, time() - $cnnTs);
                                     } else {
-                                        $c = ['⚪', 'Waiting for the first recording from the hive mic', '#6b7280', '#f3f4f6'];
+                                        $c = ['⚪', 'No buzz pitch reading yet', '#6b7280', '#f3f4f6'];
                                     }
                                 ?>
                                 <!-- Live hive sound — straight from the microphone inside the hive (ESP32) -->
@@ -339,7 +339,7 @@ foreach ($hives as $_hive) {
                                     <div class="h-2 bg-gray-200 rounded-full overflow-hidden mb-2">
                                         <div class="h-full bg-yellow-500" id="sound-bar-<?php echo $hive['id']; ?>" style="width:<?php echo round($sensor['sound_level'] ?? 0); ?>%"></div>
                                     </div>
-                                    <p class="text-xs text-gray-500" title="Dominant frequency measured by the hive microphone. Shown as a reading only; it is not used for the colony check.">
+                                    <p class="text-xs text-gray-500" title="Main pitch of the hive hum, measured by the hive microphone. The colony status is based on it.">
                                         Buzz pitch: <span id="colony-freq-<?php echo $hive['id']; ?>" class="font-mono text-gray-700"><?php echo $freqDisplay; ?></span>
                                     </p>
                                 </div>
@@ -347,16 +347,16 @@ foreach ($hives as $_hive) {
                                 <div id="colony-conclusion-<?php echo $hive['id']; ?>"
                                      class="px-3 py-2 rounded-lg text-xs mb-3"
                                      style="background:<?php echo $c[3]; ?>;color:<?php echo $c[2]; ?>;"
-                                     title="About every 2 minutes the hive mic records a 5-second clip. The BeeGuard computer checks each clip with the AI model and the result shows here.">
-                                    <p class="font-semibold opacity-70 mb-0.5">Colony check · from a hive mic recording</p>
+                                     title="Based on the buzz pitch: Normal below 450 Hz · Queenless 450–600 Hz · Swarming above 600 Hz">
+                                    <p class="font-semibold opacity-70 mb-0.5">Colony status · from buzz pitch</p>
                                     <p class="flex items-center gap-1.5 font-bold text-sm">
                                         <span id="colony-icon-<?php echo $hive['id']; ?>"><?php echo $c[0]; ?></span>
                                         <span id="colony-text-<?php echo $hive['id']; ?>"><?php echo $c[1]; ?></span>
                                     </p>
                                     <?php if ($audio): ?>
-                                    <p id="colony-cnn-time-<?php echo $hive['id']; ?>" class="opacity-70 mt-0.5" data-age="<?php echo $cnnAge; ?>" data-prefix="Recording checked at <?php echo htmlspecialchars($cnnTime); ?> · ">Recording checked at <?php echo $cnnTime; ?></p>
+                                    <p id="colony-cnn-time-<?php echo $hive['id']; ?>" class="opacity-70 mt-0.5">Normal &lt;450 Hz · Queenless 450–600 · Swarming &gt;600</p>
                                     <?php else: ?>
-                                    <p id="colony-cnn-time-<?php echo $hive['id']; ?>" class="opacity-70 mt-0.5">The hive mic records a 5-second clip every 2 minutes. The result appears here after the BeeGuard computer checks it.</p>
+                                    <p id="colony-cnn-time-<?php echo $hive['id']; ?>" class="opacity-70 mt-0.5">Normal &lt;450 Hz · Queenless 450–600 · Swarming &gt;600</p>
                                     <?php endif; ?>
                                 </div>
                                 <div class="flex justify-between items-center text-xs text-gray-500">
@@ -532,34 +532,34 @@ foreach ($hives as $_hive) {
                                             </div>
                                             <span class="text-xl font-black text-yellow-600" id="modal-sound-val-<?php echo $hive['id']; ?>"><?php echo $sensor ? round($sensor['sound_level'] ?? 0) : 0; ?>%</span>
                                         </div>
-                                        <p class="text-xs text-gray-500 mt-2" title="Dominant frequency measured by the hive microphone. Shown as a reading only; it is not used for the colony check.">
+                                        <p class="text-xs text-gray-500 mt-2" title="Main pitch of the hive hum, measured by the hive microphone. The colony status is based on it.">
                                             <i class="fas fa-wave-square text-yellow-500 mr-1"></i>
                                             Buzz pitch: <strong id="modal-colony-freq-<?php echo $hive['id']; ?>" class="font-mono text-gray-700"><?php echo $sensor && $sensor['dominant_freq'] ? round($sensor['dominant_freq']) . ' Hz' : '— Hz'; ?></strong>
                                         </p>
                                     </div>
                                     <!-- Colony check: latest AI result on a recorded sound clip (not live) -->
                                     <div class="flex-1">
-                                        <p class="text-xs text-gray-500 mb-2 font-semibold">Colony check · from a sound recording</p>
+                                        <p class="text-xs text-gray-500 mb-2 font-semibold">Colony status · from buzz pitch</p>
                                         <?php if ($audio): ?>
                                         <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl text-sm font-bold"
                                               style="background:white;border:1.5px solid #FDE68A;color:#92400E;">
                                             <i class="<?php echo $badge['icon']; ?> text-yellow-600"></i>
                                             <span id="modal-colony-label-<?php echo $hive['id']; ?>"><?php echo $mColonyText[$audio['colony_status']] ?? $badge['text']; ?></span>
                                         </span>
-                                        <p class="text-xs text-gray-400 mt-1" id="modal-colony-cnn-time-<?php echo $hive['id']; ?>" data-age="<?php echo max(0, time() - strtotime($audio['timestamp'])); ?>" data-prefix="Recording checked at <?php echo date('M d, H:i', strtotime($audio['timestamp'])); ?> · ">
-                                            Recording checked at <?php echo date('M d, H:i', strtotime($audio['timestamp'])); ?>
+                                        <p class="text-xs text-gray-400 mt-1" id="modal-colony-cnn-time-<?php echo $hive['id']; ?>" data-age="<?php echo max(0, time() - strtotime($audio['timestamp'])); ?>" data-prefix="Buzz pitch <?php echo (int)$audio['freq']; ?> Hz · ">
+                                            Buzz pitch <?php echo (int)$audio['freq']; ?> Hz
                                         </p>
                                         <?php else: ?>
                                         <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl text-sm font-bold"
                                               style="background:white;border:1.5px solid #e5e7eb;color:#6b7280;">
                                             <i class="fas fa-circle-question text-gray-400"></i>
-                                            <span id="modal-colony-label-<?php echo $hive['id']; ?>">Waiting for the first recording from the hive mic</span>
+                                            <span id="modal-colony-label-<?php echo $hive['id']; ?>">No buzz pitch reading yet</span>
                                         </span>
                                         <p class="text-xs text-gray-400 mt-1" id="modal-colony-cnn-time-<?php echo $hive['id']; ?>">
-                                            The hive mic records a 5-second clip every 2 minutes. The result appears here after the BeeGuard computer checks it.
+                                            The hive was too quiet to measure a pitch, or the hive mic is not sending.
                                         </p>
                                         <?php endif; ?>
-                                        <p class="text-xs text-gray-400 mt-2">The hive mic records a 5-second clip about every 2 minutes. Each clip is checked by the AI model, and this result updates by itself.</p>
+                                        <p class="text-xs text-gray-400 mt-2"><span style="display:inline-block;width:10px;height:4px;background:#F59E0B;border-radius:2px;vertical-align:middle;margin-right:4px;"></span>Normal &lt;450 Hz · Queenless 450–600 · Swarming &gt;600</p>
                                     </div>
                                 </div>
 
@@ -1153,7 +1153,7 @@ foreach ($hives as $_hive) {
                     if (freqEl) freqEl.textContent = freqTxt;
                     if (mFreqEl) mFreqEl.textContent = freqTxt;
 
-                    // Update colony conclusion badge — from CNN result only
+                    // Update colony status badge — from the live buzz pitch (Hz)
                     const conclusionEl   = document.getElementById(`colony-conclusion-${id}`);
                     const conclusionIcon = document.getElementById(`colony-icon-${id}`);
                     const conclusionText = document.getElementById(`colony-text-${id}`);
@@ -1174,8 +1174,9 @@ foreach ($hives as $_hive) {
                         if (mLabel)         mLabel.textContent = c[1];
                         const timeStr = h.badge.cnn_time || '';
                         if (timeStr) {
-                            setAgeLabel(conclusionTime, h.badge.cnn_age_sec, `Recording checked at ${timeStr} · `);
-                            setAgeLabel(mCnnTime,       h.badge.cnn_age_sec, `Recording checked at ${timeStr} · `);
+                            setAgeLabel(conclusionTime, null);
+                            setAgeLabel(mCnnTime,       h.badge.cnn_age_sec, `Buzz pitch ${h.badge.freq} Hz · `);
+                            if (conclusionTime) conclusionTime.textContent = 'Normal <450 Hz · Queenless 450–600 · Swarming >600';
                         } else {
                             setAgeLabel(conclusionTime, null);
                             setAgeLabel(mCnnTime, null);
@@ -1185,13 +1186,13 @@ foreach ($hives as $_hive) {
                     } else {
                         setAgeLabel(conclusionTime, null);   // stop the ticker from overwriting the "no result" text
                         setAgeLabel(mCnnTime, null);
-                        // No CNN result
+                        // No pitch reading
                         if (conclusionEl)   { conclusionEl.style.background = '#f3f4f6'; conclusionEl.style.color = '#6b7280'; }
                         if (conclusionIcon) conclusionIcon.textContent = '⚪';
-                        if (conclusionText) conclusionText.textContent = 'Waiting for the first recording from the hive mic';
-                        if (mLabel)         mLabel.textContent = 'Waiting for the first recording from the hive mic';
-                        if (conclusionTime) conclusionTime.textContent = 'The hive mic records a 5-second clip every 2 minutes. The result appears here after the BeeGuard computer checks it.';
-                        if (mCnnTime)       mCnnTime.textContent = 'The hive mic records a 5-second clip every 2 minutes. The result appears here after the BeeGuard computer checks it.';
+                        if (conclusionText) conclusionText.textContent = 'No buzz pitch reading yet';
+                        if (mLabel)         mLabel.textContent = 'No buzz pitch reading yet';
+                        if (conclusionTime) conclusionTime.textContent = 'Normal <450 Hz · Queenless 450–600 · Swarming >600';
+                        if (mCnnTime)       mCnnTime.textContent = 'The hive was too quiet to measure a pitch, or the hive mic is not sending.';
                     }
                     const badgeEl = document.getElementById(`badge-${id}`);
                     const badgeIcon = document.getElementById(`badge-icon-${id}`);

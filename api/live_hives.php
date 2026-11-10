@@ -19,10 +19,9 @@ $data  = [];
 
 foreach ($hives as $hive) {
     $sensor = getLatestSensorData($conn, $hive['id']);
-    $audio  = getLatestAudioAnalysis($conn, $hive['id']);
-
-    // Colony status comes exclusively from the CNN (audio_analysis table).
-    // If no CNN result exists, badge is null and the UI shows "No CNN result".
+    // Colony status from the live buzz pitch (Hz): <450 normal · 450–600 queenless · >600 swarming.
+    // null when there is no pitch reading; the UI then shows "No buzz pitch reading yet".
+    $audio  = getColonyFromPitch($sensor);
     $badge = $audio ? getHiveStatusBadge($audio['colony_status']) : null;
 
     $recommendations = getHiveRecommendations($sensor, $audio);
@@ -72,6 +71,7 @@ foreach ($hives as $hive) {
             'cnn_time'   => $cnnTimeFormatted,
             'cnn_elapsed'=> $cnnElapsed,
             'cnn_age_sec'=> $cnnAgeSec,
+            'freq'       => $audio['freq'],
         ] : null,
         'issues'      => $issues,
     ];
