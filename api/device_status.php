@@ -59,7 +59,7 @@ if ($result) {
         $sensors = [
             'temperature' => $isOnline && $hasReading && $row['latest_temp']    !== null && (float)$row['latest_temp']    > 0,
             'humidity'    => $isOnline && $hasReading && $row['latest_humidity'] !== null && (float)$row['latest_humidity'] > 0,
-            'co2'         => $isOnline && $hasReading && $row['latest_co2']      !== null && (float)$row['latest_co2']     > 0,
+            'co2'         => $isOnline && $hasReading && $row['latest_co2']      !== null && (float)$row['latest_co2']     >= 0,
             'sound'       => $isOnline && $hasReading && $row['latest_sound']    !== null && (float)$row['latest_sound'] > 0,
             'camera'      => $cameraLive,
         ];
