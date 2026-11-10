@@ -3,6 +3,8 @@ session_start();
 if (isset($_SESSION['user_id'])) { header('Location: dashboard.php'); exit; }
 require_once 'config.php';
 
+if (!isset($_SESSION['login_attempts'])) $_SESSION['login_attempts'] = 0;
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = trim($_POST['username'] ?? '');
     $password = $_POST['password'] ?? '';
@@ -21,6 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($user['account_status'] === 'inactive') {
                 $error = "Your account is inactive. Please contact the administrator.";
             } else {
+                $_SESSION['login_attempts'] = 0;
                 $_SESSION['user_id']   = $user['id'];
                 $_SESSION['username']  = $user['username'];
                 $_SESSION['full_name'] = $user['full_name'] ?? '';
@@ -34,12 +37,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 exit;
             }
         } else {
+            $_SESSION['login_attempts']++;
             $error = "Invalid username or password.";
         }
     } else {
+        $_SESSION['login_attempts']++;
         $error = "Invalid username or password.";
     }
 }
+$showForgot = ($_SESSION['login_attempts'] >= 3);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -197,8 +203,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <?php if (isset($error)): ?>
             <div class="mx-8 mb-4 rounded-xl p-3.5 flex items-center gap-3 shake"
                  style="background:#FFF1F2;border:1px solid #FECDD3;">
-                <i class="fas fa-exclamation-circle text-red-500"></i>
-                <p class="text-sm text-red-700 font-medium"><?php echo htmlspecialchars($error); ?></p>
+                <i class="fas fa-exclamation-circle text-red-500 flex-shrink-0"></i>
+                <div>
+                    <?php if ($showForgot): ?>
+                    <p class="text-sm text-red-700 font-medium">Too many failed attempts. Opening password recovery…</p>
+                    <?php elseif ($_SESSION['login_attempts'] === 2): ?>
+                    <p class="text-sm text-red-700 font-medium"><?php echo htmlspecialchars($error); ?></p>
+                    <p class="text-xs text-red-500 mt-0.5">1 more failed attempt will open password recovery.</p>
+                    <?php else: ?>
+                    <p class="text-sm text-red-700 font-medium"><?php echo htmlspecialchars($error); ?></p>
+                    <?php endif; ?>
+                </div>
             </div>
             <?php endif; ?>
 
@@ -388,6 +403,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         btn.disabled = true;
         txt.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing in...';
     });
+
+    <?php if ($showForgot): ?>
+    // 3rd failed attempt — auto-open Forgot Password
+    window.addEventListener('DOMContentLoaded', function() {
+        setTimeout(openForgotModal, 400);
+        // Pre-fill username if it was entered
+        setTimeout(function() {
+            const u = document.getElementById('forgotUsername');
+            const entered = document.querySelector('input[name="username"]');
+            if (u && entered && entered.value) u.value = entered.value;
+        }, 500);
+    });
+    <?php endif; ?>
 
     let forgotAttempts = 0;
     let forgotResetUrl = '';
