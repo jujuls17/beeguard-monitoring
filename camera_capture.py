@@ -422,10 +422,10 @@ def pick_usb(found):
     if not found: return None
     if len(found) == 1:
         return found[0]
-    # Prefer highest index — Windows assigns higher indices to externally-plugged USB cameras
-    usb = sorted([i for i in found if i > 0], reverse=True)
-    chosen = usb[0] if usb else found[-1]
-    print(f"[CAM] Available={found} | Selected USB webcam=index {chosen} ✅")
+    # Prefer USB cameras (index > 0) — index 0 is usually the built-in laptop camera
+    usb = sorted([i for i in found if i > 0], reverse=False)  # lowest USB first
+    chosen = usb[0] if usb else found[0]
+    print(f"[CAM] Available={found} | Skipping built-in (index 0) | Selected USB={chosen} ✅")
     return chosen
 
 
