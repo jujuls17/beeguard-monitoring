@@ -338,35 +338,56 @@ int readCO2() {
 // =============================================================
 //  MICROPHONE READING (MAX4466)
 // =============================================================
+// Signal swing (ADC counts) below which the mic is treated as "no clear sound".
+// ESP32 ADC noise is roughly ±10–20 counts.
+#ifndef MIC_NOISE_FLOOR
+#define MIC_NOISE_FLOOR     20
+#endif
+
 void readMicrophone(float &soundLevel, float &dominantFreq) {
-    // RMS sound level
-    long sumSq = 0;
-    for (int i = 0; i < MIC_SAMPLES; i++) {
-        int raw  = analogRead(MIC_PIN) - MIC_BASELINE;
-        sumSq   += (long)raw * raw;
-        delayMicroseconds(100);
-    }
-    float rms = sqrt((float)sumSq / MIC_SAMPLES);
-    g_soundOk = rms > 0;  // rms == 0 → mic pin reads nothing (disconnected)
-    soundLevel = constrain(map((long)rms, 0, MIC_RMS_MAX, 0, 100), 0, 100);
-    Serial.printf("[MIC] Raw RMS: %.1f → Sound: %.1f%% (MIC_RMS_MAX=%d)\n", rms, soundLevel, MIC_RMS_MAX);
-
-    // Dominant frequency via zero-crossing
-    int crossings  = 0;
-    int prevSample = analogRead(MIC_PIN) - MIC_BASELINE;
+    // v1.1: every MAX4466 board rests at a slightly different level (its "DC bias"),
+    // and the ESP32 ADC adds its own offset. The old code assumed exactly 2048
+    // (MIC_BASELINE). On a board resting at e.g. 1800, the sound never crossed
+    // 2048, so the pitch was stuck at the 50 Hz floor and the offset itself was
+    // counted as "sound". Now each node measures its own resting level first.
+    static int buf[MIC_FREQ_SAMPLES];
+    long sum = 0;
     unsigned long startUs = micros();
-
     for (int i = 0; i < MIC_FREQ_SAMPLES; i++) {
-        int curr = analogRead(MIC_PIN) - MIC_BASELINE;
-        if ((prevSample < 0 && curr >= 0) || (prevSample >= 0 && curr < 0)) {
-            crossings++;
-        }
-        prevSample = curr;
+        buf[i] = analogRead(MIC_PIN);
+        sum   += buf[i];
         delayMicroseconds(100);
     }
+    float dur  = (micros() - startUs) / 1000000.0f;
+    float mean = (float)sum / MIC_FREQ_SAMPLES;      // this mic's own resting level
 
-    float dur    = (micros() - startUs) / 1000000.0f;
-    dominantFreq = constrain((crossings / 2.0f) / dur, 50, 800);
+    // Sound level = RMS of the sound around its own resting level
+    double sumSq = 0;
+    for (int i = 0; i < MIC_FREQ_SAMPLES; i++) {
+        float d = buf[i] - mean;
+        sumSq  += (double)d * d;
+    }
+    float rms  = sqrt(sumSq / MIC_FREQ_SAMPLES);
+    g_soundOk  = mean > 10;   // pin stuck near 0 → mic not powered / disconnected
+    soundLevel = constrain(rms / MIC_RMS_MAX * 100.0f, 0, 100);
+
+    // Dominant frequency: count full cycles around the resting level, with a small
+    // dead band (hysteresis) so ADC noise is not counted as sound.
+    float band = max((float)MIC_NOISE_FLOOR / 2.0f, rms * 0.3f);
+    if (rms < MIC_NOISE_FLOOR) {
+        dominantFreq = 0;     // too quiet to measure → dashboard shows "— Hz"
+    } else {
+        int  cycles = 0;
+        bool above  = buf[0] > mean;
+        for (int i = 1; i < MIC_FREQ_SAMPLES; i++) {
+            if (!above && buf[i] > mean + band)      { above = true; cycles++; }
+            else if (above && buf[i] < mean - band)  { above = false; }
+        }
+        dominantFreq = constrain(cycles / dur, 50, 800);
+    }
+
+    Serial.printf("[MIC] Rest level: %.0f (old code assumed %d) | RMS: %.1f → Sound: %.1f%% | Pitch: %.0f Hz\n",
+                  mean, MIC_BASELINE, rms, soundLevel, dominantFreq);
 }
 
 // =============================================================

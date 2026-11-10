@@ -234,6 +234,75 @@ checkAuth();
                 </div>
             </div>
 
+            <!-- ── Glossary: plain-language meanings for beekeepers ───── -->
+            <div class="bg-white rounded-xl p-6" id="glossary">
+                <h3 class="font-bold text-lg text-gray-900 mb-1 flex items-center gap-2">
+                    <i class="fas fa-book-open text-amber-500"></i>
+                    What the Words Mean
+                </h3>
+                <p class="text-sm text-gray-500 mb-5">A plain-language guide to the words, units and part names you will see on the BeeGuard screens.</p>
+
+                <?php
+                $glossary = [
+                    ['Hive readings', 'fa-temperature-half', 'text-orange-500', [
+                        ['°C (degrees Celsius)', 'How warm it is inside the hive. A healthy brood area stays around <b>33–36 °C</b>.'],
+                        ['Humidity (%)', 'How much moisture is in the hive air. 100% is fully wet air. BeeGuard treats <b>40–95%</b> as normal.'],
+                        ['CO₂', 'Carbon dioxide, the gas bees breathe out. If it builds up, the hive may not be getting enough fresh air.'],
+                        ['ppm (parts per million)', 'The unit for CO₂. 1,000 ppm means 1,000 parts of CO₂ in every million parts of air. Outdoor air is about 400 ppm. BeeGuard warns above <b>4,000 ppm</b> and marks it critical above <b>6,000 ppm</b>. These CO₂ numbers are estimates from a low-cost sensor, so use them to spot trends rather than as exact values.'],
+                        ['Hive sound level (%)', 'How loud the hive is right now, from 0% (silent) to 100% (very loud), measured by the microphone inside the hive.'],
+                        ['Hz (hertz)', 'How many times something vibrates each second. Bees buzz by beating their wings, and that hum has a pitch measured in Hz. A higher number means a higher-pitched hum.'],
+                        ['Buzz pitch', 'The main pitch of the hive hum, in Hz, heard by the hive microphone. It is shown as a live reading only. It does not decide the colony status. If it shows "— Hz", the hive was too quiet to measure a pitch.'],
+                    ]],
+                    ['The hardware in the hive', 'fa-microchip', 'text-blue-500', [
+                        ['ESP32', 'The small computer board in each hive box. It reads all the sensors and sends the readings to this website over Wi-Fi every <b>15 seconds</b>.'],
+                        ['DHT22', 'The sensor that measures <b>temperature</b> and <b>humidity</b>.'],
+                        ['MQ-135', 'The gas sensor that estimates the <b>CO₂</b> level in ppm. It needs a few minutes to warm up after the box is switched on, so early readings can be off.'],
+                        ['MAX4466', 'The <b>microphone</b> inside the hive. It gives the hive sound level and the buzz pitch.'],
+                        ['OLED screen', 'The small screen on the hive box. It shows the same readings on the spot and updates every 2 seconds.'],
+                        ['Camera', 'The camera pointed at the hive entrance. It watches for insects that are not bees.'],
+                    ]],
+                    ['Colony check and AI', 'fa-brain', 'text-purple-500', [
+                        ['AI model', 'A computer program that learned to recognise patterns from many examples. BeeGuard uses two: one listens to hive sound recordings, and one looks at the camera picture.'],
+                        ['CNN (sound AI)', 'The AI that listens to a <b>sound recording</b> of a hive and decides if the colony sounds normal, queenless or about to swarm. It learned from labelled hive recordings.'],
+                        ['Sound recording', 'A short audio clip of the hive. The colony check uses these clips, not the live microphone reading. That is why the colony check shows when the recording was checked and can be older than the live readings.'],
+                        ['Colony check', 'The CNN result for a hive: <b>Colony sounds normal</b>, <b>Signs of swarming</b>, or <b>Signs of a missing queen</b>. "Waiting for a sound recording" means no recording of that hive has been checked yet, even if the live sensors are on.'],
+                        ['Queenless', 'The colony has lost its queen. Without her no new eggs are laid, so look for eggs, young larvae or queen cells.'],
+                        ['Swarming', 'Part of the colony is getting ready to leave with the old queen to start a new nest. Look for capped queen cells.'],
+                        ['YOLO (camera AI)', 'The AI that looks at the camera picture and draws a box around each insect it finds: green for bees, red for other insects such as wasps or hornets.'],
+                        ['Confidence', 'How sure the AI is about what it found, from 0% to 100%. The camera only raises an alert when it is at least <b>35%</b> sure an insect is not a bee.'],
+                        ['Training / retrain', 'Teaching the sound AI again using the recordings saved in the system. Retraining replaces the current model, so only do it on purpose.'],
+                    ]],
+                    ['Screen and alert words', 'fa-display', 'text-green-600', [
+                        ['Online / Offline', '<b>Online</b>: the hive box sent readings within the last 2 minutes. <b>Offline</b>: nothing has arrived for over 2 minutes; check the power and Wi-Fi at that hive.'],
+                        ['"Updated 12 sec ago"', 'How long ago the newest reading arrived. The number counts up every second. It turns red when the hive has gone quiet for 2 minutes.'],
+                        ['(old reading)', 'The value shown is the last one received before the hive went offline, not a live value.'],
+                        ['Warning', 'A reading is outside the normal range. Check the hive when you can.'],
+                        ['Critical', 'A reading is far outside the normal range, or the colony check found a problem. Check the hive as soon as possible.'],
+                        ['Info', 'A notice for your information only. No action needed.'],
+                        ['Health score', 'A number from 0 to 100 that sums up the latest readings for a hive. 80 or above is healthy.'],
+                    ]],
+                ];
+                ?>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <?php foreach ($glossary as $group): ?>
+                    <div>
+                        <div class="flex items-center gap-2 mb-3">
+                            <i class="fas <?php echo $group[1]; ?> <?php echo $group[2]; ?> text-sm"></i>
+                            <h4 class="font-semibold text-gray-800"><?php echo $group[0]; ?></h4>
+                        </div>
+                        <dl class="divide-y divide-gray-100 border border-gray-100 rounded-xl">
+                            <?php foreach ($group[3] as $term): ?>
+                            <div class="px-4 py-3 grid grid-cols-1 sm:grid-cols-3 gap-1 sm:gap-4">
+                                <dt class="text-sm font-semibold text-gray-900"><?php echo $term[0]; ?></dt>
+                                <dd class="sm:col-span-2 text-sm text-gray-600 leading-relaxed"><?php echo $term[1]; ?></dd>
+                            </div>
+                            <?php endforeach; ?>
+                        </dl>
+                    </div>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+
             <!-- ── FAQ + System Info row ──────────────────────────────── -->
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
@@ -252,7 +321,7 @@ checkAuth();
                              'BeeGuard is an IoT-based smart beehive monitoring system designed for precision apiculture. ESP32 microcontrollers attached to each hive collect real-time sensor data — temperature, humidity, CO₂, and sound — and send it to this web dashboard over Wi-Fi every <strong>15 seconds</strong>. A CNN machine-learning model then analyzes uploaded audio recordings to detect colony health problems (normal, queenless, or swarming). A separate YOLOv8 AI model monitors the hive entrance via USB camera in real time for non-bee insect intrusions.'],
 
                             ['📊 &nbsp;How often is data collected and displayed?',
-                             'The ESP32 sends sensor data every <strong>15 seconds</strong> and stores it in the database. The Live Hives and Dashboard pages auto-refresh every <strong>15 seconds</strong>. Analytics charts refresh every <strong>60 seconds</strong>. A device is marked <em>offline</em> if no data is received for more than <strong>2 minutes</strong>. All historical data is kept permanently and can be exported at any time from the Export Data page.'],
+                             'The ESP32 sends sensor data every <strong>15 seconds</strong> and stores it in the database. The Live Hives page checks for new readings every <strong>5 seconds</strong> and shows how long ago each hive last sent data. Analytics charts refresh every <strong>60 seconds</strong>. A device is marked <em>offline</em> if no data is received for more than <strong>2 minutes</strong>. All historical data is kept permanently and can be exported at any time from the Export Data page.'],
 
                             ['🔔 &nbsp;What kinds of alerts does the system generate?',
                              'BeeGuard generates these alert types automatically:<br><br>
@@ -264,10 +333,10 @@ checkAuth();
                              Each alert has a severity level (info / warning / critical) and is shown on the Alerts page with a recommended beekeeper action.'],
 
                             ['📷 &nbsp;How does the camera insect detection work?',
-                             'A USB webcam streams live video from the hive entrance at up to 10 FPS. A custom-trained YOLOv8 (nano) model — trained on bee and insect photos — detects and classifies objects in real time: bees get a <span style="color:#16A34A;font-weight:bold;">green box</span>, while wasps, hornets, moths, and flies get a <span style="color:#DC2626;font-weight:bold;">red box</span>. If a non-bee insect is detected above the confidence threshold (0.25), an alert is automatically created. The camera runs on a separate Python process (port 5050) and does not affect the main PHP server performance.'],
+                             'A USB webcam streams live video from the hive entrance at up to 10 FPS. A custom-trained YOLOv8 model — trained on bee and insect photos — detects and classifies objects in real time: bees get a <span style="color:#16A34A;font-weight:bold;">green box</span>, while wasps, hornets, moths, and flies get a <span style="color:#DC2626;font-weight:bold;">red box</span>. If a non-bee insect is detected above the confidence threshold (0.35), an alert is automatically created. The camera runs on a separate Python process (port 5050) and does not affect the main PHP server performance.'],
 
                             ['🤖 &nbsp;How does the CNN audio analysis work?',
-                             'The CNN (Convolutional Neural Network) model analyzes 3-second WAV recordings of hive audio. It extracts 40 MFCC (Mel-Frequency Cepstral Coefficient) features from each recording, producing a 40×216 spectrogram input. Three Conv2D layers with Global Average Pooling then classify the audio into one of 3 colony states: <b>Normal</b>, <b>Queenless</b>, or <b>Swarming</b>. To get a colony status, go to <b>Upload Sound</b>, choose the hive, and upload a WAV recording — the result appears in the hive modal and Live Hives page within seconds.'],
+                             'The CNN (Convolutional Neural Network) model analyzes 3-second WAV recordings of hive audio. It extracts 40 MFCC (Mel-Frequency Cepstral Coefficient) features from each recording, producing a 40×216 spectrogram input. Three Conv2D layers with Global Average Pooling then classify the audio into one of 3 colony states: <b>Normal</b>, <b>Queenless</b>, or <b>Swarming</b>. The model works on recorded clips, not on the live microphone stream, so a hive shows "Waiting for a sound recording" until a recording of that hive has been checked. When it has, the result and the time of the recording appear on the Live Hives page and in the hive window.'],
 
                             ['💾 &nbsp;What should I do when I receive a critical alert?',
                              'Critical alerts require immediate attention. Open the <b>Alerts</b> page, read the recommended action for that specific alert type, then physically inspect the hive. For a <b>Queenless</b> alert: look for queen cells or eggs in the brood frames. For <b>Swarming</b>: inspect for capped queen cells and consider splitting the colony. For <b>High Temperature</b>: open the entrance and provide shade. Dismiss the alert once the issue is resolved.'],
@@ -277,10 +346,10 @@ checkAuth();
                              'Each hive sensor node uses three sensors connected to a 30-pin ESP32:<br><br>
                              <b>DHT22</b> (GPIO 4) — measures temperature (°C) and relative humidity (%RH). Accuracy: ±0.5°C and ±2–5%RH. Samples every 2 seconds; ESP32 sends the latest reading every 15 seconds.<br><br>
                              <b>MQ-135</b> (GPIO 34, ADC 12-bit) — measures CO₂ concentration in ppm via analog voltage. Calibration baseline (CO2_R0) is set to 400.0 in fresh air. CO₂ scale factor (CO2_SCALE) is 1.8 for inside-hive placement.<br><br>
-                             <b>MAX4466</b> (GPIO 35) — electret microphone amplifier. Captures 512-sample RMS for sound level (0–100%) and 2048-sample zero-crossing for dominant frequency (Hz). The microphone is placed <em>inside</em> the hive directly on the brood frames.'],
+                             <b>MAX4466</b> (GPIO 35) — electret microphone amplifier. Captures 512-sample RMS for sound level (0–100%) and the dominant frequency (Hz) of the hive hum, measured from 2,048 samples around the microphone&#39;s own resting level. The microphone is placed <em>inside</em> the hive directly on the brood frames.'],
 
                             ['📡 &nbsp;How does the ESP32 connect to the system?',
-                             'The ESP32 connects to the same Wi-Fi network as the server PC. On boot it calls <code>GET /beemonitoring/api/get_config.php</code> to fetch its sync interval, then POSTs a JSON payload to <code>/beemonitoring/api/receive_data.php</code> every 15 seconds. The payload includes: <code>api_key</code>, <code>device_id</code>, <code>hive_id</code>, <code>temperature</code>, <code>humidity</code>, <code>co2</code>, <code>sound_level</code>, and <code>dominant_freq</code>. The API key is <code>BEEGUARD_SECRET_2026</code> and must match in both <code>config.h</code> and the server. If the server IP changes (DHCP), update <code>SERVER_HOST</code> in <code>config.h</code> and reflash.'],
+                             'The ESP32 connects to the same Wi-Fi network as the server PC. On boot it calls <code>GET /beemonitoring/api/get_config.php</code> to fetch its sync interval, then POSTs a JSON payload to <code>/beemonitoring/api/receive_data.php</code> every 15 seconds. The payload includes: <code>api_key</code>, <code>device_id</code>, <code>hive_id</code>, <code>temperature</code>, <code>humidity</code>, <code>co2</code>, <code>sound_level</code>, and <code>dominant_freq</code>. The API key must match in both <code>config.h</code> and the server (it is not shown here for security). If the server IP changes (DHCP), update <code>SERVER_HOST</code> in <code>config.h</code> and reflash.'],
 
                             ['🔧 &nbsp;How do I register a new ESP32 device?',
                              'Flash the ESP32 firmware with the correct <code>WIFI_SSID</code>, <code>WIFI_PASSWORD</code>, <code>SERVER_HOST</code>, <code>DEVICE_ID</code>, and <code>HIVE_ID</code> values in <code>config.h</code>. Once powered on and connected to Wi-Fi, the device will appear in the <b>Detected New ESP32 Devices</b> section on the Devices page within 15 seconds. Click <b>Register</b> to assign it to a new or existing hive. If the device already has a matching <code>HIVE_ID</code> in the database it will send data immediately.'],

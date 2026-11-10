@@ -315,7 +315,7 @@ foreach ($hives as $_hive) {
                                         $cnnTime = (date('Y-m-d', $cnnTs) === date('Y-m-d')) ? date('H:i', $cnnTs) : date('M d, H:i', $cnnTs);
                                         $cnnAge  = max(0, time() - $cnnTs);
                                     } else {
-                                        $c = ['⚪', 'Colony not checked yet', '#6b7280', '#f3f4f6'];
+                                        $c = ['⚪', 'Waiting for a sound recording', '#6b7280', '#f3f4f6'];
                                     }
                                 ?>
                                 <!-- Live hive sound — straight from the microphone inside the hive (ESP32) -->
@@ -344,7 +344,7 @@ foreach ($hives as $_hive) {
                                     <?php if ($audio): ?>
                                     <p id="colony-cnn-time-<?php echo $hive['id']; ?>" class="opacity-70 mt-0.5" data-age="<?php echo $cnnAge; ?>" data-prefix="Recording checked at <?php echo htmlspecialchars($cnnTime); ?> · ">Recording checked at <?php echo $cnnTime; ?></p>
                                     <?php else: ?>
-                                    <p id="colony-cnn-time-<?php echo $hive['id']; ?>" class="opacity-70 mt-0.5">No sound recording has been checked for this hive</p>
+                                    <p id="colony-cnn-time-<?php echo $hive['id']; ?>" class="opacity-70 mt-0.5">The live sensors don't run this check. It needs a sound recording of this hive.</p>
                                     <?php endif; ?>
                                 </div>
                                 <div class="flex justify-between items-center text-xs text-gray-500">
@@ -540,10 +540,10 @@ foreach ($hives as $_hive) {
                                         <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl text-sm font-bold"
                                               style="background:white;border:1.5px solid #e5e7eb;color:#6b7280;">
                                             <i class="fas fa-circle-question text-gray-400"></i>
-                                            <span id="modal-colony-label-<?php echo $hive['id']; ?>">Not checked yet</span>
+                                            <span id="modal-colony-label-<?php echo $hive['id']; ?>">Waiting for a sound recording</span>
                                         </span>
                                         <p class="text-xs text-gray-400 mt-1" id="modal-colony-cnn-time-<?php echo $hive['id']; ?>">
-                                            No sound recording has been checked for this hive
+                                            The live sensors don't run this check. It needs a sound recording of this hive.
                                         </p>
                                         <?php endif; ?>
                                         <p class="text-xs text-gray-400 mt-2">The colony check is not live. It updates when a new recording of this hive is checked.</p>
@@ -1159,10 +1159,10 @@ foreach ($hives as $_hive) {
                         // No CNN result
                         if (conclusionEl)   { conclusionEl.style.background = '#f3f4f6'; conclusionEl.style.color = '#6b7280'; }
                         if (conclusionIcon) conclusionIcon.textContent = '⚪';
-                        if (conclusionText) conclusionText.textContent = 'Colony not checked yet';
-                        if (mLabel)         mLabel.textContent = 'Not checked yet';
-                        if (conclusionTime) conclusionTime.textContent = 'No sound recording has been checked for this hive';
-                        if (mCnnTime)       mCnnTime.textContent = 'No sound recording has been checked for this hive';
+                        if (conclusionText) conclusionText.textContent = 'Waiting for a sound recording';
+                        if (mLabel)         mLabel.textContent = 'Waiting for a sound recording';
+                        if (conclusionTime) conclusionTime.textContent = "The live sensors don't run this check. It needs a sound recording of this hive.";
+                        if (mCnnTime)       mCnnTime.textContent = "The live sensors don't run this check. It needs a sound recording of this hive.";
                     }
                     const badgeEl = document.getElementById(`badge-${id}`);
                     const badgeIcon = document.getElementById(`badge-icon-${id}`);

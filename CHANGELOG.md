@@ -4,6 +4,12 @@ The version number is in `version.php` and shows in the sidebar (under "IoT Moni
 **Every update:** bump the number in `version.php`, add a section here, then push.
 If the sidebar on the hosted site shows an older number than this file, the server is not running the latest push.
 
+## v1.2 — 2026-11-11
+- Fix: hive cards never updated without a page reload. The live update request (`api/live_hives.php`) crashed on every call because a required file was not loaded. Cards now really update every 5 s.
+- ESP32 firmware: the microphone now measures its own resting level instead of assuming a fixed value. Before, a board whose mic rested at a different level read a false 50 Hz and a raised sound %. When the hive is too quiet to measure, the pitch shows "— Hz". **Re-flash both ESP32 boards.**
+- Hive cards: when there is no colony check yet, the card now says "Waiting for a sound recording" and explains that the live sensors don't run this check.
+- Help page: new "What the Words Mean" glossary (ppm, Hz, DHT22, MQ-135, MAX4466, ESP32, CNN, YOLO, confidence, warning/critical, and more). Corrected the camera confidence threshold to 0.35 and the refresh time to 5 s, and removed the device API key from the page.
+
 ## v1.1 — 2026-11-11
 Changes after the evaluation, prepared for the defense.
 

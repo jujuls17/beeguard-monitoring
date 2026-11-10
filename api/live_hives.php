@@ -5,6 +5,7 @@ ini_set('display_errors', 0);
 session_start();
 require_once '../config.php';
 require_once '../functions.php';
+require_once '../get_recommendations.php';   // getHiveRecommendations() lives here; without it every refresh failed
 checkAuth();
 session_write_close();
 
